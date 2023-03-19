@@ -21,4 +21,4 @@ lähde: [minmax moniste](https://tiralabra.github.io/2023_p4/fi/aiheet/minimax.p
 
 opinto-ohjelma: tietojenkäsittelytieteen kandidaatti (TKT)
 
-dokumentaatiossa tullaan käyttämään suomenkiletä.
+dokumentaatiossa tullaan käyttämään suomenkieltä.
