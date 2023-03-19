@@ -18,5 +18,7 @@ mutta sitä voidaan parantaa alfa-beta-karsinnalla sekä muilla pelikohtaisilla 
 Tilavaativuus on minimaalinen verrattuna aikavaativuuteen se on todennäköisesti luokkaa O(n).
 
 lähde: [minmax moniste](https://tiralabra.github.io/2023_p4/fi/aiheet/minimax.pdf)
+
 opinto-ohjelma: tietojenkäsittelytieteen kandidaatti (TKT)
+
 dokumentaatiossa tullaan käyttämään suomenkiletä.
