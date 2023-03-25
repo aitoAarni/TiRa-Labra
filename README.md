@@ -2,7 +2,7 @@
 
 Ristinolla tekoälyllä varustettuna olisi tavoite.
 
-!(gihub actions)[https://github.com/aitoAarni/TiRa-Labra/workflows/CI/badge.svg]
+![Github Actions](https://github.com/aitoAarni/TiRa-Labra/workflows/CI/badge.svg)
 
 
 ## Dokumentit
