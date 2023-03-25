@@ -2,6 +2,9 @@
 
 Ristinolla tekoälyllä varustettuna olisi tavoite.
 
+https://github.com/aitoAarni/TiRa-Labra/workflows/CI/badge.svg
+
+
 ## Dokumentit
 
 [Määrittelydokumentti](https://github.com/aitoAarni/TiRa-Labra/blob/main/dokumentaatio/m%C3%A4%C3%A4rittelydokumentti.md)
