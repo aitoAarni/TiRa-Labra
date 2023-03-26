@@ -23,3 +23,6 @@
 ## Mitä teen seuraavaksi?
 
 - pelin logiikan valmiiksi
+
+
+tuunit: n. 6h
