@@ -13,3 +13,5 @@ Ristinolla tekoälyllä varustettuna olisi tavoite.
 
 [viikkoraportti 1](https://github.com/aitoAarni/TiRa-Labra/blob/main/dokumentaatio/viikkoraportti1.md)
 
+[viikkoraportti 2](https://github.com/aitoAarni/TiRa-Labra/blob/main/dokumentaatio/viikkoraportti2.md)
+
