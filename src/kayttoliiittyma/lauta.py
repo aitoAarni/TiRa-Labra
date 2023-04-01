@@ -17,7 +17,7 @@ class Lauta:
             pygame.draw.line(self._ikkuna, LAUDAN_VIIVOJEN_VARI,
                              (x, y), (x, KORKEUS))
             pygame.draw.line(
-                self._ikkuna, LAUDAN_VIIVOJEN_VARI, (y, x), (y, lEVEYS))
+                self._ikkuna, LAUDAN_VIIVOJEN_VARI, (y, x), (lEVEYS, x))
 
     def _piirra_nollat(self):
         for rivi, sarake in self._nollat:

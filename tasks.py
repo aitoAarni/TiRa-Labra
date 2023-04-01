@@ -8,8 +8,9 @@ def format(ctx):
 def lint(ctx):
     ctx.run("pylint src", pty=True)
     
+@task
 def start(ctx):
-    pass
+    ctx.run("python3 src/index.py", pty=True)
     
 @task
 def coverage(ctx):
