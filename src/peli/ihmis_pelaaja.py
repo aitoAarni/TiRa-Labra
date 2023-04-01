@@ -1,4 +1,4 @@
-from config import RUUTUJEN_MAARA
+from config import RUUTUJEN_MAARA, lEVEYS, KORKEUS
 
 
 class Pelaaja:
@@ -8,7 +8,7 @@ class Pelaaja:
 
     def get_ruutu(self):
         if self.hiirta_klikattu():
+            print("hiirtä klikattu1234")
             x, y = self.hiiren_paikka()
-            return (x // RUUTUJEN_MAARA, y // RUUTUJEN_MAARA)
-
+            return (round(x // (lEVEYS / RUUTUJEN_MAARA)), round(y // (KORKEUS / RUUTUJEN_MAARA)))
         return None

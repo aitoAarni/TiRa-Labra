@@ -21,8 +21,8 @@ class Lauta:
 
     def _piirra_nollat(self):
         for rivi, sarake in self._nollat:
-            keskipiste = (rivi*self._ruudun_leveys+self._ruudun_leveys/2,
-                          sarake*self._ruudun_leveys+self._ruudun_leveys/2)
+            keskipiste = (sarake*self._ruudun_leveys+self._ruudun_leveys/2,
+                          rivi*self._ruudun_leveys+self._ruudun_leveys/2)
             pygame.draw.circle(self._ikkuna, NAPPLUOIDEN_VARI,
                                keskipiste, self._ruudun_leveys/3)
 
@@ -35,6 +35,7 @@ class Lauta:
                              (x+self._ruudun_leveys, y), (x, y+self._ruudun_leveys))
 
     def piirra_lauta(self):
+
         self._ikkuna.fill(LAUDAN_VARI)
         self._piirra_viivat()
         self._piirra_nollat()
