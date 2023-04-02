@@ -17,7 +17,7 @@ class Tapahtumat:
                 tapahtumat["lopeta"] = True
 
             if tapahtuma.type == pygame.KEYDOWN:
-                if pygame.key == pygame.K_ESCAPE:
+                if tapahtuma.key == pygame.K_ESCAPE:
                     tapahtumat["takaisin"] = True
 
             if tapahtuma.type == pygame.MOUSEBUTTONDOWN:
