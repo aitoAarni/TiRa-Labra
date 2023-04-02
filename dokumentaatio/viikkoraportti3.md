@@ -21,3 +21,6 @@ mutta en oikein ymmärrä mistä tämä johtuu sillä testien working directory 
 ## Mitä teen seuraavaksi?
 
 Seuraavaksi aloitan minimax algoritmin toteuttamisen peliä varten.
+
+
+tunnit: 12 h
