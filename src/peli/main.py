@@ -1,4 +1,4 @@
-from config import RUUTUJEN_MAARA
+from konfiguraatio import RUUTUJEN_MAARA
 
 
 class Peli:

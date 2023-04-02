@@ -1,4 +1,4 @@
-from config import RUUTUJEN_MAARA, lEVEYS, KORKEUS
+from konfiguraatio import RUUTUJEN_MAARA, LEVEYS, KORKEUS
 
 
 class Pelaaja:
@@ -10,5 +10,5 @@ class Pelaaja:
         if self.hiirta_klikattu():
             print("hiirtä klikattu1234")
             x, y = self.hiiren_paikka()
-            return (round(x // (lEVEYS / RUUTUJEN_MAARA)), round(y // (KORKEUS / RUUTUJEN_MAARA)))
+            return (round(x // (LEVEYS / RUUTUJEN_MAARA)), round(y // (KORKEUS / RUUTUJEN_MAARA)))
         return None

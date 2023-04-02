@@ -1,4 +1,4 @@
-from config import RUUTUJEN_MAARA, LAUDAN_VARI, LAUDAN_VIIVOJEN_VARI, lEVEYS, KORKEUS, NAPPLUOIDEN_VARI, PELI_OHI_VARI, VOITTO_TEKSTIN_VARI, FONTTI
+from konfiguraatio import RUUTUJEN_MAARA, LAUDAN_VARI, LAUDAN_VIIVOJEN_VARI, LEVEYS, KORKEUS, NAPPLUOIDEN_VARI, PELI_OHI_VARI, VOITTO_TEKSTIN_VARI, FONTTI
 import pygame
 import os
 
@@ -8,7 +8,7 @@ class Lauta:
         self._ikkuna = ikkuna
         self._ristit = ristit
         self._nollat = nollat
-        self._ruudun_leveys = lEVEYS/RUUTUJEN_MAARA
+        self._ruudun_leveys = LEVEYS/RUUTUJEN_MAARA
         self.voittoikkuna = None
 
     def _piirra_viivat(self):
@@ -19,7 +19,7 @@ class Lauta:
             pygame.draw.line(self._ikkuna, LAUDAN_VIIVOJEN_VARI,
                              (x, y), (x, KORKEUS))
             pygame.draw.line(
-                self._ikkuna, LAUDAN_VIIVOJEN_VARI, (y, x), (lEVEYS, x))
+                self._ikkuna, LAUDAN_VIIVOJEN_VARI, (y, x), (LEVEYS, x))
 
     def _piirra_nollat(self):
         for rivi, sarake in self._nollat:
@@ -37,7 +37,7 @@ class Lauta:
                              (x+self._ruudun_leveys, y), (x, y+self._ruudun_leveys), 3)
 
     def tee_voittoteksti(self, merkki):
-        self.voittoikkuna = pygame.Surface((lEVEYS, KORKEUS))
+        self.voittoikkuna = pygame.Surface((LEVEYS, KORKEUS))
         if merkki == "x":
             merkin_nimi = "Ristit"
         else:
@@ -47,7 +47,7 @@ class Lauta:
             "materiaalit", "Wedgie Regular.ttf"), FONTTI)
         teksti = fontti.render(merkkijono, True, VOITTO_TEKSTIN_VARI)
         teksti_rect = teksti.get_rect()
-        teksti_rect.center = (lEVEYS/2, KORKEUS/2)
+        teksti_rect.center = (LEVEYS/2, KORKEUS/2)
         self.voittoikkuna.set_alpha(200)
         self.voittoikkuna.fill(PELI_OHI_VARI)
         self.voittoikkuna.blit(teksti, teksti_rect)
@@ -55,7 +55,7 @@ class Lauta:
     def _piirra_voittonakyma(self):
         vari = tuple(PELI_OHI_VARI + [50])
         print(vari)
-        pygame.draw.rect(self._ikkuna, vari, (0, 0, lEVEYS, KORKEUS))
+        pygame.draw.rect(self._ikkuna, vari, (0, 0, LEVEYS, KORKEUS))
 
     def piirra_lauta(self):
 
