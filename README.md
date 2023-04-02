@@ -3,6 +3,9 @@
 Ristinolla tekoälyllä varustettuna olisi tavoite.
 
 ![Github Actions](https://github.com/aitoAarni/TiRa-Labra/workflows/CI/badge.svg)
+[![codecov](https://codecov.io/gh/aitoAarni/TiRa-Labra/branch/main/graph/badge.svg?token=G521CJR0IT)](https://codecov.io/gh/aitoAarni/TiRa-Labra)
+
+
 
 
 ## Dokumentit
