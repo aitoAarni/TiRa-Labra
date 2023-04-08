@@ -1,5 +1,5 @@
 import pygame
-from konfiguraatio import LEVEYS, KORKEUS
+from konfiguraatio import get_konfiguraatio
 from peli.tapahtumat import Tapahtumat
 from peli.main import Peli
 from peli.ihmis_pelaaja import Pelaaja
@@ -10,11 +10,20 @@ FPS = 144
 class Sovellus:
     def __init__(self) -> None:
         pygame.init()
-        ikkuna = pygame.display.set_mode((LEVEYS, KORKEUS))
+        konffi = get_konfiguraatio()
+        ikkuna = pygame.display.set_mode((konffi["leveys"], konffi["korkeus"]))
         pygame.display.set_caption("Ristinolla")
         self.tapahtumat = Tapahtumat()
-        self.peli = Peli(self.tapahtumat, Pelaaja(self.tapahtumat.hiirta_klikattu, self.tapahtumat.get_hiiren_paikka), Pelaaja(
-            self.tapahtumat.hiirta_klikattu, self.tapahtumat.get_hiiren_paikka), Lauta, ikkuna)
+        self.peli = Peli(
+            self.tapahtumat,
+            Pelaaja(
+                self.tapahtumat.hiirta_klikattu,
+                self.tapahtumat.get_hiiren_paikka),
+            Pelaaja(
+                self.tapahtumat.hiirta_klikattu,
+                self.tapahtumat.get_hiiren_paikka),
+            Lauta,
+            ikkuna)
 
     def main(self):
         kello = pygame.time.Clock()

@@ -1,4 +1,6 @@
-from konfiguraatio import RUUTUJEN_MAARA, LEVEYS, KORKEUS
+from konfiguraatio import get_konfiguraatio
+
+konffi = get_konfiguraatio()
 
 
 class Pelaaja:
@@ -6,9 +8,12 @@ class Pelaaja:
         self.hiirta_klikattu = hiiren_klikki
         self.hiiren_paikka = hiiren_paikka
 
-    def get_ruutu(self):
+    def valitse_ruutu(self):
         if self.hiirta_klikattu():
-            print("hiirtä klikattu1234")
             x, y = self.hiiren_paikka()
-            return (round(x // (LEVEYS / RUUTUJEN_MAARA)), round(y // (KORKEUS / RUUTUJEN_MAARA)))
+            return (round(x //
+                          (konffi["leveys"] /
+                           konffi["ruutujen_määrä"])), round(y //
+                                                             (konffi["korkeus"] /
+                                                              konffi["ruutujen_määrä"])))
         return None

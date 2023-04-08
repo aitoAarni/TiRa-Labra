@@ -1,4 +1,6 @@
-from konfiguraatio import RUUTUJEN_MAARA
+from konfiguraatio import get_konfiguraatio
+
+konffi = get_konfiguraatio()
 
 
 class Peli:
@@ -20,18 +22,17 @@ class Peli:
                 "merkki": "0"
             }
         ]
-
         self.ristit_ja_nollat = [[None for _ in range(
-            RUUTUJEN_MAARA)] for _ in range(RUUTUJEN_MAARA)]
+            konffi["ruutujen_määrä"])] for _ in range(konffi["ruutujen_määrä"])]
 
     def tarkista_voitto(self, viimeisin_siirto, merkki):
         x, y = viimeisin_siirto
 
-        n = RUUTUJEN_MAARA - 1
+        n = konffi["ruutujen_määrä"] - 1
 
-        a = min(y, n-x)
-        x_vino_oikea = x+a
-        y_vino_oikea = y-a
+        a = min(y, n - x)
+        x_vino_oikea = x + a
+        y_vino_oikea = y - a
 
         b = min(y, x)
         x_vino_vasen = x - b
@@ -42,7 +43,7 @@ class Peli:
         vino_vasen = 0
         vino_oikea = 0
 
-        for i in range(RUUTUJEN_MAARA):
+        for i in range(konffi["ruutujen_määrä"]):
             if self.ristit_ja_nollat[i][x] == merkki:
                 pysty += 1
             else:
@@ -52,11 +53,13 @@ class Peli:
                 vaaka += 1
             else:
                 vaaka = 0
-            if x_vino_vasen + i <= n and y_vino_vasen + i <= n and self.ristit_ja_nollat[y_vino_vasen + i][x_vino_vasen + i] == merkki:
+            if x_vino_vasen + i <= n and y_vino_vasen + \
+                    i <= n and self.ristit_ja_nollat[y_vino_vasen + i][x_vino_vasen + i] == merkki:
                 vino_vasen += 1
             else:
                 vino_vasen = 0
-            if x_vino_oikea - i >= 0 and y_vino_oikea + i <= n and self.ristit_ja_nollat[y_vino_oikea + i][x_vino_oikea-i] == merkki:
+            if x_vino_oikea - i >= 0 and y_vino_oikea + \
+                    i <= n and self.ristit_ja_nollat[y_vino_oikea + i][x_vino_oikea - i] == merkki:
                 vino_oikea += 1
             else:
                 vino_oikea = 0
@@ -67,7 +70,7 @@ class Peli:
 
     def valitse_ruutu(self, vuoro):
         pelaaja = self.pelaajat[vuoro]
-        ruutu = pelaaja["pelaaja"].get_ruutu()
+        ruutu = pelaaja["pelaaja"].valitse_ruutu()
         if ruutu:
             if self.ristit_ja_nollat[ruutu[1]][ruutu[0]] is None:
                 self.ristit_ja_nollat[ruutu[1]][ruutu[0]] = pelaaja["merkki"]
@@ -93,7 +96,8 @@ class Peli:
                     break
                 siirto = self.pelaa_vuoro(vuoro)
                 if siirto:
-                    if self.tarkista_voitto(siirto, self.pelaajat[vuoro]["merkki"]):
+                    if self.tarkista_voitto(
+                            siirto, self.pelaajat[vuoro]["merkki"]):
                         loppu = True
                     break
             if loppu:

@@ -1,9 +1,10 @@
-import sys  
-sys.path.append("./src")
-import unittest
-from konfiguraatio import LEVEYS, KORKEUS, RUUTUJEN_MAARA
-from unittest.mock import Mock
 from peli.ihmis_pelaaja import Pelaaja
+from unittest.mock import Mock
+from konfiguraatio import LEVEYS, KORKEUS, RUUTUJEN_MAARA
+import unittest
+import sys
+sys.path.append("./src")
+
 
 class TestPelaaja(unittest.TestCase):
 
@@ -14,7 +15,8 @@ class TestPelaaja(unittest.TestCase):
         ruutu1 = pelaaja.get_ruutu()
         hiiren_paikka_mock.return_value = (LEVEYS, KORKEUS)
         ruutu2 = pelaaja.get_ruutu()
-        self.assertTupleEqual((ruutu1, ruutu2), ((0, 0), (RUUTUJEN_MAARA-1, RUUTUJEN_MAARA-1)))
+        self.assertTupleEqual(
+            (ruutu1, ruutu2), ((0, 0), (RUUTUJEN_MAARA - 1, RUUTUJEN_MAARA - 1)))
 
     def test_ei_palauta_ruutua_jos_ei_klikkia(self):
         hiiren_klikki_mock = Mock(return_value=False)

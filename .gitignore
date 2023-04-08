@@ -122,6 +122,8 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+src/testi123.py
 .dmypy.json
 dmypy.json
 
