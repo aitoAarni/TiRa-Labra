@@ -1,10 +1,11 @@
 from konfiguraatio import get_konfiguraatio
-
+from peli.tekoäly_pelaaja import Tekoaly
 konffi = get_konfiguraatio()
 
 
 class Peli:
     def __init__(self, tapahtumat, pelaaja1, pelaaja2, lauta, ikkuna) -> None:
+        self.ai = Tekoaly()
         self.tapahtumat = tapahtumat
         self.ristit = []
         self.nollat = []
@@ -75,6 +76,7 @@ class Peli:
             if self.ristit_ja_nollat[ruutu[1]][ruutu[0]] is None:
                 self.ristit_ja_nollat[ruutu[1]][ruutu[0]] = pelaaja["merkki"]
                 pelaaja["nappulat"].append((ruutu[1], ruutu[0]))
+                print(self.ai.heurestinen_funktio(self.ristit_ja_nollat))
                 return ruutu
         return None
 
