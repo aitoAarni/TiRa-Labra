@@ -1,5 +1,5 @@
 from konfiguraatio import get_konfiguraatio
-from peli.tekoäly_pelaaja import Tekoaly
+from tekoäly.minimax import Tekoaly
 konffi = get_konfiguraatio()
 
 
