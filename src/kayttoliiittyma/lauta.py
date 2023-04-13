@@ -43,21 +43,13 @@ class Lauta:
             pygame.draw.line(
                 self._ikkuna,
                 konffi["nappuloiden_väri"],
-                (x,
-                 y),
-                (x + self._ruudun_leveys,
-                 y + self._ruudun_leveys),
-                3)
+                (x, y),
+                (x + self._ruudun_leveys, y + self._ruudun_leveys), 3)
             pygame.draw.line(
                 self._ikkuna,
                 konffi["nappuloiden_väri"],
-                (x +
-                 self._ruudun_leveys,
-                 y),
-                (x,
-                 y +
-                 self._ruudun_leveys),
-                3)
+                (x + self._ruudun_leveys, y),
+                (x, y + self._ruudun_leveys), 3)
 
     def tee_voittoteksti(self, merkki):
         self.voittoikkuna = pygame.Surface(

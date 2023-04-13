@@ -1,21 +1,157 @@
 from konfiguraatio import get_konfiguraatio
-
 konffi = get_konfiguraatio()
+from functools import reduce
 
 
 class Tekoaly:
-    def __init__(self, pelitilanne=None) -> None:
-        self.pelitilanne = pelitilanne
-        self.maksimoiva_merkki = "x"
-        self.minimoiva_merkki = "0"
+    def __init__(
+            self,
+            tarkista_voitto,
+            maksimoiva_merkki="x",
+            minimoiva_merkki="0") -> None:
+        self.tarkista_voitto = tarkista_voitto
+        self.maksimoiva_merkki = maksimoiva_merkki
+        self.minimoiva_merkki = minimoiva_merkki
         self.n = konffi["ruutujen_määrä"]
 
-    def minimax(self, syvyys, a, b, maksimoiva_pelaaja):
-        if syvyys == 0:
-            return None
+    def minimax(
+            self,
+            syvyys,
+            pelilauta,
+            siirrot,
+            varatut_siirrot,
+            vapaat_ruudut,
+            siirroissa_olevat_ruudut,
+            alfa,
+            beeta,
+            maksimoiva_pelaaja,
+            viimeisin_siirto=None):
+        merkki = self.maksimoiva_merkki if maksimoiva_pelaaja else self.minimoiva_merkki
+        if viimeisin_siirto:
+            if self.tarkista_voitto(viimeisin_siirto, merkki, pelilauta) or syvyys == 0:
+                #print(f"evalissa, syvyys: {syvyys}")
+                return self.heurestinen_funktio(pelilauta), None
+
+        if maksimoiva_pelaaja:
+            arvo = float("-infinity")
+
+            for siirto in siirrot[::-1]:
+                #print(f"tarkistetaan_siirtoa: {siirto} syvyys: {syvyys} ")
+                #print(f"kaikki siirrot: {siirrot}")
+                if siirto in varatut_siirrot:
+                    continue
+                #print("varatut_siirrot", varatut_siirrot)
+                varatut_siirrot.add(siirto)
+                uusien_siirtojen_maara = self.etsi_siirrot(
+                    siirto, vapaat_ruudut, siirroissa_olevat_ruudut, siirrot)
+                pelilauta[siirto[1]][siirto[0]] = self.maksimoiva_merkki
+                '''
+                print("vapaat_ruudut.remove(siirto)  failed")
+                print(f"siirto in vapaat_ruudut: {siirto in vapaat_ruudut}")
+                print(f"siirto: {siirto}")
+                print(f"siirrot: {siirrot}")
+'''
+                vapaat_ruudut.remove(siirto)
+
+                arviointi = self.minimax(
+                    syvyys - 1,
+                    pelilauta,
+                    siirrot,
+                    varatut_siirrot,
+                    vapaat_ruudut,
+                    siirroissa_olevat_ruudut,
+                    alfa,
+                    beeta,
+                    False,
+                    siirto)[0]
+                
+                arvo = max(arvo, arviointi)
+                if arviointi == arvo:
+                    paras_siirto = siirto
+                pelilauta[siirto[1]][siirto[0]] = None
+            
+                varatut_siirrot.remove(siirto)
+                vapaat_ruudut.add(siirto)
+                for _ in range(uusien_siirtojen_maara):
+                    siirto = siirrot.pop()
+                    siirroissa_olevat_ruudut.remove(siirto)
+                alfa = max(alfa, arvo)
+                if arvo >= beeta:
+                    #print(f"syvyys: {syvyys},  arvo {arvo} >= beeta {beeta}: True")
+                    break
+            return arvo, paras_siirto
+
+        else:
+            arvo = float("infinity")
+            for siirto in siirrot[::-1]:
+                if siirto in varatut_siirrot:
+                    continue
+                varatut_siirrot.add(siirto)
+                uusien_siirtojen_maara = self.etsi_siirrot(
+                    siirto, vapaat_ruudut, siirroissa_olevat_ruudut, siirrot)
+                pelilauta[siirto[1]][siirto[0]] = self.minimoiva_merkki
+                '''
+                print(f"vapaat_ruudut: {vapaat_ruudut}")
+                print(f"siirto: {siirto}")
+                print(f"siirrot: {siirrot}")
+'''
+                vapaat_ruudut.remove(siirto)
+
+                arviointi = self.minimax(
+                    syvyys - 1,
+                    pelilauta,
+                    siirrot,
+                    varatut_siirrot,
+                    vapaat_ruudut,
+                    siirroissa_olevat_ruudut,
+                    alfa,
+                    beeta,
+                    True,
+                    siirto)[0]
+                arvo = min(arvo, arviointi)
+                pelilauta[siirto[1]][siirto[0]] = None
+                varatut_siirrot.remove(siirto)
+                vapaat_ruudut.add(siirto)
+
+                for _ in range(uusien_siirtojen_maara):
+                    siirto = siirrot.pop()
+                    siirroissa_olevat_ruudut.remove(siirto)
+                beeta = min(beeta, arvo)
+                if arvo <= alfa:
+                    break
+
+            return arvo, None
+
+    @staticmethod
+    def etsi_siirrot(
+            edellinen_siirto: tuple,
+            vapaat_ruudut: set,
+            siirroissa_olevat_ruudut,
+            siirrot: list):
+        uusia_siirtoja = 0
+        x, y = edellinen_siirto
+
+        for x_delta in range(-2, 3):
+            for y_delta in range(-2, 3):
+                ruutu = x + x_delta, y + y_delta
+                if ruutu == (6, 5):
+                    pass
+                    #print(f"lisätään ruutua etsittäviin ruutuihin (6, 5), ruutu in vapaat_ruudut: {ruutu in vapaat_ruudut}" )
+                if ruutu in vapaat_ruudut:
+                    if ruutu in siirroissa_olevat_ruudut:
+                        print("errorriiii")
+                        print(f"ruutu {ruutu} in siiroissa_olevat_ruudut: {ruutu in siirroissa_olevat_ruudut}")
+                        print(f"siirroissa_olevat_ruudut len: {len(siirroissa_olevat_ruudut)}")
+                        print(f"siirrot len: {len(siirrot)}")
+                        siirrot.remove(ruutu)
+                    else:
+                        siirroissa_olevat_ruudut.add(ruutu)
+                        uusia_siirtoja += 1
+
+                    siirrot.append(ruutu)
+        return uusia_siirtoja
 
     def heurestinen_funktio(self, pelilauta):
-
         pysty = HeurestisenArvonLaskija(
             self.maksimoiva_merkki, self.minimoiva_merkki)
         vaaka = HeurestisenArvonLaskija(
@@ -45,14 +181,14 @@ class Tekoaly:
             # tämä looppaa aina oikean verran ruutuja per vino rivi
             # 5, 6, 7, ..., self.n-1, self.n, self.n-1,..., 7, 6, 5 ruutua
             for j in range(self.n - abs(self.n - 5 - i)):
-
                 x_akseli1 = min(i + 4, self.n - 1) - j
                 y_akseli1 = max(0, -self.n + 5 + i) + j
+
                 x_akseli2 = max(0, self.n - 5 - i) + j
                 y_akseli2 = max(0, -self.n + 5 + i) + j
 
                 vino_oikea_merkki = pelilauta[y_akseli1][x_akseli1]
-                vino_vasen_merkki = pelilauta[y_akseli2][y_akseli2]
+                vino_vasen_merkki = pelilauta[y_akseli2][x_akseli2]
 
                 vino_oikea.laske_arvo(
                     vino_oikea_merkki, (x_akseli1 + 1, y_akseli1 - 1))
@@ -60,8 +196,8 @@ class Tekoaly:
                     vino_vasen_merkki, (x_akseli2 - 1, y_akseli2 - 1))
             vino_oikea.viimeisen_ruudun_tarkistus()
             vino_vasen.viimeisen_ruudun_tarkistus()
-
         HeurestisenArvonLaskija.yksi_perakkain.clear()
+        #print(f"pysty: {pysty.heurestinen_arvo}, vaaka: {vaaka.heurestinen_arvo}, vino_oikea: {vino_oikea.heurestinen_arvo}, vino_vasen: {vino_vasen.heurestinen_arvo}")
         return pysty.heurestinen_arvo + vaaka.heurestinen_arvo + \
             vino_oikea.heurestinen_arvo + vino_vasen.heurestinen_arvo
 
@@ -135,6 +271,10 @@ class HeurestisenArvonLaskija:
 
             self.viimeinen_tyhja_ruutu = self._ruutu_numero
             self.minimoivia_palasia_perakkain = self.maksimoivia_palasia_perakkain = 0
+        if self.maksimoivia_palasia_perakkain >= 5:
+            self.heurestinen_arvo += 1000
+        if self.minimoivia_palasia_perakkain >= 5:
+            self.heurestinen_arvo += 1000
         self._ruutu_numero += 1
 
     def laskemisen_alustus(self):

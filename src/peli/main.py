@@ -1,35 +1,56 @@
 from konfiguraatio import get_konfiguraatio
 from tekoäly.minimax import Tekoaly
+from peli.ihmis_pelaaja import Pelaaja
+from peli.tekoäly_pelaaja import TekoalyPelaaja
 konffi = get_konfiguraatio()
+
+RUUTUJEN_MAARA = konffi["ruutujen_määrä"]
 
 
 class Peli:
     def __init__(self, tapahtumat, pelaaja1, pelaaja2, lauta, ikkuna) -> None:
-        self.ai = Tekoaly()
+        self.ai = Tekoaly(Peli.tarkista_voitto)
         self.tapahtumat = tapahtumat
         self.ristit = []
         self.nollat = []
-        self.lauta = lauta(ikkuna, self.ristit, self.nollat)
-        self.pelaajat = [
+        self.lauta_ui = lauta(ikkuna, self.ristit, self.nollat)
+        self.lauta = [[None for _ in range(
+            RUUTUJEN_MAARA)] for _ in range(RUUTUJEN_MAARA)]
+        self.vapaat_ruudut = set()
+        for x in range(RUUTUJEN_MAARA):
+            for y in range(RUUTUJEN_MAARA):
+                self.vapaat_ruudut.add((x,y))
+        self.siirrot = []
+        pelaaja1 = self._alusta_pelaaja(pelaaja1, "x", self.ristit)
+        pelaaja2 = self._alusta_pelaaja(pelaaja2, "0", self.nollat)
+        self.pelaajat = [pelaaja1, pelaaja2]
 
-            {
-                "pelaaja": pelaaja1,
-                "nappulat": self.ristit,
-                "merkki": "x"
-            },
-            {
-                "pelaaja": pelaaja2,
-                "nappulat": self.nollat,
-                "merkki": "0"
-            }
-        ]
-        self.ristit_ja_nollat = [[None for _ in range(
-            konffi["ruutujen_määrä"])] for _ in range(konffi["ruutujen_määrä"])]
 
-    def tarkista_voitto(self, viimeisin_siirto, merkki):
+
+    def _alusta_pelaaja(self, pelaaja, merkki, merkit):
+        saa_minimoiva_merkki = {"x": "0", "0": "x"}
+        if pelaaja is Pelaaja:
+            return pelaaja(
+                self.tapahtumat.hiirta_klikattu,
+                self.tapahtumat.get_hiiren_paikka,
+                merkki,
+                merkit,
+                RUUTUJEN_MAARA)
+
+        elif pelaaja is TekoalyPelaaja:
+            return pelaaja(
+                merkit,
+                self.lauta,
+                self.siirrot,
+                self.vapaat_ruudut,
+                Peli.tarkista_voitto,
+                merkki,
+                saa_minimoiva_merkki[merkki])
+
+    @staticmethod
+    def tarkista_voitto(viimeisin_siirto, merkki, lauta):
         x, y = viimeisin_siirto
-
-        n = konffi["ruutujen_määrä"] - 1
+        n = RUUTUJEN_MAARA - 1
 
         a = min(y, n - x)
         x_vino_oikea = x + a
@@ -45,22 +66,22 @@ class Peli:
         vino_oikea = 0
 
         for i in range(konffi["ruutujen_määrä"]):
-            if self.ristit_ja_nollat[i][x] == merkki:
+            if lauta[i][x] == merkki:
                 pysty += 1
             else:
                 pysty = 0
 
-            if self.ristit_ja_nollat[y][i] == merkki:
+            if lauta[y][i] == merkki:
                 vaaka += 1
             else:
                 vaaka = 0
             if x_vino_vasen + i <= n and y_vino_vasen + \
-                    i <= n and self.ristit_ja_nollat[y_vino_vasen + i][x_vino_vasen + i] == merkki:
+                    i <= n and lauta[y_vino_vasen + i][x_vino_vasen + i] == merkki:
                 vino_vasen += 1
             else:
                 vino_vasen = 0
             if x_vino_oikea - i >= 0 and y_vino_oikea + \
-                    i <= n and self.ristit_ja_nollat[y_vino_oikea + i][x_vino_oikea - i] == merkki:
+                    i <= n and lauta[y_vino_oikea + i][x_vino_oikea - i] == merkki:
                 vino_oikea += 1
             else:
                 vino_oikea = 0
@@ -71,12 +92,15 @@ class Peli:
 
     def valitse_ruutu(self, vuoro):
         pelaaja = self.pelaajat[vuoro]
-        ruutu = pelaaja["pelaaja"].valitse_ruutu()
+        ruutu = pelaaja.valitse_ruutu()
         if ruutu:
-            if self.ristit_ja_nollat[ruutu[1]][ruutu[0]] is None:
-                self.ristit_ja_nollat[ruutu[1]][ruutu[0]] = pelaaja["merkki"]
-                pelaaja["nappulat"].append((ruutu[1], ruutu[0]))
-                print(self.ai.heurestinen_funktio(self.ristit_ja_nollat))
+            if self.lauta[ruutu[1]][ruutu[0]] is None:
+                self.lauta[ruutu[1]][ruutu[0]] = pelaaja.merkki
+                self.siirrot.append(ruutu)
+                self.vapaat_ruudut.remove(ruutu)
+                pelaaja.merkit.append((ruutu[1], ruutu[0]))
+
+                print(self.ai.heurestinen_funktio(self.lauta))
                 return ruutu
         return None
 
@@ -87,7 +111,7 @@ class Peli:
         return (vuoro + 1) % 2
 
     def pelaa(self):
-        self.lauta.piirra_lauta()
+        self.lauta_ui.piirra_lauta()
         loppu = False
         vuoro = 0
         while True:
@@ -99,16 +123,18 @@ class Peli:
                 siirto = self.pelaa_vuoro(vuoro)
                 if siirto:
                     if self.tarkista_voitto(
-                            siirto, self.pelaajat[vuoro]["merkki"]):
+                            siirto,
+                            self.pelaajat[vuoro].merkki,
+                            self.lauta):
                         loppu = True
                     break
             if loppu:
                 break
             vuoro = self.vaihda_vuoroa(vuoro)
-            self.lauta.piirra_lauta()
-        self.lauta.tee_voittoteksti(self.pelaajat[vuoro]["merkki"])
+            self.lauta_ui.piirra_lauta()
+        self.lauta_ui.tee_voittoteksti(self.pelaajat[vuoro].merkki)
         while True:
-            self.lauta.piirra_lauta()
+            self.lauta_ui.piirra_lauta()
             tapahtumat = self.tapahtumat.get_tapahtumat()
             if tapahtumat["lopeta"] or tapahtumat["takaisin"]:
                 break

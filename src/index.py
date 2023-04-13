@@ -4,26 +4,25 @@ from peli.tapahtumat import Tapahtumat
 from peli.main import Peli
 from peli.ihmis_pelaaja import Pelaaja
 from kayttoliiittyma.lauta import Lauta
-FPS = 144
+from peli.tekoäly_pelaaja import TekoalyPelaaja
+FPS = 30
+
+konffi = get_konfiguraatio()
 
 
 class Sovellus:
     def __init__(self) -> None:
         pygame.init()
-        konffi = get_konfiguraatio()
         ikkuna = pygame.display.set_mode((konffi["leveys"], konffi["korkeus"]))
         pygame.display.set_caption("Ristinolla")
         self.tapahtumat = Tapahtumat()
         self.peli = Peli(
             self.tapahtumat,
-            Pelaaja(
-                self.tapahtumat.hiirta_klikattu,
-                self.tapahtumat.get_hiiren_paikka),
-            Pelaaja(
-                self.tapahtumat.hiirta_klikattu,
-                self.tapahtumat.get_hiiren_paikka),
+            Pelaaja,
+            TekoalyPelaaja,
             Lauta,
-            ikkuna)
+            ikkuna
+        )
 
     def main(self):
         kello = pygame.time.Clock()
