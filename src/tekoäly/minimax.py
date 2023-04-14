@@ -29,28 +29,18 @@ class Tekoaly:
         merkki = self.maksimoiva_merkki if maksimoiva_pelaaja else self.minimoiva_merkki
         if viimeisin_siirto:
             if self.tarkista_voitto(viimeisin_siirto, merkki, pelilauta) or syvyys == 0:
-                #print(f"evalissa, syvyys: {syvyys}")
                 return self.heurestinen_funktio(pelilauta), None
 
         if maksimoiva_pelaaja:
             arvo = float("-infinity")
 
             for siirto in siirrot[::-1]:
-                #print(f"tarkistetaan_siirtoa: {siirto} syvyys: {syvyys} ")
-                #print(f"kaikki siirrot: {siirrot}")
                 if siirto in varatut_siirrot:
                     continue
-                #print("varatut_siirrot", varatut_siirrot)
                 varatut_siirrot.add(siirto)
                 uusien_siirtojen_maara = self.etsi_siirrot(
                     siirto, vapaat_ruudut, siirroissa_olevat_ruudut, siirrot)
                 pelilauta[siirto[1]][siirto[0]] = self.maksimoiva_merkki
-                '''
-                print("vapaat_ruudut.remove(siirto)  failed")
-                print(f"siirto in vapaat_ruudut: {siirto in vapaat_ruudut}")
-                print(f"siirto: {siirto}")
-                print(f"siirrot: {siirrot}")
-'''
                 vapaat_ruudut.remove(siirto)
 
                 arviointi = self.minimax(
@@ -76,9 +66,8 @@ class Tekoaly:
                     siirto = siirrot.pop()
                     siirroissa_olevat_ruudut.remove(siirto)
                 alfa = max(alfa, arvo)
-                if arvo >= beeta:
-                    #print(f"syvyys: {syvyys},  arvo {arvo} >= beeta {beeta}: True")
-                    break
+                #if arvo >= beeta:
+                #    break
             return arvo, paras_siirto
 
         else:
@@ -90,11 +79,6 @@ class Tekoaly:
                 uusien_siirtojen_maara = self.etsi_siirrot(
                     siirto, vapaat_ruudut, siirroissa_olevat_ruudut, siirrot)
                 pelilauta[siirto[1]][siirto[0]] = self.minimoiva_merkki
-                '''
-                print(f"vapaat_ruudut: {vapaat_ruudut}")
-                print(f"siirto: {siirto}")
-                print(f"siirrot: {siirrot}")
-'''
                 vapaat_ruudut.remove(siirto)
 
                 arviointi = self.minimax(
@@ -117,8 +101,8 @@ class Tekoaly:
                     siirto = siirrot.pop()
                     siirroissa_olevat_ruudut.remove(siirto)
                 beeta = min(beeta, arvo)
-                if arvo <= alfa:
-                    break
+                #if arvo <= alfa:
+                #    break
 
             return arvo, None
 
@@ -136,13 +120,8 @@ class Tekoaly:
                 ruutu = x + x_delta, y + y_delta
                 if ruutu == (6, 5):
                     pass
-                    #print(f"lisätään ruutua etsittäviin ruutuihin (6, 5), ruutu in vapaat_ruudut: {ruutu in vapaat_ruudut}" )
                 if ruutu in vapaat_ruudut:
                     if ruutu in siirroissa_olevat_ruudut:
-                        print("errorriiii")
-                        print(f"ruutu {ruutu} in siiroissa_olevat_ruudut: {ruutu in siirroissa_olevat_ruudut}")
-                        print(f"siirroissa_olevat_ruudut len: {len(siirroissa_olevat_ruudut)}")
-                        print(f"siirrot len: {len(siirrot)}")
                         siirrot.remove(ruutu)
                     else:
                         siirroissa_olevat_ruudut.add(ruutu)
@@ -197,7 +176,6 @@ class Tekoaly:
             vino_oikea.viimeisen_ruudun_tarkistus()
             vino_vasen.viimeisen_ruudun_tarkistus()
         HeurestisenArvonLaskija.yksi_perakkain.clear()
-        #print(f"pysty: {pysty.heurestinen_arvo}, vaaka: {vaaka.heurestinen_arvo}, vino_oikea: {vino_oikea.heurestinen_arvo}, vino_vasen: {vino_vasen.heurestinen_arvo}")
         return pysty.heurestinen_arvo + vaaka.heurestinen_arvo + \
             vino_oikea.heurestinen_arvo + vino_vasen.heurestinen_arvo
 
@@ -214,8 +192,11 @@ class HeurestisenArvonLaskija:
         self.maksimoivia_palasia_perakkain = None
         self.minimoivia_palasia_perakkain = None
         self._ruutu_numero = 0
+        self.perakkain_kertoimet = {2: 10, 3: 100, 4: 1000, 5: float("infinity")}
+        
 
     def laske_arvo(self, merkki, edeltava_ruutu):
+
 
         if merkki == self.maksimoiva_merkki:
             self.maksimoivia_palasia_perakkain += 1
@@ -272,9 +253,14 @@ class HeurestisenArvonLaskija:
             self.viimeinen_tyhja_ruutu = self._ruutu_numero
             self.minimoivia_palasia_perakkain = self.maksimoivia_palasia_perakkain = 0
         if self.maksimoivia_palasia_perakkain >= 5:
+            self.heurestinen_arvo += 10000
+        elif self.maksimoivia_palasia_perakkain == 4:
             self.heurestinen_arvo += 1000
+
         if self.minimoivia_palasia_perakkain >= 5:
-            self.heurestinen_arvo += 1000
+            self.heurestinen_arvo -= 10000
+        elif self.minimoivia_palasia_perakkain == 4:
+            self.heurestinen_arvo -= 1000
         self._ruutu_numero += 1
 
     def laskemisen_alustus(self):
