@@ -19,13 +19,11 @@ class Peli:
         self.vapaat_ruudut = set()
         for x in range(RUUTUJEN_MAARA):
             for y in range(RUUTUJEN_MAARA):
-                self.vapaat_ruudut.add((x,y))
+                self.vapaat_ruudut.add((x, y))
         self.siirrot = []
         pelaaja1 = self._alusta_pelaaja(pelaaja1, "x", self.ristit)
         pelaaja2 = self._alusta_pelaaja(pelaaja2, "0", self.nollat)
         self.pelaajat = [pelaaja1, pelaaja2]
-
-
 
     def _alusta_pelaaja(self, pelaaja, merkki, merkit):
         saa_minimoiva_merkki = {"x": "0", "0": "x"}
@@ -100,7 +98,7 @@ class Peli:
                 self.vapaat_ruudut.remove(ruutu)
                 pelaaja.merkit.append((ruutu[1], ruutu[0]))
 
-                print("evaluaatio:", self.ai.heurestinen_funktio(self.lauta))
+                print("evaluaatio:", self.ai.heurestinen_funktio(self.lauta, 5))
                 return ruutu
         return None
 
