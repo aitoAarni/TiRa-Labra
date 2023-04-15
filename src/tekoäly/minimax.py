@@ -27,7 +27,8 @@ class Tekoaly:
             maksimoiva_pelaaja,
             viimeisin_siirto=None):
         
-        edellinen_merkki = self.maksimoiva_merkki if maksimoiva_pelaaja else self.minimoiva_merkki
+        edellinen_merkki = self.minimoiva_merkki if maksimoiva_pelaaja else self.maksimoiva_merkki
+
         if viimeisin_siirto:
             if self.tarkista_voitto(
                     viimeisin_siirto,
