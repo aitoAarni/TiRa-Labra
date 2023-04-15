@@ -9,7 +9,7 @@ RUUTUJEN_MAARA = konffi["ruutujen_määrä"]
 
 class Peli:
     def __init__(self, tapahtumat, pelaaja1, pelaaja2, lauta, ikkuna) -> None:
-        self.ai = Tekoaly(Peli.tarkista_voitto, "x", "0", 2)
+        self.ai = Tekoaly(Peli.tarkista_voitto, "x", "0", 4)
         self.tapahtumat = tapahtumat
         self.ristit = []
         self.nollat = []

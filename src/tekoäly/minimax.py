@@ -70,7 +70,7 @@ class Tekoaly:
                 varatut_siirrot.remove(siirto)
                 vapaat_ruudut.add(siirto)
                 alfa = max(alfa, arvo)
-                # if arvo >= beeta:
+                #if arvo >= beeta:
                 #    break
             return arvo, paras_siirto
 
@@ -103,7 +103,7 @@ class Tekoaly:
                 vapaat_ruudut.add(siirto)
 
                 beeta = min(beeta, arvo)
-                # if arvo <= alfa:
+                #if arvo <= alfa:
                 #    break
 
             return arvo, None

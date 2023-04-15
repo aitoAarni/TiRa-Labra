@@ -24,7 +24,11 @@ class Lauta:
                 self._ikkuna, konffi["laudan_viivojen_väri"], (y, x), (konffi["leveys"], x))
 
     def _piirra_nollat(self):
-        for rivi, sarake in self._nollat:
+        vari = konffi["nappuloiden_väri"]
+        for i, ruutu in enumerate(self._nollat):
+            rivi, sarake = ruutu
+            if i == len(self._nollat) - 1:
+                vari = (0, 255, 10)
             keskipiste = (
                 sarake *
                 self._ruudun_leveys +
@@ -34,20 +38,24 @@ class Lauta:
                 self._ruudun_leveys +
                 self._ruudun_leveys /
                 2)
-            pygame.draw.circle(self._ikkuna, konffi["nappuloiden_väri"],
+            pygame.draw.circle(self._ikkuna, vari,
                                keskipiste, self._ruudun_leveys / 3, 3)
 
     def _piirra_ristit(self):
-        for rivi, sarake in self._ristit:
+        vari = konffi["nappuloiden_väri"]
+        for i, ruutu in enumerate(self._ristit):
+            rivi, sarake = ruutu
+            if i == len(self._ristit) - 1:
+                vari = (255, 105, 180)
             x, y = sarake * self._ruudun_leveys, rivi * self._ruudun_leveys
             pygame.draw.line(
                 self._ikkuna,
-                konffi["nappuloiden_väri"],
+                vari,
                 (x, y),
                 (x + self._ruudun_leveys, y + self._ruudun_leveys), 3)
             pygame.draw.line(
                 self._ikkuna,
-                konffi["nappuloiden_väri"],
+                vari,
                 (x + self._ruudun_leveys, y),
                 (x, y + self._ruudun_leveys), 3)
 
