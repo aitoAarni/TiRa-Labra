@@ -27,11 +27,11 @@ class Tekoaly:
             maksimoiva_pelaaja,
             viimeisin_siirto=None):
         
-        merkki = self.maksimoiva_merkki if maksimoiva_pelaaja else self.minimoiva_merkki
+        edellinen_merkki = self.maksimoiva_merkki if maksimoiva_pelaaja else self.minimoiva_merkki
         if viimeisin_siirto:
             if self.tarkista_voitto(
                     viimeisin_siirto,
-                    merkki,
+                    edellinen_merkki,
                     pelilauta) or syvyys == 0:
                 return self.heurestinen_funktio(pelilauta, syvyys), None
         
