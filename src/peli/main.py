@@ -9,7 +9,7 @@ RUUTUJEN_MAARA = konffi["ruutujen_määrä"]
 
 class Peli:
     def __init__(self, tapahtumat, pelaaja1, pelaaja2, lauta, ikkuna) -> None:
-        self.ai = Tekoaly(Peli.tarkista_voitto)
+        self.ai = Tekoaly(Peli.tarkista_voitto, "x", "0", 2)
         self.tapahtumat = tapahtumat
         self.ristit = []
         self.nollat = []
@@ -43,7 +43,8 @@ class Peli:
                 self.vapaat_ruudut,
                 Peli.tarkista_voitto,
                 merkki,
-                saa_minimoiva_merkki[merkki])
+                saa_minimoiva_merkki[merkki],
+                2)
 
     @staticmethod
     def tarkista_voitto(viimeisin_siirto, merkki, lauta):
@@ -97,13 +98,8 @@ class Peli:
                 self.siirrot.append(ruutu)
                 self.vapaat_ruudut.remove(ruutu)
                 pelaaja.merkit.append((ruutu[1], ruutu[0]))
-                print("lauta: ")
-                for rivi in self.lauta:
-                    print(rivi)
-                print()
-                print("evaluaatio:", self.ai.heurestinen_funktio(self.lauta, 5))
-                print()
-                print()
+
+                print("evaluaatio:", self.ai.heurestinen_funktio(self.lauta, 2))
                 return ruutu
         return None
 

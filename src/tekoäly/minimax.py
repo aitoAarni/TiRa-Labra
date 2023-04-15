@@ -7,12 +7,13 @@ class Tekoaly:
     def __init__(
             self,
             tarkista_voitto,
-            maksimoiva_merkki="x",
-            minimoiva_merkki="0") -> None:
+            maksimoiva_merkki,
+            minimoiva_merkki, maksimi_syvyys) -> None:
         self.tarkista_voitto = tarkista_voitto
         self.maksimoiva_merkki = maksimoiva_merkki
         self.minimoiva_merkki = minimoiva_merkki
         self.n = konffi["ruutujen_määrä"]
+        self.maksimi_syvyys = maksimi_syvyys
 
     def minimax(
             self,
@@ -26,7 +27,7 @@ class Tekoaly:
             beeta,
             maksimoiva_pelaaja,
             viimeisin_siirto=None):
-        
+
         edellinen_merkki = self.minimoiva_merkki if maksimoiva_pelaaja else self.maksimoiva_merkki
 
         if viimeisin_siirto:
@@ -35,10 +36,9 @@ class Tekoaly:
                     edellinen_merkki,
                     pelilauta) or syvyys == 0:
                 return self.heurestinen_funktio(pelilauta, syvyys), None
-        
+
         if maksimoiva_pelaaja:
             arvo = float("-infinity")
-
 
             for siirto in siirrot[::-1]:
                 if siirto in varatut_siirrot:
@@ -49,7 +49,6 @@ class Tekoaly:
                     siirto, vapaat_ruudut, siirroissa_olevat_ruudut, siirrot)
                 pelilauta[siirto[1]][siirto[0]] = self.maksimoiva_merkki
                 vapaat_ruudut.remove(siirto)
-
 
                 arviointi = self.minimax(
                     syvyys - 1,
@@ -62,7 +61,6 @@ class Tekoaly:
                     beeta,
                     False,
                     siirto)[0]
-                
 
                 arvo = max(arvo, arviointi)
                 if arviointi == arvo:
@@ -86,7 +84,7 @@ class Tekoaly:
                     siirto, vapaat_ruudut, siirroissa_olevat_ruudut, siirrot)
                 pelilauta[siirto[1]][siirto[0]] = self.minimoiva_merkki
                 vapaat_ruudut.remove(siirto)
-                
+
                 arviointi = self.minimax(
                     syvyys - 1,
                     pelilauta,
@@ -98,15 +96,11 @@ class Tekoaly:
                     beeta,
                     True,
                     siirto)[0]
-                
-
 
                 arvo = min(arvo, arviointi)
                 pelilauta[siirto[1]][siirto[0]] = None
                 varatut_siirrot.remove(siirto)
                 vapaat_ruudut.add(siirto)
-
-
 
                 beeta = min(beeta, arvo)
                 # if arvo <= alfa:
@@ -124,8 +118,8 @@ class Tekoaly:
         uudet_siirroissa_olevat_ruudut = siirroissa_olevat_ruudut.copy()
         x, y = edellinen_siirto
 
-        for x_delta in range(-2, 3):
-            for y_delta in range(-2, 3):
+        for x_delta in (2, -2, 1, -1, 0):
+            for y_delta in (2, -2, 1, -1, 0):
                 ruutu = x + x_delta, y + y_delta
 
                 if ruutu in vapaat_ruudut:
@@ -134,19 +128,30 @@ class Tekoaly:
                     else:
                         uudet_siirroissa_olevat_ruudut.add(ruutu)
 
-
                     uudet_siirrot.append(ruutu)
         return uudet_siirrot, uudet_siirroissa_olevat_ruudut
 
     def heurestinen_funktio(self, pelilauta, syvyys):
         pysty = HeurestisenArvonLaskija(
-            self.maksimoiva_merkki, self.minimoiva_merkki, syvyys)
+            self.maksimoiva_merkki,
+            self.minimoiva_merkki,
+            syvyys,
+            self.maksimi_syvyys)
         vaaka = HeurestisenArvonLaskija(
-            self.maksimoiva_merkki, self.minimoiva_merkki, syvyys)
+            self.maksimoiva_merkki,
+            self.minimoiva_merkki,
+            syvyys,
+            self.maksimi_syvyys)
         vino_oikea = HeurestisenArvonLaskija(
-            self.maksimoiva_merkki, self.minimoiva_merkki, syvyys)
+            self.maksimoiva_merkki,
+            self.minimoiva_merkki,
+            syvyys,
+            self.maksimi_syvyys)
         vino_vasen = HeurestisenArvonLaskija(
-            self.maksimoiva_merkki, self.minimoiva_merkki, syvyys)
+            self.maksimoiva_merkki,
+            self.minimoiva_merkki,
+            syvyys,
+            self.maksimi_syvyys)
 
         for a in range(self.n):
             pysty.laskemisen_alustus()
@@ -186,4 +191,3 @@ class Tekoaly:
         HeurestisenArvonLaskija.yksi_perakkain.clear()
         return pysty.heurestinen_arvo + vaaka.heurestinen_arvo + \
             vino_oikea.heurestinen_arvo + vino_vasen.heurestinen_arvo
-
