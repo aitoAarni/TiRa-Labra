@@ -12,6 +12,11 @@ def lint(ctx):
 def start(ctx):
     ctx.run("python3 src/index.py", pty=True)
     
+
+@task
+def logger(ctx):
+    ctx.run("python3 src/index.py > debugging_log.txt", pty=True)
+    
 @task
 def test(ctx):
     ctx.run("pytest src", pty=True)

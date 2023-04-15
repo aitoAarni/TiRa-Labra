@@ -48,7 +48,7 @@ class Tekoaly:
                     continue
                 varatut_siirrot.add(siirto)
 
-                uudet_siirrot = self.etsi_siirrot(
+                uudet_siirrot, uudet_siirroissa_olevat_ruudut = self.etsi_siirrot(
                     siirto, vapaat_ruudut, siirroissa_olevat_ruudut, siirrot)
                 pelilauta[siirto[1]][siirto[0]] = self.maksimoiva_merkki
                 vapaat_ruudut.remove(siirto)
@@ -57,16 +57,14 @@ class Tekoaly:
                 arviointi = self.minimax(
                     syvyys - 1,
                     pelilauta,
-                    siirrot,
+                    uudet_siirrot,
                     varatut_siirrot,
                     vapaat_ruudut,
-                    siirroissa_olevat_ruudut,
+                    uudet_siirroissa_olevat_ruudut,
                     alfa,
                     beeta,
                     False,
                     siirto)[0]
-                if syvyys == 2 and arviointi > 10**9:
-                    print(f"arvo: {arviointi}, siirto: {siirto}, isoin avo atm: {arvo}")
                 
 
                 arvo = max(arvo, arviointi)
@@ -76,9 +74,6 @@ class Tekoaly:
 
                 varatut_siirrot.remove(siirto)
                 vapaat_ruudut.add(siirto)
-                for _ in range(uusien_siirtojen_maara):
-                    siirto = siirrot.pop()
-                    siirroissa_olevat_ruudut.remove(siirto)
                 alfa = max(alfa, arvo)
                 # if arvo >= beeta:
                 #    break
@@ -90,7 +85,7 @@ class Tekoaly:
                 if siirto in varatut_siirrot:
                     continue
                 varatut_siirrot.add(siirto)
-                uusien_siirtojen_maara = self.etsi_siirrot(
+                uudet_siirrot, uudet_siirroissa_olevat_ruudut = self.etsi_siirrot(
                     siirto, vapaat_ruudut, siirroissa_olevat_ruudut, siirrot)
                 pelilauta[siirto[1]][siirto[0]] = self.minimoiva_merkki
                 vapaat_ruudut.remove(siirto)
@@ -98,22 +93,24 @@ class Tekoaly:
                 arviointi = self.minimax(
                     syvyys - 1,
                     pelilauta,
-                    siirrot,
+                    uudet_siirrot,
                     varatut_siirrot,
                     vapaat_ruudut,
-                    siirroissa_olevat_ruudut,
+                    uudet_siirroissa_olevat_ruudut,
                     alfa,
                     beeta,
                     True,
                     siirto)[0]
+                
+
+
                 arvo = min(arvo, arviointi)
                 pelilauta[siirto[1]][siirto[0]] = None
                 varatut_siirrot.remove(siirto)
                 vapaat_ruudut.add(siirto)
 
-                for _ in range(uusien_siirtojen_maara):
-                    siirto = siirrot.pop()
-                    siirroissa_olevat_ruudut.remove(siirto)
+
+
                 beeta = min(beeta, arvo)
                 # if arvo <= alfa:
                 #    break
@@ -126,7 +123,8 @@ class Tekoaly:
             vapaat_ruudut: set,
             siirroissa_olevat_ruudut: set,
             siirrot: list):
-        uudet_siirrot = []
+        uudet_siirrot = siirrot.copy()
+        uudet_siirroissa_olevat_ruudut = siirroissa_olevat_ruudut.copy()
         x, y = edellinen_siirto
 
         for x_delta in range(-2, 3):
@@ -134,14 +132,14 @@ class Tekoaly:
                 ruutu = x + x_delta, y + y_delta
 
                 if ruutu in vapaat_ruudut:
-                    if ruutu in siirroissa_olevat_ruudut:
-                        siirrot.remove(ruutu)
+                    if ruutu in uudet_siirroissa_olevat_ruudut:
+                        uudet_siirrot.remove(ruutu)
                     else:
-                        siirroissa_olevat_ruudut.add(ruutu)
-                        uusia_siirtoja += 1
+                        uudet_siirroissa_olevat_ruudut.add(ruutu)
 
-                    siirrot.append(ruutu)
-        return uusia_siirtoja
+
+                    uudet_siirrot.append(ruutu)
+        return uudet_siirrot, uudet_siirroissa_olevat_ruudut
 
     def heurestinen_funktio(self, pelilauta, syvyys):
         pysty = HeurestisenArvonLaskija(
@@ -165,8 +163,8 @@ class Tekoaly:
 
                 pysty.laske_arvo(pysty_merkki, (a, b - 1))
                 vaaka.laske_arvo(vaaka_merkki, (b - 1, a))
-            pysty.viimeisen_ruudun_tarkistus()
-            vaaka.viimeisen_ruudun_tarkistus()
+            pysty.viimeisen_ruudun_tarkistus((a, b - 1))
+            vaaka.viimeisen_ruudun_tarkistus((b - 1, a))
 
         # Looppaa kaikki vinot rivit läpi jossa voi olla 5 merkkiä peräkkäin
         for i in range(self.n * 2 - 10 + 1):
@@ -186,8 +184,8 @@ class Tekoaly:
                     vino_oikea_merkki, (x_akseli1 + 1, y_akseli1 - 1))
                 vino_vasen.laske_arvo(
                     vino_vasen_merkki, (x_akseli2 - 1, y_akseli2 - 1))
-            vino_oikea.viimeisen_ruudun_tarkistus()
-            vino_vasen.viimeisen_ruudun_tarkistus()
+            vino_oikea.viimeisen_ruudun_tarkistus((x_akseli1 + 1, y_akseli1 - 1))
+            vino_vasen.viimeisen_ruudun_tarkistus((x_akseli2 - 1, y_akseli2 - 1))
         HeurestisenArvonLaskija.yksi_perakkain.clear()
         return pysty.heurestinen_arvo + vaaka.heurestinen_arvo + \
             vino_oikea.heurestinen_arvo + vino_vasen.heurestinen_arvo
@@ -207,7 +205,7 @@ class HeurestisenArvonLaskija:
         self._ruutu_numero = 0
         self.syvyys = syvyys
 
-    def perakkaisten_ruutujen_arvot(self, perakkain, arvokas=False):
+    def perakkaisten_ruutujen_arvot(self, perakkain, edeltava, arvokas=False):
         voitto_arvo = VOITTO_ARVO - (10 - self.syvyys) * 10**6
         
         arvot = {2: 10, 3: 100, 4: 1000, 5: voitto_arvo}
@@ -225,22 +223,22 @@ class HeurestisenArvonLaskija:
             self.maksimoivia_palasia_perakkain += 1
             # jos minimoivia palasia on useita peräkkäin ja niitä blokkaa nykyinen maksivoiva merkki
             # niin vähennä heurestista arvoa palasten pituudella
-            if self.viimeinen_tyhja_ruutu == self._ruutu_numero - 1 - \
-                    self.minimoivia_palasia_perakkain and self.minimoivia_palasia_perakkain > 1:
+            if (self.viimeinen_tyhja_ruutu == self._ruutu_numero - 1 - \
+                    self.minimoivia_palasia_perakkain and self.minimoivia_palasia_perakkain > 1) or self.minimoivia_palasia_perakkain >= 5:
 
                 self.heurestinen_arvo -= self.perakkaisten_ruutujen_arvot(
-                    self.minimoivia_palasia_perakkain)
+                    self.minimoivia_palasia_perakkain, edeltava_ruutu)
             self.minimoivia_palasia_perakkain = 0
 
         elif merkki == self.minimoiva_merkki:
             self.minimoivia_palasia_perakkain += 1
             # jos maksivoivia palasia on useita peräkkäin ja niitä blokkaa nykyinen minivoiva merkki
             # niin lisää heurestiseen arvoon palasten pituus
-            if self.viimeinen_tyhja_ruutu == self._ruutu_numero - 1 - \
-                    self.maksimoivia_palasia_perakkain and self.maksimoivia_palasia_perakkain > 1:
+            if (self.viimeinen_tyhja_ruutu == self._ruutu_numero - 1 - \
+                    self.maksimoivia_palasia_perakkain and self.maksimoivia_palasia_perakkain > 1) or self.maksimoivia_palasia_perakkain >= 5:
 
                 self.heurestinen_arvo += self.perakkaisten_ruutujen_arvot(
-                    self.maksimoivia_palasia_perakkain)
+                    self.maksimoivia_palasia_perakkain, edeltava_ruutu)
             self.maksimoivia_palasia_perakkain = 0
 
         else:
@@ -255,10 +253,10 @@ class HeurestisenArvonLaskija:
                     else:
                         self.yksi_perakkain.add(edeltava_ruutu)
                         self.heurestinen_arvo -= self.perakkaisten_ruutujen_arvot(
-                            self.minimoivia_palasia_perakkain, True)
+                            self.minimoivia_palasia_perakkain, edeltava_ruutu, True)
                 else:
                     self.heurestinen_arvo -= self.perakkaisten_ruutujen_arvot(
-                        self.minimoivia_palasia_perakkain, True)
+                        self.minimoivia_palasia_perakkain, edeltava_ruutu, True)
 
             # jos maskivoivia merkkejä on välissä ja molemmilla puolilla on tyhjä ruutu
             # niin lisää heurestiseen arvoon 2 * pituus
@@ -270,16 +268,16 @@ class HeurestisenArvonLaskija:
                     else:
                         self.yksi_perakkain.add(edeltava_ruutu)
                         self.heurestinen_arvo += self.perakkaisten_ruutujen_arvot(
-                            self.maksimoivia_palasia_perakkain, True)
+                            self.maksimoivia_palasia_perakkain, edeltava_ruutu, True)
                 else:
                     self.heurestinen_arvo += self.perakkaisten_ruutujen_arvot(
-                        self.maksimoivia_palasia_perakkain, True)
+                        self.maksimoivia_palasia_perakkain, edeltava_ruutu, True)
 
             elif 1 not in (self.maksimoivia_palasia_perakkain, self.minimoivia_palasia_perakkain):
                 self.heurestinen_arvo -= self.perakkaisten_ruutujen_arvot(
-                    self.minimoivia_palasia_perakkain)
+                    self.minimoivia_palasia_perakkain, edeltava_ruutu)
                 self.heurestinen_arvo += self.perakkaisten_ruutujen_arvot(
-                    self.maksimoivia_palasia_perakkain)
+                    self.maksimoivia_palasia_perakkain, edeltava_ruutu)
 
             self.viimeinen_tyhja_ruutu = self._ruutu_numero
             self.minimoivia_palasia_perakkain = self.maksimoivia_palasia_perakkain = 0
@@ -291,10 +289,10 @@ class HeurestisenArvonLaskija:
         self.minimoivia_palasia_perakkain = 0
         self._ruutu_numero = 0
 
-    def viimeisen_ruudun_tarkistus(self):
+    def viimeisen_ruudun_tarkistus(self, edeltava_ruutu):
         if self.viimeinen_tyhja_ruutu == self._ruutu_numero - \
                 1 - self.minimoivia_palasia_perakkain:
-            self.heurestinen_arvo -= self.perakkaisten_ruutujen_arvot(self.minimoivia_palasia_perakkain, self.syvyys)
+            self.heurestinen_arvo -= self.perakkaisten_ruutujen_arvot(self.minimoivia_palasia_perakkain, edeltava_ruutu)
         if self.viimeinen_tyhja_ruutu == self._ruutu_numero - \
                 1 - self.maksimoivia_palasia_perakkain:
-            self.heurestinen_arvo += self.perakkaisten_ruutujen_arvot(self.maksimoivia_palasia_perakkain, self.syvyys)
+            self.heurestinen_arvo += self.perakkaisten_ruutujen_arvot(self.maksimoivia_palasia_perakkain, edeltava_ruutu)

@@ -97,8 +97,13 @@ class Peli:
                 self.siirrot.append(ruutu)
                 self.vapaat_ruudut.remove(ruutu)
                 pelaaja.merkit.append((ruutu[1], ruutu[0]))
-
+                print("lauta: ")
+                for rivi in self.lauta:
+                    print(rivi)
+                print()
                 print("evaluaatio:", self.ai.heurestinen_funktio(self.lauta, 5))
+                print()
+                print()
                 return ruutu
         return None
 
