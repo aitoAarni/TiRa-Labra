@@ -1,9 +1,9 @@
 import unittest
-from peli.tapahtumat import Tapahtumat
 import pygame
-
-
 pygame.init()
+from peli.tapahtumat import Tapahtumat
+
+
 
 def lisaa_eventti(tyyppi, nappi=None):
     pygame.init()
