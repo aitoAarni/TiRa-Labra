@@ -13,6 +13,7 @@ def lisaa_eventti(tyyppi, nappi=None):
 
 class TestTapahtumat(unittest.TestCase):
     def setUp(self):
+        pygame.init()
         self.tapahtumat = Tapahtumat()
 
     def test_konstruktori_toimii(self):
