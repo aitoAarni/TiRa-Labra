@@ -14,8 +14,16 @@ VOITTO_TEKSTIN_VARI = konffi["voitto_tekstin_väri"]
 PELI_OHI_VARI = konffi["peli_ohi_väri"]
 LAUDAN_VARI = konffi["laudan_väri"]
 
-class Lauta:
-    def __init__(self, ikkuna, ristit, nollat) -> None:
+
+class LautaUI:
+    """Pelilaudan graaffinen esitys
+    """
+
+    def __init__(
+            self,
+            ikkuna: pygame.display,
+            ristit: list,
+            nollat: list) -> None:
         self._ikkuna = ikkuna
         self._ristit = ristit
         self._nollat = nollat
@@ -24,15 +32,18 @@ class Lauta:
         self.voittoikkuna = None
 
     def _piirra_viivat(self):
+        """piirtää laudan ruudut, joihin voi laittaa ristin tai nollan
+        """
         for i in range(1, RUUTUJEN_MAARA):
             x1 = self._ruudun_leveys * i
             y1 = 0
             x2 = 0
-            y2= self._ruudun_korkeus * i
+            y2 = self._ruudun_korkeus * i
+
             # pysty viivat
             pygame.draw.line(self._ikkuna, LAUDAN_VIIVOJEN_VARI,
                              (x1, y1), (x1, KORKEUS))
-            # vaaka viivat 
+            # vaaka viivat
             pygame.draw.line(
                 self._ikkuna, LAUDAN_VIIVOJEN_VARI, (x2, y2), (LEVEYS, y2))
 
@@ -51,13 +62,13 @@ class Lauta:
                 self._ruudun_korkeus +
                 self._ruudun_korkeus /
                 2)
-            r = min(self._ruudun_korkeus, self._ruudun_leveys) / 3
+            r = min(self._ruudun_korkeus, self._ruudun_leveys) / 3  # r = säde
             pygame.draw.circle(self._ikkuna, vari,
                                keskipiste, r, 3)
 
     def _piirra_ristit(self):
         vari = NAPPULOIDEN_VARI
-        r = min(self._ruudun_korkeus, self._ruudun_leveys) / 3
+        r = min(self._ruudun_korkeus, self._ruudun_leveys) / 3  # r = säde
 
         for i, ruutu in enumerate(self._ristit):
             rivi, sarake = ruutu
@@ -78,21 +89,21 @@ class Lauta:
                 (x_keski + r, y_keski - r),
                 (x_keski - r, y_keski + r), 3)
 
-    def tee_voittoteksti(self, merkki):
+    def tee_voittoteksti(self, merkki: str):
         self.voittoikkuna = pygame.Surface(
             (LEVEYS, KORKEUS))
         if merkki.lower() == "x":
             merkkijono = "RISTIT VOITTI!"
-        
+
         elif merkki == "-":
             merkkijono = "TASAPELI -_-"
-        
+
         else:
             merkkijono = "NOOLAT VOITTI!"
 
         fontti = pygame.font.Font(os.path.join(
             "materiaalit", "Wedgie Regular.ttf"), FONTTI)
-        
+
         teksti = fontti.render(merkkijono, True, VOITTO_TEKSTIN_VARI)
         teksti_rect = teksti.get_rect()
         teksti_rect.center = (LEVEYS / 2, KORKEUS / 2)

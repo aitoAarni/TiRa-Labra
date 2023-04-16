@@ -2,31 +2,36 @@ from konfiguraatio import get_konfiguraatio
 from tekoäly.heurestinen_arviointi import HeurestisenArvonLaskija
 konffi = get_konfiguraatio()
 
+RUUTUJEN_MAARA = konffi["ruutujen_määrä"]
+
 
 class Tekoaly:
+    """Luokka parhaan seuraavan ruudun etsimiseen käyttäen minimax algoritmia
+    """
+
     def __init__(
             self,
             tarkista_voitto,
-            maksimoiva_merkki,
-            minimoiva_merkki, maksimi_syvyys) -> None:
+            maksimoiva_merkki: str,
+            minimoiva_merkki: str, maksimi_syvyys: int) -> None:
         self.tarkista_voitto = tarkista_voitto
         self.maksimoiva_merkki = maksimoiva_merkki
         self.minimoiva_merkki = minimoiva_merkki
-        self.n = konffi["ruutujen_määrä"]
+        self.n = RUUTUJEN_MAARA
         self.maksimi_syvyys = maksimi_syvyys
 
     def minimax(
             self,
-            syvyys,
-            pelilauta,
-            siirrot,
-            varatut_siirrot,
-            vapaat_ruudut,
-            siirroissa_olevat_ruudut,
-            alfa,
-            beeta,
-            maksimoiva_pelaaja,
-            viimeisin_siirto=None):
+            syvyys: int,
+            pelilauta: list,
+            siirrot: list,
+            varatut_siirrot: set,
+            vapaat_ruudut: set,
+            siirroissa_olevat_ruudut: set,
+            alfa: float,
+            beeta: float,
+            maksimoiva_pelaaja: bool,
+            viimeisin_siirto: tuple | None=None) -> tuple:
 
         edellinen_merkki = self.minimoiva_merkki if maksimoiva_pelaaja else self.maksimoiva_merkki
 
@@ -40,14 +45,15 @@ class Tekoaly:
         if maksimoiva_pelaaja:
             arvo = float("-infinity")
 
-            for i, siirto in enumerate(siirrot[::-1]):
+            for siirto in siirrot[::-1]:
                 if siirto in varatut_siirrot:
                     continue
                 varatut_siirrot.add(siirto)
-                if syvyys == 4:
-                    print(f"siirto: {i+1}/{len(siirrot)}")
+
+                # lisää tutkittavia siirtoja seuraavaa minimax kutsua varten
                 uudet_siirrot, uudet_siirroissa_olevat_ruudut = self.etsi_siirrot(
                     siirto, vapaat_ruudut, siirroissa_olevat_ruudut, siirrot)
+                
                 pelilauta[siirto[1]][siirto[0]] = self.maksimoiva_merkki
                 vapaat_ruudut.remove(siirto)
 
@@ -115,6 +121,14 @@ class Tekoaly:
             vapaat_ruudut: set,
             siirroissa_olevat_ruudut: set,
             siirrot: list):
+        """Palauttaa tekoälylle ruudut, joista se etsii siirtoja
+
+        Args:
+            siirroissa_olevat_ruudut (set): samat ruudut kuin siirroissa, 
+                                            tietorakenne nopeuttaa etsimistä
+        Returns:
+            _type_: _description_
+        """
         uudet_siirrot = siirrot.copy()
         uudet_siirroissa_olevat_ruudut = siirroissa_olevat_ruudut.copy()
         x, y = edellinen_siirto
@@ -132,7 +146,17 @@ class Tekoaly:
                     uudet_siirrot.append(ruutu)
         return uudet_siirrot, uudet_siirroissa_olevat_ruudut
 
-    def heurestinen_funktio(self, pelilauta, syvyys):
+
+    def heurestinen_funktio(self, pelilauta: list, syvyys: int) -> float:
+        """arvioi kaikki vaaka, pysty, ja molemmat vinot rivit, joidenka pituus on 5 tai yli
+
+        Args:
+            pelilauta (list): 
+            syvyys (int): minimax algoritmin syvyys, kun se kutsuu tätä metodia
+
+        Returns:
+            float: heurestinen arvo
+        """
         pysty = HeurestisenArvonLaskija(
             self.maksimoiva_merkki,
             self.minimoiva_merkki,
@@ -184,9 +208,9 @@ class Tekoaly:
                 vino_vasen_merkki = pelilauta[y_akseli2][x_akseli2]
 
                 vino_oikea.laske_arvo(
-                    vino_oikea_merkki, (x_akseli1 + 1, y_akseli1 - 1))
+                    vino_oikea_merkki, edeltava_ruutu=(x_akseli1 + 1, y_akseli1 - 1))
                 vino_vasen.laske_arvo(
-                    vino_vasen_merkki, (x_akseli2 - 1, y_akseli2 - 1))
+                    vino_vasen_merkki, edeltava_ruutu=(x_akseli2 - 1, y_akseli2 - 1))
             vino_oikea.viimeisen_ruudun_tarkistus()
             vino_vasen.viimeisen_ruudun_tarkistus()
         HeurestisenArvonLaskija.yksi_perakkain.clear()

@@ -2,11 +2,14 @@ import pygame
 
 
 class Tapahtumat:
+    """Luokka joka hoitaa hiiren ja näppäimistön interaktiot
+    """
+
     def __init__(self) -> None:
         self.hiiren_paikka = None
         self._hiirta_klikattu = False
 
-    def get_tapahtumat(self):
+    def get_tapahtumat(self) -> dict:
         tapahtumat = {
             "lopeta": False,
             "takaisin": False,
@@ -29,17 +32,17 @@ class Tapahtumat:
 
         return tapahtumat
 
-    def hiirta_klikattu(self):
+    def hiirta_klikattu(self) -> bool:
         muisti = self._hiirta_klikattu
         self._hiirta_klikattu = False
         return muisti
 
     def get_hiiren_paikka(self):
         return pygame.mouse.get_pos()
-    
+
     def palauta_nappaimiston_komento(self):
         tapahtumat = self.get_tapahtumat()
         for avain, arvo in tapahtumat.items():
-            if arvo == True:
+            if arvo:
                 return avain
         return None

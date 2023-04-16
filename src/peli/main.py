@@ -1,14 +1,25 @@
 from konfiguraatio import get_konfiguraatio
 from peli.ihmis_pelaaja import Pelaaja
 from peli.tekoäly_pelaaja import TekoalyPelaaja
-from time import sleep
+from peli.tapahtumat import Tapahtumat
+from kayttoliiittyma.lauta import LautaUI
+import pygame.display
 konffi = get_konfiguraatio()
 
 RUUTUJEN_MAARA = konffi["ruutujen_määrä"]
 
 
 class Peli:
-    def __init__(self, tapahtumat, pelaaja1, pelaaja2, lauta, ikkuna) -> None:
+    """Pelilogiikka on tämän luokan sisällä.
+    """
+
+    def __init__(
+            self,
+            tapahtumat: Tapahtumat,
+            pelaaja1: Pelaaja | TekoalyPelaaja,
+            pelaaja2: Pelaaja | TekoalyPelaaja,
+            lauta: LautaUI,
+            ikkuna: pygame.display) -> None:
         self.tapahtumat = tapahtumat
         self.ristit = []
         self.nollat = []
@@ -46,7 +57,10 @@ class Peli:
                 2)
 
     @staticmethod
-    def tarkista_voitto(viimeisin_siirto, merkki, lauta):
+    def tarkista_voitto(
+            viimeisin_siirto: tuple,
+            merkki: str,
+            lauta: list) -> bool:
         x, y = viimeisin_siirto
         n = RUUTUJEN_MAARA - 1
 
@@ -87,19 +101,22 @@ class Peli:
             if 5 in (pysty, vaaka, vino_vasen, vino_oikea):
                 return True
         return False
-    
-    def tarkista_tasapeli(self):
+
+    def tarkista_tasapeli(self) -> bool:
         return RUUTUJEN_MAARA ** 2 == self.siirrot
-    
-    def tarkista_onko_peli_paattynyt(self, viimeisin_siirto, merkki, lauta):
+
+    def tarkista_onko_peli_paattynyt(
+            self,
+            viimeisin_siirto: tuple,
+            merkki: str,
+            lauta: list) -> tuple:
         if self.tarkista_voitto(viimeisin_siirto, merkki, lauta):
             return True, merkki
         if self.tarkista_tasapeli():
             return True, "-"
         return False, None
 
-
-    def valitse_ruutu(self, vuoro):
+    def valitse_ruutu(self, vuoro: int) -> tuple | None:
         pelaaja = self.pelaajat[vuoro]
         ruutu = pelaaja.valitse_ruutu()
         if ruutu:
@@ -112,14 +129,13 @@ class Peli:
                 return ruutu
         return None
 
-    def pelaa_vuoro(self, vuoro):
+    def pelaa_vuoro(self, vuoro: int):
         return self.valitse_ruutu(vuoro)
 
-    def vaihda_vuoroa(self, vuoro):
+    def vaihda_vuoroa(self, vuoro: int):
         return (vuoro + 1) % 2
-    
 
-    def pelaa(self):
+    def pelaa(self) -> str:
         self.lauta_ui.piirra_lauta()
         loppu = False
         vuoro = 0
@@ -128,22 +144,20 @@ class Peli:
                 tapahtuma = self.tapahtumat.palauta_nappaimiston_komento()
                 if tapahtuma:
                     return tapahtuma
-                
 
                 siirto = self.pelaa_vuoro(vuoro)
                 if siirto:
                     loppu, loppu_arvo = self.tarkista_onko_peli_paattynyt(
-                            siirto,
-                            self.pelaajat[vuoro].merkki,
-                            self.lauta)
-                
+                        siirto,
+                        self.pelaajat[vuoro].merkki,
+                        self.lauta)
+
                     break
             if loppu:
                 break
             vuoro = self.vaihda_vuoroa(vuoro)
             self.lauta_ui.piirra_lauta()
         self.lauta_ui.tee_voittoteksti(loppu_arvo)
-        sleep(1)
         while True:
             self.lauta_ui.piirra_lauta()
             tapahtumat = self.tapahtumat.get_tapahtumat()
