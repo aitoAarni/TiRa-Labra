@@ -40,11 +40,12 @@ class Tekoaly:
         if maksimoiva_pelaaja:
             arvo = float("-infinity")
 
-            for siirto in siirrot[::-1]:
+            for i, siirto in enumerate(siirrot[::-1]):
                 if siirto in varatut_siirrot:
                     continue
                 varatut_siirrot.add(siirto)
-
+                if syvyys == 4:
+                    print(f"siirto: {i+1}/{len(siirrot)}")
                 uudet_siirrot, uudet_siirroissa_olevat_ruudut = self.etsi_siirrot(
                     siirto, vapaat_ruudut, siirroissa_olevat_ruudut, siirrot)
                 pelilauta[siirto[1]][siirto[0]] = self.maksimoiva_merkki
@@ -70,8 +71,8 @@ class Tekoaly:
                 varatut_siirrot.remove(siirto)
                 vapaat_ruudut.add(siirto)
                 alfa = max(alfa, arvo)
-                #if arvo >= beeta:
-                #    break
+                if arvo > beeta:
+                    break
             return arvo, paras_siirto
 
         else:
@@ -103,8 +104,8 @@ class Tekoaly:
                 vapaat_ruudut.add(siirto)
 
                 beeta = min(beeta, arvo)
-                #if arvo <= alfa:
-                #    break
+                if arvo < alfa:
+                    break
 
             return arvo, None
 

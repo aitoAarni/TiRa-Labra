@@ -9,7 +9,7 @@ RUUTUJEN_MAARA = konffi["ruutujen_määrä"]
 
 class Peli:
     def __init__(self, tapahtumat, pelaaja1, pelaaja2, lauta, ikkuna) -> None:
-        self.ai = Tekoaly(Peli.tarkista_voitto, "x", "0", 4)
+        self.ai = Tekoaly(Peli.tarkista_voitto, "x", "0", 2)
         self.tapahtumat = tapahtumat
         self.ristit = []
         self.nollat = []
@@ -24,6 +24,7 @@ class Peli:
         pelaaja1 = self._alusta_pelaaja(pelaaja1, "x", self.ristit)
         pelaaja2 = self._alusta_pelaaja(pelaaja2, "0", self.nollat)
         self.pelaajat = [pelaaja1, pelaaja2]
+        print("constructiorissa ")
 
     def _alusta_pelaaja(self, pelaaja, merkki, merkit):
         saa_minimoiva_merkki = {"x": "0", "0": "x"}
@@ -44,7 +45,7 @@ class Peli:
                 Peli.tarkista_voitto,
                 merkki,
                 saa_minimoiva_merkki[merkki],
-                2)
+                3)
 
     @staticmethod
     def tarkista_voitto(viimeisin_siirto, merkki, lauta):
@@ -88,6 +89,17 @@ class Peli:
             if 5 in (pysty, vaaka, vino_vasen, vino_oikea):
                 return True
         return False
+    
+    def tarkista_tasapeli(self):
+        return RUUTUJEN_MAARA ** 2 == self.siirrot
+    
+    def tarkista_onko_peli_paattynyt(self, viimeisin_siirto, merkki, lauta):
+        if self.tarkista_voitto(viimeisin_siirto, merkki, lauta):
+            return True, merkki
+        if self.tarkista_tasapeli():
+            return True, "-"
+        return False, None
+
 
     def valitse_ruutu(self, vuoro):
         pelaaja = self.pelaajat[vuoro]
@@ -99,7 +111,8 @@ class Peli:
                 self.vapaat_ruudut.remove(ruutu)
                 pelaaja.merkit.append((ruutu[1], ruutu[0]))
 
-                print("evaluaatio:", self.ai.heurestinen_funktio(self.lauta, 2))
+                print("reaali evaluaatio:", self.ai.heurestinen_funktio(self.lauta, 4))
+                print()
                 return ruutu
         return None
 
@@ -108,6 +121,7 @@ class Peli:
 
     def vaihda_vuoroa(self, vuoro):
         return (vuoro + 1) % 2
+    
 
     def pelaa(self):
         self.lauta_ui.piirra_lauta()
@@ -115,25 +129,29 @@ class Peli:
         vuoro = 0
         while True:
             while True:
-                tapahtumat = self.tapahtumat.get_tapahtumat()
-                if tapahtumat["lopeta"] or tapahtumat["takaisin"]:
-                    loppu = True
-                    break
+                tapahtuma = self.tapahtumat.palauta_nappaimiston_komento()
+                if tapahtuma:
+                    print("SHEEEEEEEEEEEEEEE")
+                    return tapahtuma
+                
+
                 siirto = self.pelaa_vuoro(vuoro)
                 if siirto:
-                    if self.tarkista_voitto(
+                    loppu, loppu_arvo = self.tarkista_onko_peli_paattynyt(
                             siirto,
                             self.pelaajat[vuoro].merkki,
-                            self.lauta):
-                        loppu = True
+                            self.lauta)
+                
                     break
             if loppu:
                 break
             vuoro = self.vaihda_vuoroa(vuoro)
             self.lauta_ui.piirra_lauta()
-        self.lauta_ui.tee_voittoteksti(self.pelaajat[vuoro].merkki)
+        self.lauta_ui.tee_voittoteksti(loppu_arvo)
         while True:
             self.lauta_ui.piirra_lauta()
             tapahtumat = self.tapahtumat.get_tapahtumat()
             if tapahtumat["lopeta"] or tapahtumat["takaisin"]:
-                break
+                return "lopeta"
+            elif tapahtumat["pelaa_uudelleen"]:
+                return "pelaa_uudelleen"

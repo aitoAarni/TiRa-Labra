@@ -5,7 +5,7 @@ from peli.main import Peli
 from peli.ihmis_pelaaja import Pelaaja
 from kayttoliiittyma.lauta import Lauta
 from peli.tekoäly_pelaaja import TekoalyPelaaja
-FPS = 30
+FPS = 500
 
 konffi = get_konfiguraatio()
 
@@ -18,7 +18,7 @@ class Sovellus:
         self.tapahtumat = Tapahtumat()
         self.peli = Peli(
             self.tapahtumat,
-            TekoalyPelaaja,
+            Pelaaja,
             TekoalyPelaaja,
             Lauta,
             ikkuna
@@ -27,12 +27,16 @@ class Sovellus:
     def main(self):
         kello = pygame.time.Clock()
 
-        while True:
-            kello.tick(FPS)
-            self.peli.pelaa()
-            break
+        kello.tick(FPS)
+        return self.peli.pelaa()
 
 
 if __name__ == "__main__":
-    sovellus = Sovellus()
-    sovellus.main()
+    while True:
+        sovellus = Sovellus()
+        paluuarvo =sovellus.main()
+        if paluuarvo == "pelaa_uudelleen":
+            continue
+        print("see you later, alligator")
+        break
+        

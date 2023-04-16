@@ -62,13 +62,18 @@ class Lauta:
     def tee_voittoteksti(self, merkki):
         self.voittoikkuna = pygame.Surface(
             (konffi["leveys"], konffi["korkeus"]))
-        if merkki == "x":
-            merkin_nimi = "Ristit"
+        if merkki.lower() == "x":
+            merkkijono = "RISTIT VOITTI!"
+        
+        elif merkki == "-":
+            merkkijono = "TASAPELI -_-"
+        
         else:
-            merkin_nimi = "Nollat"
-        merkkijono = f"{merkin_nimi} voitti!"
+            merkkijono = "NOOLAT VOITTI!"
+
         fontti = pygame.font.Font(os.path.join(
             "materiaalit", "Wedgie Regular.ttf"), konffi["fontti"])
+        
         teksti = fontti.render(merkkijono, True, konffi["voitto_tekstin_väri"])
         teksti_rect = teksti.get_rect()
         teksti_rect.center = (konffi["leveys"] / 2, konffi["korkeus"] / 2)
