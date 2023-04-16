@@ -9,13 +9,16 @@ try:
 except FileNotFoundError:
     print("dotenv not found")
 
-
-konfiguraatiotiedoston_nimi = os.getenv("KONFIGURAATIO")
-konfiguraatiotiedoston_polku = os.path.join(
-    tiedoston_nimi,
-    "..",
-    "materiaalit",
-    konfiguraatiotiedoston_nimi) or os.path.join(
+try:
+    raise TypeError
+    konfiguraatiotiedoston_nimi = os.getenv("KONFIGURAATIO")
+    konfiguraatiotiedoston_polku = os.path.join(
+        tiedoston_nimi,
+        "..",
+        "materiaalit",
+        konfiguraatiotiedoston_nimi)
+except TypeError:
+    konfiguraatiotiedoston_polku = os.path.join(
         tiedoston_nimi,
         "..",
         "materiaalit",
