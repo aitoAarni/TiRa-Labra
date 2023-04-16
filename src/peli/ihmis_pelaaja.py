@@ -1,7 +1,8 @@
 from konfiguraatio import get_konfiguraatio
 
 konffi = get_konfiguraatio()
-
+LEVEYS = konffi["leveys"]
+KORKEUS = konffi["korkeus"]
 
 class Pelaaja:
     def __init__(
@@ -18,11 +19,14 @@ class Pelaaja:
         self.ruutujen_maara = ruutujen_maara
 
     def valitse_ruutu(self):
+        x, y = self.hiiren_paikka()
+
         if self.hiirta_klikattu():
             x, y = self.hiiren_paikka()
-            return (round(x //
-                          (konffi["leveys"] /
-                           self.ruutujen_maara)), round(y //
-                                                        (konffi["korkeus"] /
-                                                         self.ruutujen_maara)))
+            ruudun_leveys = LEVEYS / self.ruutujen_maara
+            ruudun_korkeus = KORKEUS / self.ruutujen_maara
+            rivi = round(x // ruudun_leveys)
+            sarake = round(y // ruudun_korkeus)
+            
+            return rivi, sarake
         return None

@@ -5,7 +5,7 @@ from peli.main import Peli
 from peli.ihmis_pelaaja import Pelaaja
 from kayttoliiittyma.lauta import Lauta
 from peli.tekoäly_pelaaja import TekoalyPelaaja
-FPS = 500
+FPS = 20
 
 konffi = get_konfiguraatio()
 
@@ -18,8 +18,8 @@ class Sovellus:
         self.tapahtumat = Tapahtumat()
         self.peli = Peli(
             self.tapahtumat,
-            Pelaaja,
             TekoalyPelaaja,
+            Pelaaja,
             Lauta,
             ikkuna
         )

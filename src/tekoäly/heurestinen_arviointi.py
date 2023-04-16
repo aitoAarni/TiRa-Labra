@@ -21,17 +21,24 @@ class HeurestisenArvonLaskija:
         self.syvyys = syvyys
         self.maksimi_syvyys = maksimi_syvyys
 
-    def perakkaisten_ruutujen_arvot(self, perakkain, arvokas=False):
-        voitto_arvo = VOITTO_ARVO - (self.maksimi_syvyys - self.syvyys) * 10**6
+    def perakkaisten_ruutujen_arvot(self, n_perakkain, molemmilla_puolilla_tyhja=False):
 
-        arvot = {2: 10, 3: 100, 4: 1000, 5: voitto_arvo}
-        if arvokas:
-            arvot = {1: 10, 2: 100, 3: 1000, 4: 100000, 5: voitto_arvo}
-        if perakkain in arvot.keys():
-            return arvot[perakkain]
-        if perakkain < 2:
-            return 0
-        return voitto_arvo
+        kerroin = (20 - self.maksimi_syvyys - self.syvyys) / 20
+
+
+
+        arvot = {2: 10, 3: 100, 4: 1000, 5: VOITTO_ARVO}
+        if molemmilla_puolilla_tyhja:
+            arvot = {1: 10, 2: 100, 3: 1000, 4: 100000, 5: VOITTO_ARVO}
+    
+        if n_perakkain in arvot:
+            arvo = arvot[n_perakkain]
+        elif n_perakkain < 2:
+            arvo = 0
+        else:
+            arvo = VOITTO_ARVO
+    
+        return arvo * kerroin
 
     def laske_arvo(self, merkki, edeltava_ruutu):
 

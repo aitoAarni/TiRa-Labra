@@ -1,7 +1,7 @@
 from konfiguraatio import get_konfiguraatio
-from tekoäly.minimax import Tekoaly
 from peli.ihmis_pelaaja import Pelaaja
 from peli.tekoäly_pelaaja import TekoalyPelaaja
+from time import sleep
 konffi = get_konfiguraatio()
 
 RUUTUJEN_MAARA = konffi["ruutujen_määrä"]
@@ -9,7 +9,6 @@ RUUTUJEN_MAARA = konffi["ruutujen_määrä"]
 
 class Peli:
     def __init__(self, tapahtumat, pelaaja1, pelaaja2, lauta, ikkuna) -> None:
-        self.ai = Tekoaly(Peli.tarkista_voitto, "x", "0", 2)
         self.tapahtumat = tapahtumat
         self.ristit = []
         self.nollat = []
@@ -24,7 +23,6 @@ class Peli:
         pelaaja1 = self._alusta_pelaaja(pelaaja1, "x", self.ristit)
         pelaaja2 = self._alusta_pelaaja(pelaaja2, "0", self.nollat)
         self.pelaajat = [pelaaja1, pelaaja2]
-        print("constructiorissa ")
 
     def _alusta_pelaaja(self, pelaaja, merkki, merkit):
         saa_minimoiva_merkki = {"x": "0", "0": "x"}
@@ -45,7 +43,7 @@ class Peli:
                 Peli.tarkista_voitto,
                 merkki,
                 saa_minimoiva_merkki[merkki],
-                3)
+                2)
 
     @staticmethod
     def tarkista_voitto(viimeisin_siirto, merkki, lauta):
@@ -65,7 +63,7 @@ class Peli:
         vino_vasen = 0
         vino_oikea = 0
 
-        for i in range(konffi["ruutujen_määrä"]):
+        for i in range(RUUTUJEN_MAARA):
             if lauta[i][x] == merkki:
                 pysty += 1
             else:
@@ -111,8 +109,6 @@ class Peli:
                 self.vapaat_ruudut.remove(ruutu)
                 pelaaja.merkit.append((ruutu[1], ruutu[0]))
 
-                print("reaali evaluaatio:", self.ai.heurestinen_funktio(self.lauta, 4))
-                print()
                 return ruutu
         return None
 
@@ -131,7 +127,6 @@ class Peli:
             while True:
                 tapahtuma = self.tapahtumat.palauta_nappaimiston_komento()
                 if tapahtuma:
-                    print("SHEEEEEEEEEEEEEEE")
                     return tapahtuma
                 
 
@@ -148,6 +143,7 @@ class Peli:
             vuoro = self.vaihda_vuoroa(vuoro)
             self.lauta_ui.piirra_lauta()
         self.lauta_ui.tee_voittoteksti(loppu_arvo)
+        sleep(1)
         while True:
             self.lauta_ui.piirra_lauta()
             tapahtumat = self.tapahtumat.get_tapahtumat()

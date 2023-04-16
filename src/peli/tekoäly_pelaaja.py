@@ -57,7 +57,6 @@ class TekoalyPelaaja:
         self.ruudut_joista_etsitaan_siirtoja, self.siirroissa_olevat_ruudut = self._lisaa_etsittavat_siirrot_tekoalylle(
             siirto)
         self._poista_etsittavista_siirroista_viimeisin_oikea_siirto(siirto)
-        print("pelin_arviointi:", heurestinen_arvo)
         return siirto
 
     def _aloitus(self, n):
