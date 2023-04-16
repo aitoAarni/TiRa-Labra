@@ -40,4 +40,4 @@ aloita ohjelma komennolla
 ```
 poetry run invoke start 
 ```
-
+Tällä hetkellä pelissä heurestinen arviointi on vielä vähän heikko, joten paras minimax syvyys jolla peli toimii on 2. Pelissä ei ole vielä valikkoa, joten joitakin parametrejä voi vaihdella [materiaalit/tuotanot_konfiguraatio.json](https://github.com/aitoAarni/TiRa-Labra/blob/main/materiaalit/tuotanto_konfiguraatio.json) tiedostosta.
