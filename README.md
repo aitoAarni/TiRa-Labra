@@ -25,3 +25,19 @@ Ristinolla tekoälyllä varustettuna olisi tavoite.
 [viikkoraportti 3](https://github.com/aitoAarni/TiRa-Labra/blob/main/dokumentaatio/viikkoraportti3.md)
 
 [viikkoraportti 4](https://github.com/aitoAarni/TiRa-Labra/blob/main/dokumentaatio/viikkoraportti4.md)
+
+## pikaiset ohjeet vertaisarviointia varten
+
+
+Lataa projekti git clone - kommennolla ja asenna projekti seuraavilla komennoilla:
+
+```
+poetry install
+```
+
+aloita ohjelma komennolla
+
+```
+poetry run invoke start 
+```
+
