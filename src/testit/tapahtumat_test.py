@@ -11,8 +11,8 @@ def lisaa_eventti(tyyppi, nappi=None):
     tapahtuma = pygame.event.Event(tyyppi, nappaimisto)
     pygame.event.post(tapahtuma)
 
-
-class TestTapahtumat(unittest.TestCase):
+# video moduuli ei toimi actionseissa
+class Tapahtumat(unittest.TestCase):
     def setUp(self):
         self.tapahtumat = Tapahtumat()
 
