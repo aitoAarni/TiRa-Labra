@@ -23,7 +23,7 @@ class Pelaaja:
         self.merkit = merkit
         self.ruutujen_maara = ruutujen_maara
 
-    def valitse_ruutu(self) -> tuple | None:
+    def valitse_ruutu(self):
         x, y = self.hiiren_paikka()
 
         if self.hiirta_klikattu():
