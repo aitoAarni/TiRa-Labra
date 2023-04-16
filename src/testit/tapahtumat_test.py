@@ -1,8 +1,9 @@
 import unittest
-from unittest.mock import Mock
 from peli.tapahtumat import Tapahtumat
 import pygame
 
+
+pygame.init()
 
 def lisaa_eventti(tyyppi, nappi=None):
     pygame.init()
@@ -13,7 +14,6 @@ def lisaa_eventti(tyyppi, nappi=None):
 
 class TestTapahtumat(unittest.TestCase):
     def setUp(self):
-        pygame.init()
         self.tapahtumat = Tapahtumat()
 
     def test_konstruktori_toimii(self):
