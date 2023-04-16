@@ -31,7 +31,7 @@ class Tekoaly:
             alfa: float,
             beeta: float,
             maksimoiva_pelaaja: bool,
-            viimeisin_siirto: tuple | None=None) -> tuple:
+            viimeisin_siirto: tuple | None = None) -> tuple:
 
         edellinen_merkki = self.minimoiva_merkki if maksimoiva_pelaaja else self.maksimoiva_merkki
 
@@ -53,7 +53,7 @@ class Tekoaly:
                 # lisää tutkittavia siirtoja seuraavaa minimax kutsua varten
                 uudet_siirrot, uudet_siirroissa_olevat_ruudut = self.etsi_siirrot(
                     siirto, vapaat_ruudut, siirroissa_olevat_ruudut, siirrot)
-                
+
                 pelilauta[siirto[1]][siirto[0]] = self.maksimoiva_merkki
                 vapaat_ruudut.remove(siirto)
 
@@ -124,7 +124,7 @@ class Tekoaly:
         """Palauttaa tekoälylle ruudut, joista se etsii siirtoja
 
         Args:
-            siirroissa_olevat_ruudut (set): samat ruudut kuin siirroissa, 
+            siirroissa_olevat_ruudut (set): samat ruudut kuin siirroissa,
                                             tietorakenne nopeuttaa etsimistä
         Returns:
             _type_: _description_
@@ -146,12 +146,11 @@ class Tekoaly:
                     uudet_siirrot.append(ruutu)
         return uudet_siirrot, uudet_siirroissa_olevat_ruudut
 
-
     def heurestinen_funktio(self, pelilauta: list, syvyys: int) -> float:
         """arvioi kaikki vaaka, pysty, ja molemmat vinot rivit, joidenka pituus on 5 tai yli
 
         Args:
-            pelilauta (list): 
+            pelilauta (list):
             syvyys (int): minimax algoritmin syvyys, kun se kutsuu tätä metodia
 
         Returns:
@@ -208,9 +207,11 @@ class Tekoaly:
                 vino_vasen_merkki = pelilauta[y_akseli2][x_akseli2]
 
                 vino_oikea.laske_arvo(
-                    vino_oikea_merkki, edeltava_ruutu=(x_akseli1 + 1, y_akseli1 - 1))
+                    vino_oikea_merkki, edeltava_ruutu=(
+                        x_akseli1 + 1, y_akseli1 - 1))
                 vino_vasen.laske_arvo(
-                    vino_vasen_merkki, edeltava_ruutu=(x_akseli2 - 1, y_akseli2 - 1))
+                    vino_vasen_merkki, edeltava_ruutu=(
+                        x_akseli2 - 1, y_akseli2 - 1))
             vino_oikea.viimeisen_ruudun_tarkistus()
             vino_vasen.viimeisen_ruudun_tarkistus()
         HeurestisenArvonLaskija.yksi_perakkain.clear()

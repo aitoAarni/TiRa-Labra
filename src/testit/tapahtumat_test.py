@@ -3,11 +3,13 @@ from unittest.mock import Mock
 from peli.tapahtumat import Tapahtumat
 import pygame
 
+
 def lisaa_eventti(tyyppi, nappi=None):
     pygame.init()
     nappaimisto = {"key": nappi}
     tapahtuma = pygame.event.Event(tyyppi, nappaimisto)
     pygame.event.post(tapahtuma)
+
 
 class TestTapahtumat(unittest.TestCase):
     def setUp(self):
@@ -43,12 +45,13 @@ class TestTapahtumat(unittest.TestCase):
         hiirta_klikattu = self.tapahtumat.hiirta_klikattu()
         self.assertTrue(hiirta_klikattu)
 
-    def test_palauta_nappaimiston_komento_metodi_toimii_kun_nappaimistoa_painettu(self):
+    def test_palauta_nappaimiston_komento_metodi_toimii_kun_nappaimistoa_painettu(
+            self):
         lisaa_eventti(pygame.KEYDOWN, pygame.K_ESCAPE)
         paluuarvo = self.tapahtumat.palauta_nappaimiston_komento()
         self.assertEqual(paluuarvo, "takaisin")
 
-    def test_palauta_nappaimiston_komento_metodi_toimii_kun_nappaimistoa_ei_painettu(self):
+    def test_palauta_nappaimiston_komento_metodi_toimii_kun_nappaimistoa_ei_painettu(
+            self):
         paluuarvo = self.tapahtumat.palauta_nappaimiston_komento()
         self.assertEqual(paluuarvo, None)
-        

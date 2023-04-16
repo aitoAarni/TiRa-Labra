@@ -1,6 +1,7 @@
 import unittest
 from tekoäly.heurestinen_arviointi import HeurestisenArvonLaskija, VOITTO_ARVO
 
+
 class TestHeurestinenArviointi(unittest.TestCase):
     def setUp(self):
         self.arviointi = HeurestisenArvonLaskija("x", "0", 2, 2)
@@ -18,6 +19,6 @@ class TestHeurestinenArviointi(unittest.TestCase):
         rivin_esitys = "-0-xxx0-xxx-000-x00x-0xx0-x-"
         self.arviointi.laskemisen_alustus()
         for alkio in rivin_esitys:
-            self.arviointi.laske_arvo(alkio, (0,0))
+            self.arviointi.laske_arvo(alkio, (0, 0))
         self.arviointi.viimeisen_ruudun_tarkistus()
         self.assertEqual(self.arviointi.heurestinen_arvo, 90)

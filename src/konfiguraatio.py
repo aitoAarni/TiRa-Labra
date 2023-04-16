@@ -12,7 +12,14 @@ except FileNotFoundError:
 
 konfiguraatiotiedoston_nimi = os.getenv("KONFIGURAATIO")
 konfiguraatiotiedoston_polku = os.path.join(
-    tiedoston_nimi, "..", "materiaalit", konfiguraatiotiedoston_nimi)
+    tiedoston_nimi,
+    "..",
+    "materiaalit",
+    konfiguraatiotiedoston_nimi) or os.path.join(
+        tiedoston_nimi,
+        "..",
+        "materiaalit",
+    "testaus_konfiguraatio.json")
 
 
 def rakenna_konfiguraatio():
