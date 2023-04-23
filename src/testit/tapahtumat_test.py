@@ -1,6 +1,5 @@
 import unittest
 import pygame
-pygame.init()
 from peli.tapahtumat import Tapahtumat
 
 
@@ -12,7 +11,7 @@ def lisaa_eventti(tyyppi, nappi=None):
     pygame.event.post(tapahtuma)
 
 # video moduuli ei toimi actionseissa
-class Tapahtumat(unittest.TestCase):
+class TestTapahtumat(unittest.TestCase):
     def setUp(self):
         self.tapahtumat = Tapahtumat()
 
