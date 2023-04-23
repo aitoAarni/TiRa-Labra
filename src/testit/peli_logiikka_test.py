@@ -4,6 +4,6 @@ from peli.peli_logiikka import Peli
 
 class TestPeliLogiikka(unittest.TestCase):
     def setUp(self):
-        pass
+        self.peli = Peli(voikko)
 
     
