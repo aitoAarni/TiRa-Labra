@@ -1,11 +1,12 @@
 import unittest
 import pygame
 from peli.tapahtumat import Tapahtumat
+from pygame.locals import *
 
-
+pygame.init()
 
 def lisaa_eventti(tyyppi, nappi=None):
-    pygame.init()
+    
     nappaimisto = {"key": nappi}
     tapahtuma = pygame.event.Event(tyyppi, nappaimisto)
     pygame.event.post(tapahtuma)
@@ -13,15 +14,14 @@ def lisaa_eventti(tyyppi, nappi=None):
 # video moduuli ei toimi actionseissa
 class TestTapahtumat(unittest.TestCase):
     def setUp(self):
-        pygame.init()
         self.tapahtumat = Tapahtumat()
 
     def test_konstruktori_toimii(self):
-        pygame.init()
+        
         self.assertEqual(type(self.tapahtumat), Tapahtumat)
 
     def test_get_tapahtumat_kaikki_napit_toimii(self):
-        pygame.init()
+        
         oikea_vastaus = {
             "lopeta": True,
             "takaisin": True,
@@ -34,7 +34,7 @@ class TestTapahtumat(unittest.TestCase):
         self.assertDictEqual(tapahtumat, oikea_vastaus)
 
     def test_get_tapahtumat_palauttaa_oikean_sanakrijan(self):
-        pygame.init()
+        
         oikea_vastaus = {
             "lopeta": False,
             "takaisin": False,
@@ -44,7 +44,7 @@ class TestTapahtumat(unittest.TestCase):
         self.assertDictEqual(tapahtumat, oikea_vastaus)
 
     def test_hiiren_klikki_toimii(self):
-        pygame.init()
+        
         lisaa_eventti(pygame.MOUSEBUTTONDOWN)
         self.tapahtumat.get_tapahtumat()
         hiirta_klikattu = self.tapahtumat.hiirta_klikattu()
@@ -52,13 +52,13 @@ class TestTapahtumat(unittest.TestCase):
 
     def test_palauta_nappaimiston_komento_metodi_toimii_kun_nappaimistoa_painettu(
             self):
-        pygame.init()
+        
         lisaa_eventti(pygame.KEYDOWN, pygame.K_ESCAPE)
         paluuarvo = self.tapahtumat.palauta_nappaimiston_komento()
         self.assertEqual(paluuarvo, "takaisin")
 
     def test_palauta_nappaimiston_komento_metodi_toimii_kun_nappaimistoa_ei_painettu(
             self):
-        pygame.init()
+        
         paluuarvo = self.tapahtumat.palauta_nappaimiston_komento()
         self.assertEqual(paluuarvo, None)
