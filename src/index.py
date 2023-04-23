@@ -1,16 +1,18 @@
 import pygame
 from konfiguraatio import get_konfiguraatio
 from peli.tapahtumat import Tapahtumat
-from peli.main import Peli
+from peli.peli_logiikka import Peli
 from peli.ihmis_pelaaja import Pelaaja
-from kayttoliiittyma.lauta import LautaUI
+from käyttöliittymä.lauta import LautaUI
 from peli.tekoäly_pelaaja import TekoalyPelaaja
+from peli.peli_silmukka import peli_silmukka
 FPS = 20
 
 konffi = get_konfiguraatio()
 
 LEVEYS = konffi["leveys"]
 KORKEUS = konffi["korkeus"]
+
 
 
 class Sovellus:
@@ -29,9 +31,9 @@ class Sovellus:
 
     def main(self):
         kello = pygame.time.Clock()
-
+        
         kello.tick(FPS)
-        return self.peli.pelaa()
+        return peli_silmukka(self.peli)
 
 
 if __name__ == "__main__":

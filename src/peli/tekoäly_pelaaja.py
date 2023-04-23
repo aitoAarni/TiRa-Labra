@@ -33,7 +33,7 @@ class TekoalyPelaaja:
         self.tekoaly = Tekoaly(
             tarkista_voitto,
             maksimoiva_merkki,
-            minimoiva_merkki, 
+            minimoiva_merkki,
             syvyys)
         self.merkki = maksimoiva_merkki
         self.syvyys = syvyys

@@ -1,0 +1,3 @@
+[run]
+source = src
+omit = src/**/__init__.py,src/testit/**,src/käyttöliittymä/**,src/index.py,src/testi123.py,src/konfiguraatio.py

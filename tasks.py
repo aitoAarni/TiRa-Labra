@@ -19,7 +19,7 @@ def logger(ctx):
     
 @task
 def test(ctx):
-    ctx.run("pytest src/", pty=True)
+    ctx.run("pytest -s src/", pty=True)
     
 @task
 def coverage(ctx):

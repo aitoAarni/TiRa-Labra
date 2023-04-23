@@ -2,7 +2,7 @@ from konfiguraatio import get_konfiguraatio
 from peli.ihmis_pelaaja import Pelaaja
 from peli.tekoäly_pelaaja import TekoalyPelaaja
 from peli.tapahtumat import Tapahtumat
-from kayttoliiittyma.lauta import LautaUI
+from käyttöliittymä.lauta import LautaUI
 import pygame.display
 konffi = get_konfiguraatio()
 
@@ -134,34 +134,3 @@ class Peli:
 
     def vaihda_vuoroa(self, vuoro: int):
         return (vuoro + 1) % 2
-
-    def pelaa(self) -> str:
-        self.lauta_ui.piirra_lauta()
-        loppu = False
-        vuoro = 0
-        while True:
-            while True:
-                tapahtuma = self.tapahtumat.palauta_nappaimiston_komento()
-                if tapahtuma:
-                    return tapahtuma
-
-                siirto = self.pelaa_vuoro(vuoro)
-                if siirto:
-                    loppu, loppu_arvo = self.tarkista_onko_peli_paattynyt(
-                        siirto,
-                        self.pelaajat[vuoro].merkki,
-                        self.lauta)
-
-                    break
-            if loppu:
-                break
-            vuoro = self.vaihda_vuoroa(vuoro)
-            self.lauta_ui.piirra_lauta()
-        self.lauta_ui.tee_voittoteksti(loppu_arvo)
-        while True:
-            self.lauta_ui.piirra_lauta()
-            tapahtumat = self.tapahtumat.get_tapahtumat()
-            if tapahtumat["lopeta"] or tapahtumat["takaisin"]:
-                return "lopeta"
-            elif tapahtumat["pelaa_uudelleen"]:
-                return "pelaa_uudelleen"

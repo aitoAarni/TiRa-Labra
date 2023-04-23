@@ -10,7 +10,7 @@ class HeurestisenArvonLaskija:
             self,
             maksimoiva_merkki: str,
             minimoiva_merkki: str
-            ) -> None:
+    ) -> None:
         self.maksimoiva_merkki = maksimoiva_merkki
         self.minimoiva_merkki = minimoiva_merkki
         self.heurestinen_arvo = 0
@@ -48,7 +48,6 @@ class HeurestisenArvonLaskija:
 
         return arvo
 
-
     def laske_arvo(self, merkki: str, edeltava_ruutu: tuple):
         """Metodi saa aina yhden ruudun merkin kerrallaan peräkkäisistä ruuduista,
         jonka avulla metodi arvioi ruudun arvoa isommassa kokonaisuudessa
@@ -64,8 +63,8 @@ class HeurestisenArvonLaskija:
 
             # if katsoo onko molemmilla puolilla minimoivia palasia maksimoiva merkki,
             # jos on, niin heurestinen_arvo == 0 ja skippaa loppuun
-            if (self.viimeinen_tyhja_ruutu == self._ruutu_numero - 1 - \
-                self.minimoivia_palasia_perakkain and self.minimoivia_palasia_perakkain > 1) or self.minimoivia_palasia_perakkain >= 5:
+            if (self.viimeinen_tyhja_ruutu == self._ruutu_numero - 1 -
+                    self.minimoivia_palasia_perakkain and self.minimoivia_palasia_perakkain > 1) or self.minimoivia_palasia_perakkain >= 5:
                 # jos minimoivia palasia on useita peräkkäin ja niitä blokkaa nykyinen maksivoiva merkki
                 # niin vähennä heurestista arvoa
                 self.heurestinen_arvo -= self.perakkaisten_ruutujen_arvot(
@@ -76,8 +75,8 @@ class HeurestisenArvonLaskija:
             self.minimoivia_palasia_perakkain += 1
             # if katsoo onko molemmilla puolilla minimoivia palasia maksimoiva merkki,
             # jos on, niin heurestinen_arvo == 0 ja skippaa loppuun
-            if (self.viimeinen_tyhja_ruutu == self._ruutu_numero - 1 - \
-                self.maksimoivia_palasia_perakkain and self.maksimoivia_palasia_perakkain > 1) or self.maksimoivia_palasia_perakkain >= 5:
+            if (self.viimeinen_tyhja_ruutu == self._ruutu_numero - 1 -
+                    self.maksimoivia_palasia_perakkain and self.maksimoivia_palasia_perakkain > 1) or self.maksimoivia_palasia_perakkain >= 5:
                 # jos maksivoivia palasia on useita peräkkäin ja niitä blokkaa nykyinen minivoiva merkki
                 # niin lisää heurestista arvoa
                 self.heurestinen_arvo += self.perakkaisten_ruutujen_arvot(

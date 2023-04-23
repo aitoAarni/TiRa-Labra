@@ -2,12 +2,16 @@ import json
 from dotenv import load_dotenv
 import os
 
+print("konfigissss123")
 tiedoston_nimi = os.path.dirname(__file__)
 
+
 try:
-    load_dotenv(dotenv_path=os.path.join(tiedoston_nimi, "..", ".env"))
+    load_dotenv()
+    print("dotenv found")
 except FileNotFoundError:
     print("dotenv not found")
+
 
 try:
     konfiguraatiotiedoston_nimi = os.getenv("KONFIGURAATIO")
@@ -21,7 +25,10 @@ except TypeError:
         tiedoston_nimi,
         "..",
         "materiaalit",
-    "testaus_konfiguraatio.json")
+        "testaus_konfiguraatio.json")
+
+
+print(f"konffi tiedoston nimi321: {konfiguraatiotiedoston_nimi}")
 
 
 def rakenna_konfiguraatio():
