@@ -99,7 +99,7 @@ class LautaUI:
             merkkijono = "TASAPELI -_-"
 
         else:
-            merkkijono = "NOOLAT VOITTI!"
+            merkkijono = "NOLLAT VOITTI!"
 
         fontti = pygame.font.Font(os.path.join(
             "materiaalit", "Wedgie Regular.ttf"), FONTTI)

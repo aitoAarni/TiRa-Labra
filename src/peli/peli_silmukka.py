@@ -31,3 +31,4 @@ def peli_silmukka(peli: Peli) -> str:
             return "lopeta"
         elif tapahtumat["pelaa_uudelleen"]:
             return "pelaa_uudelleen"
+        
