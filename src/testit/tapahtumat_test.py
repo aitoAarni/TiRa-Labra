@@ -5,7 +5,6 @@ from peli.tapahtumat import Tapahtumat
 
 
 def lisaa_eventti(tyyppi, nappi=None):
-    pygame.init()
     nappaimisto = {"key": nappi}
     tapahtuma = pygame.event.Event(tyyppi, nappaimisto)
     pygame.event.post(tapahtuma)
@@ -13,6 +12,7 @@ def lisaa_eventti(tyyppi, nappi=None):
 # video moduuli ei toimi actionseissa
 class TestTapahtumat(unittest.TestCase):
     def setUp(self):
+        pygame.init()
         self.tapahtumat = Tapahtumat()
 
     def test_konstruktori_toimii(self):
