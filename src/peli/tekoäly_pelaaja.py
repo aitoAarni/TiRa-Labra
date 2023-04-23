@@ -33,19 +33,21 @@ class TekoalyPelaaja:
         self.tekoaly = Tekoaly(
             tarkista_voitto,
             maksimoiva_merkki,
-            minimoiva_merkki, syvyys)
+            minimoiva_merkki, 
+            syvyys)
         self.merkki = maksimoiva_merkki
         self.syvyys = syvyys
 
     def valitse_ruutu(self) -> tuple:
-        print()
         print(self.merkki, "laskee siirtoa...")
 
         if len(self.siirrot) == 0:
             return self._aloitus_siirto(n=len(self.lauta))
         viimeisin_siirto = self.siirrot[-1]
-
         lauta = deepcopy(self.lauta)
+
+        heurestinen_arvo = self.tekoaly.heurestinen_funktio(lauta)
+
         vapaat_ruudut = self.vapaat_ruudut.copy()
         self._poista_etsittavista_siirroista_viimeisin_oikea_siirto(
             viimeisin_siirto)
@@ -54,7 +56,9 @@ class TekoalyPelaaja:
         alfa = float("-infinity")
         beeta = float("infinity")
 
-        heurestinen_arvo, siirto = self.tekoaly.minimax(
+        print("ennen minimax laskettu h arvo:", heurestinen_arvo)
+
+        arvo, siirto = self.tekoaly.minimax(
             self.syvyys,
             lauta,
             self.ruudut_joista_etsitaan_siirtoja,
@@ -62,8 +66,10 @@ class TekoalyPelaaja:
             vapaat_ruudut,
             self.siirroissa_olevat_ruudut,
             alfa,
-            beeta, True)
-
+            beeta,
+            True,
+            heurestinen_arvo)
+        print(f"paras arvio: {arvo}")
         self.ruudut_joista_etsitaan_siirtoja, self.siirroissa_olevat_ruudut = self._lisaa_etsittavat_siirrot_tekoalylle(
             siirto)
         self._poista_etsittavista_siirroista_viimeisin_oikea_siirto(siirto)

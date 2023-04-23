@@ -9,9 +9,8 @@ class HeurestisenArvonLaskija:
     def __init__(
             self,
             maksimoiva_merkki: str,
-            minimoiva_merkki: str,
-            syvyys: int,
-            maksimi_syvyys: int) -> None:
+            minimoiva_merkki: str
+            ) -> None:
         self.maksimoiva_merkki = maksimoiva_merkki
         self.minimoiva_merkki = minimoiva_merkki
         self.heurestinen_arvo = 0
@@ -19,8 +18,6 @@ class HeurestisenArvonLaskija:
         self.maksimoivia_palasia_perakkain = None
         self.minimoivia_palasia_perakkain = None
         self._ruutu_numero = 0
-        self.syvyys = syvyys
-        self.maksimi_syvyys = maksimi_syvyys
 
     def perakkaisten_ruutujen_arvot(
             self,
@@ -36,11 +33,11 @@ class HeurestisenArvonLaskija:
         Returns:
             float: arvio
         """
-        voitto_arvo = VOITTO_ARVO - 10**6 * (self.maksimi_syvyys - self.syvyys)
+        voitto_arvo = VOITTO_ARVO
 
-        arvot = {2: 10, 3: 100, 4: 1000, 5: voitto_arvo}
+        arvot = {2: 10, 3: 100, 4: 1500, 5: voitto_arvo}
         if molemmilla_puolilla_tyhja:
-            arvot = {1: 10, 2: 100, 3: 1000, 4: 100000, 5: voitto_arvo}
+            arvot = {2: 100, 3: 1000, 4: 100000, 5: voitto_arvo}
 
         if n_perakkain in arvot:
             arvo = arvot[n_perakkain]
@@ -51,6 +48,7 @@ class HeurestisenArvonLaskija:
 
         return arvo
 
+
     def laske_arvo(self, merkki: str, edeltava_ruutu: tuple):
         """Metodi saa aina yhden ruudun merkin kerrallaan peräkkäisistä ruuduista,
         jonka avulla metodi arvioi ruudun arvoa isommassa kokonaisuudessa
@@ -60,7 +58,7 @@ class HeurestisenArvonLaskija:
             edeltava_ruutu (tuple): edeltävän ruudun koordinaatit,
             jotta yhden pituisia jonoja ei lasketa useaan kertaan mukaan heurestiseen arvioon
         """
-
+        h = self.heurestinen_arvo
         if merkki == self.maksimoiva_merkki:
             self.maksimoivia_palasia_perakkain += 1
 
@@ -111,6 +109,7 @@ class HeurestisenArvonLaskija:
                 if self.maksimoivia_palasia_perakkain == 1:
                     if edeltava_ruutu in self.yksi_perakkain:
                         pass
+
                     else:
                         self.yksi_perakkain.add(edeltava_ruutu)
                         self.heurestinen_arvo += self.perakkaisten_ruutujen_arvot(
