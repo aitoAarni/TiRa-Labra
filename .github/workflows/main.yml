@@ -21,6 +21,9 @@ jobs:
       - name: Install dependencies
         run: poetry install
       - name: Run tests
+        env:
+          SDL_VIDEODRIVER: "dummy" 
+          SDL_AUDIODRIVER: "disk"
         run: poetry run invoke coverage
       - name: Coverage report
         run: poetry run coverage xml
