@@ -19,3 +19,5 @@ Tällä viikolla sain vihdoinkin github actionssit toimimvaan pygame testien kan
 ## Mitä teen seuraavaksi?
 
 Valikon peliin ja tekoälyä vielä hieman paremmaksi.
+
+tunnit: 10h
