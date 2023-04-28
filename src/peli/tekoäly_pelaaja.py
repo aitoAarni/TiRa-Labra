@@ -39,25 +39,24 @@ class TekoalyPelaaja:
         self.syvyys = syvyys
 
     def valitse_ruutu(self) -> tuple:
-        print(self.merkki, "laskee siirtoa...")
-
         if len(self.siirrot) == 0:
             return self._aloitus_siirto(n=len(self.lauta))
         viimeisin_siirto = self.siirrot[-1]
         lauta = deepcopy(self.lauta)
 
-        heurestinen_arvo = self.tekoaly.heurestinen_funktio(lauta)
+        heuristinen_arvo = self.tekoaly.heuristinen_funktio(lauta)
 
         vapaat_ruudut = self.vapaat_ruudut.copy()
+        
         self._poista_etsittavista_siirroista_viimeisin_oikea_siirto(
-            viimeisin_siirto)
+            viimeisin_siirto) # poistaa edellisen pelaajan siirron mahdollisista siiroista
+        
         self.ruudut_joista_etsitaan_siirtoja, self.siirroissa_olevat_ruudut = self._lisaa_etsittavat_siirrot_tekoalylle(
             viimeisin_siirto)
+        
         alfa = float("-infinity")
         beeta = float("infinity")
-
-        print("ennen minimax laskettu h arvo:", heurestinen_arvo)
-
+        self.jarjesta_siirrot_ennen_minimax_algoritmia(lauta)
         arvo, siirto = self.tekoaly.minimax(
             self.syvyys,
             lauta,
@@ -68,10 +67,11 @@ class TekoalyPelaaja:
             alfa,
             beeta,
             True,
-            heurestinen_arvo)
-        print(f"paras arvio: {arvo}")
+            heuristinen_arvo)
+        
         self.ruudut_joista_etsitaan_siirtoja, self.siirroissa_olevat_ruudut = self._lisaa_etsittavat_siirrot_tekoalylle(
             siirto)
+        
         self._poista_etsittavista_siirroista_viimeisin_oikea_siirto(siirto)
         return siirto
 
@@ -83,12 +83,17 @@ class TekoalyPelaaja:
 
         return siirto
 
+
+    def jarjesta_siirrot_ennen_minimax_algoritmia(self, lauta):
+        self.ruudut_joista_etsitaan_siirtoja.sort(key=lambda siirto: self.siirron_heuristinen_arvo(siirto, lauta))
+
     def _lisaa_etsittavat_siirrot_tekoalylle(
             self, viimeisin_siirto: tuple) -> tuple:
         """Tekoäly etsii kaikki ruudut, jotka ovat kahden ruudun pääsää jo laudalla olevista ruuduista
+            Tämä metodi pitää kutsua jokaisen oikean siirron
 
         Args:
-            viimeisin_siirto (_type_): tuple
+            viimeisin_siirto (tuple): x ja y koordinaatti
 
         Returns:
             _type_: (list, set)
@@ -104,3 +109,10 @@ class TekoalyPelaaja:
         if viimeisin_siirto in self.siirroissa_olevat_ruudut:
             self.ruudut_joista_etsitaan_siirtoja.remove(viimeisin_siirto)
             self.siirroissa_olevat_ruudut.remove(viimeisin_siirto)
+
+
+    def siirron_heuristinen_arvo(self, siirto: tuple, lauta: list):
+        lauta[siirto[1]][siirto[0]] = self.merkki
+        heuristinen_arvo = self.tekoaly.heuristinen_funktio(lauta)
+        lauta[siirto[1]][siirto[0]] = None
+        return heuristinen_arvo
