@@ -13,7 +13,7 @@ class HeurestisenArvonLaskija:
     ) -> None:
         self.maksimoiva_merkki = maksimoiva_merkki
         self.minimoiva_merkki = minimoiva_merkki
-        self.heurestinen_arvo = 0
+        self.heuristinen_arvo = 0
         self.viimeinen_tyhja_ruutu = None
         self.maksimoivia_palasia_perakkain = None
         self.minimoivia_palasia_perakkain = None
@@ -33,18 +33,16 @@ class HeurestisenArvonLaskija:
         Returns:
             float: arvio
         """
-        voitto_arvo = VOITTO_ARVO
-
-        arvot = {2: 10, 3: 100, 4: 1500, 5: voitto_arvo}
+        arvot = {2: 10, 3: 150, 4: 2500, 5: VOITTO_ARVO}
         if molemmilla_puolilla_tyhja:
-            arvot = {2: 100, 3: 1000, 4: 100000, 5: voitto_arvo}
+            arvot = {2: 95, 3: 1500, 4: 100000, 5: VOITTO_ARVO}
 
         if n_perakkain in arvot:
             arvo = arvot[n_perakkain]
         elif n_perakkain < 2:
             arvo = 0
         else:
-            arvo = voitto_arvo
+            arvo = VOITTO_ARVO
 
         return arvo
 
@@ -57,29 +55,28 @@ class HeurestisenArvonLaskija:
             edeltava_ruutu (tuple): edeltävän ruudun koordinaatit,
             jotta yhden pituisia jonoja ei lasketa useaan kertaan mukaan heurestiseen arvioon
         """
-        h = self.heurestinen_arvo
         if merkki == self.maksimoiva_merkki:
             self.maksimoivia_palasia_perakkain += 1
 
             # if katsoo onko molemmilla puolilla minimoivia palasia maksimoiva merkki,
-            # jos on, niin heurestinen_arvo == 0 ja skippaa loppuun
+            # jos on, niin heuristinen_arvo == 0 ja skippaa loppuun
             if (self.viimeinen_tyhja_ruutu == self._ruutu_numero - 1 -
                     self.minimoivia_palasia_perakkain and self.minimoivia_palasia_perakkain > 1) or self.minimoivia_palasia_perakkain >= 5:
                 # jos minimoivia palasia on useita peräkkäin ja niitä blokkaa nykyinen maksivoiva merkki
                 # niin vähennä heurestista arvoa
-                self.heurestinen_arvo -= self.perakkaisten_ruutujen_arvot(
+                self.heuristinen_arvo -= self.perakkaisten_ruutujen_arvot(
                     self.minimoivia_palasia_perakkain)
             self.minimoivia_palasia_perakkain = 0
 
         elif merkki == self.minimoiva_merkki:
             self.minimoivia_palasia_perakkain += 1
             # if katsoo onko molemmilla puolilla minimoivia palasia maksimoiva merkki,
-            # jos on, niin heurestinen_arvo == 0 ja skippaa loppuun
+            # jos on, niin heuristinen_arvo == 0 ja skippaa loppuun
             if (self.viimeinen_tyhja_ruutu == self._ruutu_numero - 1 -
                     self.maksimoivia_palasia_perakkain and self.maksimoivia_palasia_perakkain > 1) or self.maksimoivia_palasia_perakkain >= 5:
                 # jos maksivoivia palasia on useita peräkkäin ja niitä blokkaa nykyinen minivoiva merkki
                 # niin lisää heurestista arvoa
-                self.heurestinen_arvo += self.perakkaisten_ruutujen_arvot(
+                self.heuristinen_arvo += self.perakkaisten_ruutujen_arvot(
                     self.maksimoivia_palasia_perakkain)
             self.maksimoivia_palasia_perakkain = 0
 
@@ -95,10 +92,10 @@ class HeurestisenArvonLaskija:
                         pass
                     else:
                         self.yksi_perakkain.add(edeltava_ruutu)
-                        self.heurestinen_arvo -= self.perakkaisten_ruutujen_arvot(
+                        self.heuristinen_arvo -= self.perakkaisten_ruutujen_arvot(
                             self.minimoivia_palasia_perakkain, molemmilla_puolilla_tyhja=True)
                 else:
-                    self.heurestinen_arvo -= self.perakkaisten_ruutujen_arvot(
+                    self.heuristinen_arvo -= self.perakkaisten_ruutujen_arvot(
                         self.minimoivia_palasia_perakkain, molemmilla_puolilla_tyhja=True)
 
             # jos maskivoivia merkkejä on välissä ja molemmilla puolilla on tyhjä ruutu
@@ -111,17 +108,17 @@ class HeurestisenArvonLaskija:
 
                     else:
                         self.yksi_perakkain.add(edeltava_ruutu)
-                        self.heurestinen_arvo += self.perakkaisten_ruutujen_arvot(
+                        self.heuristinen_arvo += self.perakkaisten_ruutujen_arvot(
                             self.maksimoivia_palasia_perakkain, molemmilla_puolilla_tyhja=True)
                 else:
-                    self.heurestinen_arvo += self.perakkaisten_ruutujen_arvot(
+                    self.heuristinen_arvo += self.perakkaisten_ruutujen_arvot(
                         self.maksimoivia_palasia_perakkain, molemmilla_puolilla_tyhja=True)
 
             # jos samoja merkkejä peräkkäin jono on alkanut laudan reunalta
             elif 1 not in (self.maksimoivia_palasia_perakkain, self.minimoivia_palasia_perakkain):
-                self.heurestinen_arvo -= self.perakkaisten_ruutujen_arvot(
+                self.heuristinen_arvo -= self.perakkaisten_ruutujen_arvot(
                     self.minimoivia_palasia_perakkain)
-                self.heurestinen_arvo += self.perakkaisten_ruutujen_arvot(
+                self.heuristinen_arvo += self.perakkaisten_ruutujen_arvot(
                     self.maksimoivia_palasia_perakkain)
 
             self.viimeinen_tyhja_ruutu = self._ruutu_numero
@@ -141,9 +138,9 @@ class HeurestisenArvonLaskija:
         """
         if self.viimeinen_tyhja_ruutu == self._ruutu_numero - \
                 1 - self.minimoivia_palasia_perakkain:
-            self.heurestinen_arvo -= self.perakkaisten_ruutujen_arvot(
+            self.heuristinen_arvo -= self.perakkaisten_ruutujen_arvot(
                 self.minimoivia_palasia_perakkain)
         if self.viimeinen_tyhja_ruutu == self._ruutu_numero - \
                 1 - self.maksimoivia_palasia_perakkain:
-            self.heurestinen_arvo += self.perakkaisten_ruutujen_arvot(
+            self.heuristinen_arvo += self.perakkaisten_ruutujen_arvot(
                 self.maksimoivia_palasia_perakkain)

@@ -90,7 +90,7 @@ class TekoalyPelaaja:
     def _lisaa_etsittavat_siirrot_tekoalylle(
             self, viimeisin_siirto: tuple) -> tuple:
         """Tekoäly etsii kaikki ruudut, jotka ovat kahden ruudun pääsää jo laudalla olevista ruuduista
-            Tämä metodi pitää kutsua jokaisen oikean siirron
+            Tämä metodi pitää kutsua jokaisen oikean siirron jälkeen jotta 
 
         Args:
             viimeisin_siirto (tuple): x ja y koordinaatti

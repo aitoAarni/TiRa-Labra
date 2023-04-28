@@ -54,7 +54,7 @@ class Peli:
                 Peli.tarkista_voitto,
                 merkki,
                 saa_minimoiva_merkki[merkki],
-                3)
+                2)
 
     @staticmethod
     def tarkista_voitto(

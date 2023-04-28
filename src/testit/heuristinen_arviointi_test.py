@@ -1,8 +1,8 @@
 import unittest
-from tekoäly.heurestinen_arviointi import HeurestisenArvonLaskija, VOITTO_ARVO
+from tekoäly.heuristinen_arviointi import HeurestisenArvonLaskija, VOITTO_ARVO
 
 
-class TestHeurestinenArviointi(unittest.TestCase):
+class TestheuristinenArviointi(unittest.TestCase):
     def setUp(self):
         self.arviointi = HeurestisenArvonLaskija("x", "0")
 
@@ -21,4 +21,4 @@ class TestHeurestinenArviointi(unittest.TestCase):
         for alkio in rivin_esitys:
             self.arviointi.laske_arvo(alkio, (0, 0))
         self.arviointi.viimeisen_ruudun_tarkistus()
-        self.assertEqual(self.arviointi.heurestinen_arvo, 100)
+        self.assertEqual(self.arviointi.heuristinen_arvo, 100)

@@ -1,11 +1,8 @@
 from konfiguraatio import get_konfiguraatio
-from tekoäly.heurestinen_arviointi import HeurestisenArvonLaskija
+from tekoäly.heuristinen_arviointi import HeurestisenArvonLaskija
 konffi = get_konfiguraatio()
 
 RUUTUJEN_MAARA = konffi["ruutujen_määrä"]
-
-
-maksimi = 0
 
 
 class Tekoaly:
@@ -34,7 +31,7 @@ class Tekoaly:
             alfa: float,
             beeta: float,
             maksimoiva_pelaaja: bool,
-            heurestinen_arvo: float,
+            heuristinen_arvo: float,
             viimeisin_siirto: tuple | None = None) -> tuple:
 
         edellinen_merkki = self.minimoiva_merkki if maksimoiva_pelaaja else self.maksimoiva_merkki
@@ -44,7 +41,7 @@ class Tekoaly:
                     viimeisin_siirto,
                     edellinen_merkki,
                     pelilauta) or syvyys == 0:
-                return heurestinen_arvo, None
+                return heuristinen_arvo, None
 
         if maksimoiva_pelaaja:
             arvo = float("-infinity")
@@ -60,7 +57,7 @@ class Tekoaly:
 
                 pelilauta[siirto[1]][siirto[0]] = self.maksimoiva_merkki
                 vapaat_ruudut.remove(siirto)
-                uusi_heurestinen_arvo = heurestinen_arvo + \
+                uusi_heuristinen_arvo = heuristinen_arvo + \
                     self.heurstisen_arvon_delta(pelilauta, syvyys, siirto)
 
                 arviointi = self.minimax(
@@ -73,11 +70,11 @@ class Tekoaly:
                     alfa,
                     beeta,
                     False,
-                    uusi_heurestinen_arvo,
+                    uusi_heuristinen_arvo,
                     siirto)[0]
-                arvo = max(arvo, arviointi)
-                if arviointi == arvo:
+                if arviointi > arvo:
                     paras_siirto = siirto
+                arvo = max(arvo, arviointi)
                 pelilauta[siirto[1]][siirto[0]] = None
                 varatut_siirrot.remove(siirto)
                 vapaat_ruudut.add(siirto)
@@ -98,7 +95,7 @@ class Tekoaly:
                 pelilauta[siirto[1]][siirto[0]] = self.minimoiva_merkki
                 vapaat_ruudut.remove(siirto)
 
-                uusi_heurestinen_arvo = heurestinen_arvo + \
+                uusi_heuristinen_arvo = heuristinen_arvo + \
                     self.heurstisen_arvon_delta(pelilauta, syvyys, siirto)
 
                 arviointi = self.minimax(
@@ -111,7 +108,7 @@ class Tekoaly:
                     alfa,
                     beeta,
                     True,
-                    uusi_heurestinen_arvo,
+                    uusi_heuristinen_arvo,
                     siirto)[0]
 
                 arvo = min(arvo, arviointi)
@@ -121,7 +118,6 @@ class Tekoaly:
 
                 beeta = min(beeta, arvo)
                 if arvo <= alfa:
-
                     break
 
             return arvo, None
@@ -173,7 +169,7 @@ class Tekoaly:
             y_seuraava (int): missä y koordinantin suunnassa seuraava rivin ruutu on
 
         Returns:
-            dict: palauttaa sanakirjan, jonka avulla voidaan laskea rivin heurestinen arvo
+            dict: palauttaa sanakirjan, jonka avulla voidaan laskea rivin heuristinen arvo
         """
         suunnan_laskija = HeurestisenArvonLaskija(
             self.maksimoiva_merkki,
@@ -201,7 +197,7 @@ class Tekoaly:
             syvyys (int): minimax algoritmin syvyys, kun se kutsuu tätä metodia
             ruutu (tuple): viimeiseksi lisätyn ruudun koordinaatit
         Returns:
-            float: heurestinen arvo
+            float: heuristinen arvo
         """
         x, y = ruutu
         uusin_merkki = pelilauta[y][x]
@@ -251,22 +247,23 @@ class Tekoaly:
                         rivin_suunta["arvon laskija"].laske_arvo(
                             merkki, (x_akseli - rivin_suunta["x seuraava"], y_akseli - rivin_suunta["y seuraava"]))
                 rivin_suunta["arvon laskija"].viimeisen_ruudun_tarkistus()
-                arvo += rivin_suunta["arvon laskija"].heurestinen_arvo
-                rivin_suunta["arvon laskija"].heurestinen_arvo = 0
+                arvo += rivin_suunta["arvon laskija"].heuristinen_arvo
+                rivin_suunta["arvon laskija"].heuristinen_arvo = 0
             HeurestisenArvonLaskija.yksi_perakkain.clear()
             pelilauta[y][x] = uusin_merkki
             heurestiset_arvot.append(arvo)
-        heurestinen_arvo = heurestiset_arvot[1] - heurestiset_arvot[0]
+        heuristinen_arvo = heurestiset_arvot[1] - heurestiset_arvot[0]
         kerroin = (10 - (self.maksimi_syvyys - syvyys)) / 10
-        return heurestinen_arvo * kerroin
+        return heuristinen_arvo * kerroin
 
-    def heurestinen_funktio(self, pelilauta: list) -> float:
+    
+    def heuristinen_funktio(self, pelilauta: list) -> float:
         """arvioi kaikki vaaka, pysty, ja molemmat vinot rivit, joidenka pituus on 5 tai yli
         Args:
             pelilauta (list):
             syvyys (int): minimax algoritmin syvyys, kun se kutsuu tätä metodia
         Returns:
-            float: heurestinen arvo
+            float: heuristinen arvo
         """
         pysty = HeurestisenArvonLaskija(
             self.maksimoiva_merkki,
@@ -319,5 +316,5 @@ class Tekoaly:
             vino_oikea.viimeisen_ruudun_tarkistus()
             vino_vasen.viimeisen_ruudun_tarkistus()
         HeurestisenArvonLaskija.yksi_perakkain.clear()
-        return pysty.heurestinen_arvo + vaaka.heurestinen_arvo + \
-            vino_oikea.heurestinen_arvo + vino_vasen.heurestinen_arvo
+        return pysty.heuristinen_arvo + vaaka.heuristinen_arvo + \
+            vino_oikea.heuristinen_arvo + vino_vasen.heuristinen_arvo

@@ -23,7 +23,7 @@ class Sovellus:
         self.tapahtumat = Tapahtumat()
         self.peli = Peli(
             self.tapahtumat,
-            Pelaaja,
+            TekoalyPelaaja,
             TekoalyPelaaja,
             LautaUI,
             ikkuna
