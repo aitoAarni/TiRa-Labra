@@ -13,7 +13,7 @@ class TestheuristinenArviointi(unittest.TestCase):
         arvo1 = self.arviointi.perakkaisten_ruutujen_arvot(2, True)
         arvo2 = self.arviointi.perakkaisten_ruutujen_arvot(1)
         arvo3 = self.arviointi.perakkaisten_ruutujen_arvot(7)
-        self.assertTupleEqual((arvo1, arvo2, arvo3), (100, 0, VOITTO_ARVO))
+        self.assertTupleEqual((arvo1, arvo2, arvo3), (95, 0, VOITTO_ARVO))
 
     def test_laske_arvo_metodin_testaus(self):
         rivin_esitys = "-0-xxx0-xxx-000-x00x-0xx0-x-"
@@ -21,4 +21,4 @@ class TestheuristinenArviointi(unittest.TestCase):
         for alkio in rivin_esitys:
             self.arviointi.laske_arvo(alkio, (0, 0))
         self.arviointi.viimeisen_ruudun_tarkistus()
-        self.assertEqual(self.arviointi.heuristinen_arvo, 100)
+        self.assertEqual(self.arviointi.heuristinen_arvo, 150)
