@@ -28,6 +28,8 @@ Ristinolla tekoälyllä varustettuna olisi tavoite.
 
 [viikkoraportti 5](https://github.com/aitoAarni/TiRa-Labra/blob/main/dokumentaatio/viikkoraportti5.md)
 
+[viikoraporrt 6](https://github.com/aitoAarni/TiRa-Labra/blob/main/dokumentaatio/viikkoraportti6.md)
+
 ## pikaiset ohjeet vertaisarviointia varten
 
 
