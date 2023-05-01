@@ -16,10 +16,9 @@ except FileNotFoundError:
 try:
     konfiguraatiotiedoston_nimi = os.getenv("KONFIGURAATIO")
     konfiguraatiotiedoston_polku = os.path.join(
-        tiedoston_nimi,
-        "..",
         "materiaalit",
         konfiguraatiotiedoston_nimi)
+    
 except TypeError:
     konfiguraatiotiedoston_polku = os.path.join(
         tiedoston_nimi,
@@ -27,8 +26,6 @@ except TypeError:
         "materiaalit",
         "testaus_konfiguraatio.json")
 
-
-print(f"konffi tiedoston nimi321: {konfiguraatiotiedoston_nimi}")
 
 
 def rakenna_konfiguraatio():
@@ -41,7 +38,8 @@ def rakenna_konfiguraatio():
         "nappuloiden_väri": (0, 0, 255),
         "peli_ohi_väri": (192, 192, 192),
         "voitto_tekstin_väri": (0, 0, 0),
-        "fontti": 30
+        "fontti": 30,
+        "nappien_väri": (0, 0, 220)
     }
     with open(konfiguraatiotiedoston_polku, "w") as tiedosto:
         json.dump(konfiguraatio, tiedosto)
@@ -53,17 +51,16 @@ def lataa_konfiguraatio():
     return konfiguraatio
 
 
-konffi = lataa_konfiguraatio()
-
-
-def set_konfiguraatio(avain, arvo):
-    konffi[avain] = arvo
-    with open(konfiguraatiotiedoston_polku, "w") as file:
-        json.dump(konffi, konfiguraatiotiedoston_polku)
+def set_konfiguraatio(konfiguraatio_tietokirja):
+    with open(konfiguraatiotiedoston_polku, "w") as tiedosto:
+        tiedosto.write(json.dumps(konfiguraatio_tietokirja))
 
 
 def get_konfiguraatio():
-    return konffi
+    print("polku:", konfiguraatiotiedoston_polku)
+    with open(konfiguraatiotiedoston_polku, "r") as tiedosto:
+        konfiguraatio = json.load(tiedosto)
+    return konfiguraatio
 
 
 def main():

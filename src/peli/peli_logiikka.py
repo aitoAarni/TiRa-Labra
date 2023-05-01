@@ -2,7 +2,7 @@ from konfiguraatio import get_konfiguraatio
 from peli.ihmis_pelaaja import Pelaaja
 from peli.tekoäly_pelaaja import TekoalyPelaaja
 from peli.tapahtumat import Tapahtumat
-from käyttöliittymä.lauta import LautaUI
+from käyttöliittymä.lauta_ui import LautaUI
 import pygame.display
 konffi = get_konfiguraatio()
 
@@ -54,7 +54,7 @@ class Peli:
                 Peli.tarkista_voitto,
                 merkki,
                 saa_minimoiva_merkki[merkki],
-                2)
+                3)
 
     @staticmethod
     def tarkista_voitto(

@@ -3,44 +3,55 @@ from konfiguraatio import get_konfiguraatio
 from peli.tapahtumat import Tapahtumat
 from peli.peli_logiikka import Peli
 from peli.ihmis_pelaaja import Pelaaja
-from käyttöliittymä.lauta import LautaUI
+from käyttöliittymä.lauta_ui import LautaUI
 from peli.tekoäly_pelaaja import TekoalyPelaaja
 from peli.peli_silmukka import peli_silmukka
+from valikko.valikko import Valikko
+from käyttöliittymä.valikko_ui import ValikkoUI
+from valikko.nappien_tapahtumat import ValitsePelaaja, PelinHallinta, RuudukonKoko
 FPS = 20
 
 konffi = get_konfiguraatio()
 
 LEVEYS = konffi["leveys"]
 KORKEUS = konffi["korkeus"]
-
-
+RUUTUJEN_MAARA = konffi["ruutujen_määrä"]
 
 class Sovellus:
     def __init__(self) -> None:
         pygame.init()
-        ikkuna = pygame.display.set_mode((LEVEYS, KORKEUS))
+        self.naytto = pygame.display.set_mode((LEVEYS, KORKEUS))
         pygame.display.set_caption("Ristinolla")
         self.tapahtumat = Tapahtumat()
-        self.peli = Peli(
-            self.tapahtumat,
-            TekoalyPelaaja,
-            TekoalyPelaaja,
-            LautaUI,
-            ikkuna
-        )
 
     def main(self):
+        pelaaja1 = ValitsePelaaja(TekoalyPelaaja, Pelaaja)
+        pelaaja2 = ValitsePelaaja(Pelaaja, TekoalyPelaaja)
+        ruudukon_hallinta = RuudukonKoko(RUUTUJEN_MAARA)
         kello = pygame.time.Clock()
-        
         kello.tick(FPS)
-        return peli_silmukka(self.peli)
+        while True:
+            valikko = Valikko(self.tapahtumat, self.naytto, ValikkoUI, ruudukon_hallinta, pelaaja1, pelaaja2, PelinHallinta)
+            print(1)
+            valikko.aloita()
+            print(3)
+            if valikko.aloita_peli:
+                while True:
+                    peli = Peli(
+                        self.tapahtumat,
+                        pelaaja1,
+                        pelaaja2,
+                        LautaUI,
+                        self.naytto
+                    )
+                    tapahtuma = peli_silmukka(peli)
+                    if tapahtuma == "pelaa uudelleen": continue
+                    if tapahtuma == "takaisin": break
+                    if tapahtuma == "lopeta": return
+
 
 
 if __name__ == "__main__":
-    while True:
-        sovellus = Sovellus()
-        paluuarvo = sovellus.main()
-        if paluuarvo == "pelaa_uudelleen":
-            continue
-        print("see you later, alligator")
-        break
+    sovellus = Sovellus()
+    sovellus.main()
+    print("see you later, alligator")
