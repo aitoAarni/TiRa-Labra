@@ -17,6 +17,7 @@ LEVEYS = konffi["leveys"]
 KORKEUS = konffi["korkeus"]
 RUUTUJEN_MAARA = konffi["ruutujen_määrä"]
 
+
 class Sovellus:
     def __init__(self) -> None:
         pygame.init()
@@ -31,7 +32,14 @@ class Sovellus:
         kello = pygame.time.Clock()
         kello.tick(FPS)
         while True:
-            valikko = Valikko(self.tapahtumat, self.naytto, ValikkoUI, ruudukon_hallinta, pelaaja1, pelaaja2, PelinHallinta)
+            valikko = Valikko(
+                self.tapahtumat,
+                self.naytto,
+                ValikkoUI,
+                ruudukon_hallinta,
+                pelaaja1,
+                pelaaja2,
+                PelinHallinta)
             print(1)
             valikko.aloita()
             print(3)
@@ -46,12 +54,14 @@ class Sovellus:
                         self.naytto
                     )
                     tapahtuma = peli_silmukka(peli)
-                    if tapahtuma == "pelaa uudelleen": continue
-                    if tapahtuma == "takaisin": break
-                    if tapahtuma == "lopeta": return
+                    if tapahtuma == "pelaa uudelleen":
+                        continue
+                    if tapahtuma == "takaisin":
+                        break
+                    if tapahtuma == "lopeta":
+                        return
             else:
                 return
-
 
 
 if __name__ == "__main__":

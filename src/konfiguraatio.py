@@ -3,7 +3,6 @@ from dotenv import load_dotenv
 import os
 
 tiedoston_nimi = os.path.dirname(__file__)
-konfiguraatio = None
 
 try:
     load_dotenv()
@@ -16,7 +15,7 @@ try:
     konfiguraatiotiedoston_polku = os.path.join(
         "materiaalit",
         konfiguraatiotiedoston_nimi)
-    
+
 except TypeError:
     konfiguraatiotiedoston_polku = os.path.join(
         tiedoston_nimi,
@@ -25,34 +24,45 @@ except TypeError:
         "testaus_konfiguraatio.json")
 
 
+class KonfiguraatioArvot:
+    def __init__(self) -> None:
+        pass
+
+    def paivita_atribuutit(self, sanakrija):
+        self.__dict__ = sanakrija
+
+    def palauta_sanakirja_atribuuteista(self):
+        return vars(self)
+
+konfiguraatio = KonfiguraatioArvot()
+
 
 def rakenna_konfiguraatio():
     konfiguraatio = {
-        "ruutujen_määrä": 15,
-        "laudan_väri": (0, 0, 0),
-        "laudan_viivojen_väri": (255, 255, 255),
-        "korkeus": 500,
-        "leveys": 500,
-        "nappuloiden_väri": (0, 0, 255),
-        "peli_ohi_väri": (192, 192, 192),
-        "voitto_tekstin_väri": (0, 0, 0),
-        "fontti": 30,
-        "nappien_väri": (0, 0, 220)
-    }
+        "ruutujen_maara": 29,
+        "laudan_vari": (0, 0, 0),
+        "laudan_viivojen_vari": (255, 255, 255), 
+        "korkeus": 1000, 
+        "leveys": 1200, 
+        "nappuloiden_vari": (0, 0, 255), 
+        "peli_ohi_vari": (192, 192, 192),
+        "voitto_tekstin_vari": (0, 0, 0),
+        "fontti": 30, 
+        "nappien_vari": (0, 0, 220)}
     with open(konfiguraatiotiedoston_polku, "w") as tiedosto:
         json.dump(konfiguraatio, tiedosto)
 
 
-
-def set_konfiguraatio(konfiguraatio_tietokirja):
+def set_konfiguraatio(konfiguraatio_objekti: KonfiguraatioArvot):
     with open(konfiguraatiotiedoston_polku, "w") as tiedosto:
-        tiedosto.write(json.dumps(konfiguraatio_tietokirja))
+        tiedosto.write(json.dumps(konfiguraatio_objekti.palauta_sanakirja_atribuuteista()))
+
 
 def paivita_konfiguraatio():
-    global konfiguraatio
     with open(konfiguraatiotiedoston_polku, "r") as tiedosto:
         uusi_konfiguraatio = json.load(tiedosto)
-    konfiguraatio = uusi_konfiguraatio
+    konfiguraatio.paivita_atribuutit(uusi_konfiguraatio)
+
 
 paivita_konfiguraatio()
 
@@ -60,20 +70,5 @@ paivita_konfiguraatio()
 def get_konfiguraatio():
     return konfiguraatio
 
-
-class Testi:
-    def __init__(self) -> None:
-        self.testi_attribuutti = 1
-
-t = Testi()
-
-def get_testi():
-    print("konfiguraatiossa id(t):", id(t))
-    return t
-
-def paivita_testi():
-    t.testi_attribuutti += 1
-
-
-def main():
+if __name__ == "__main__":
     rakenna_konfiguraatio()

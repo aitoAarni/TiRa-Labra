@@ -18,28 +18,36 @@ class ValikkoUI:
         fontin_koko = konffi["leveys"] // 25
         for nappi in self.napit.sprites():
             fontti = pygame.font.SysFont(None, fontin_koko)
-            teksti = fontti.render(nappi.napin_teksti, True, konffi["nappien_väri"])
-            teksti_skaalattuna = pygame.transform.smoothscale(teksti, (nappi.rect.width, nappi.rect.height))
+            teksti = fontti.render(
+                nappi.napin_teksti, True, konffi["nappien_väri"])
+            teksti_skaalattuna = pygame.transform.smoothscale(
+                teksti, (nappi.rect.width, nappi.rect.height))
             nappi.image = teksti_skaalattuna
 
     def tee_hiiri_napin_päällä_effekti(self, nappi):
-        if  nappi:
-            self.aktiivisen_napin_tausta = pygame.transform.scale(self.aktiivisen_napin_tausta, (nappi.rect.width, nappi.rect.height))
-            self.aktiivisen_napin_tausta.fill((192,192,192))
-            
+        if nappi:
+            self.aktiivisen_napin_tausta = pygame.transform.scale(
+                self.aktiivisen_napin_tausta, (nappi.rect.width, nappi.rect.height))
+            self.aktiivisen_napin_tausta.fill((192, 192, 192))
 
-            self.ikkuna.blit(self.aktiivisen_napin_tausta, (nappi.rect.x, nappi.rect.y))
+            self.ikkuna.blit(self.aktiivisen_napin_tausta,
+                             (nappi.rect.x, nappi.rect.y))
             pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)
         else:
             pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
-    
 
-    def luo_tekstit(self, leveys, korkeus, pelaaj1_teksti, pelaaja2_teksti, ruutujen_maara):
+    def luo_tekstit(
+            self,
+            leveys,
+            korkeus,
+            pelaaj1_teksti,
+            pelaaja2_teksti,
+            ruutujen_maara):
         n_leveys = leveys / 30
         n_korkeus = korkeus / 30
         fontin_koko = konffi["leveys"] // 25
 
-        keski_x = leveys /2
+        keski_x = leveys / 2
         keski_y = korkeus / 2
 
         y_alkukorkeus = keski_y - n_korkeus * 4
@@ -55,13 +63,24 @@ class ValikkoUI:
             otsikko = fontti.render(otsikko, True, (255, 255, 255))
             x = keski_x - teksti.get_width() / 2
             y = y_alkukorkeus + n_korkeus * (4 * i)
-            self.ikkuna.blit(otsikko, (keski_x - otsikko.get_width() / 2, y - n_korkeus * 2))
+            self.ikkuna.blit(
+                otsikko, (keski_x - otsikko.get_width() / 2, y - n_korkeus * 2))
             self.ikkuna.blit(teksti, (x, y))
             i += 1
 
-    def piirra_valikko(self, nappi_jonka_paalla_on_hiiri, pelaaj1_teksti, pelaaja2_teksti, ruutujen_maara):
+    def piirra_valikko(
+            self,
+            nappi_jonka_paalla_on_hiiri,
+            pelaaj1_teksti,
+            pelaaja2_teksti,
+            ruutujen_maara):
         self.ikkuna.fill("black")
         self.tee_hiiri_napin_päällä_effekti(nappi_jonka_paalla_on_hiiri)
         self.napit.draw(self.ikkuna)
-        self.luo_tekstit(konffi["leveys"], konffi["korkeus"], pelaaj1_teksti, pelaaja2_teksti, ruutujen_maara)
+        self.luo_tekstit(
+            konffi["leveys"],
+            konffi["korkeus"],
+            pelaaj1_teksti,
+            pelaaja2_teksti,
+            ruutujen_maara)
         pygame.display.flip()

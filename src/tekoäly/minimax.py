@@ -3,7 +3,6 @@ from tekoäly.heuristinen_arviointi import HeurestisenArvonLaskija
 konffi = get_konfiguraatio()
 
 
-
 class Tekoaly:
     """Luokka parhaan seuraavan ruudun etsimiseen käyttäen minimax algoritmia
     """
@@ -255,7 +254,6 @@ class Tekoaly:
         kerroin = (10 - (self.maksimi_syvyys - syvyys)) / 10
         return heuristinen_arvo * kerroin
 
-    
     def heuristinen_funktio(self, pelilauta: list) -> float:
         """arvioi kaikki vaaka, pysty, ja molemmat vinot rivit, joidenka pituus on 5 tai yli
         Args:

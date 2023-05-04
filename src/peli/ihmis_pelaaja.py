@@ -33,7 +33,7 @@ class Pelaaja:
 
             return rivi, sarake
         return None
-    
+
     @staticmethod
     def nimi() -> str:
         return "Ihmis pelaaja"

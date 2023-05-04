@@ -1,5 +1,6 @@
 from peli.peli_logiikka import Peli
 
+
 def peli_silmukka(peli: Peli) -> str:
 
     peli.lauta_ui.piirra_lauta()
@@ -33,4 +34,3 @@ def peli_silmukka(peli: Peli) -> str:
             return "takaisin"
         elif tapahtumat["pelaa_uudelleen"]:
             return "pelaa_uudelleen"
-        

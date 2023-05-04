@@ -1,4 +1,4 @@
-from konfiguraatio import get_konfiguraatio,get_testi
+from konfiguraatio import get_konfiguraatio, get_testi
 from peli.ihmis_pelaaja import Pelaaja
 from peli.tekoäly_pelaaja import TekoalyPelaaja
 from peli.tapahtumat import Tapahtumat
@@ -6,8 +6,7 @@ from käyttöliittymä.lauta_ui import LautaUI
 import pygame.display
 
 konffi = get_konfiguraatio()
-testi = get_testi()
-print("peli logiikka: id(testi):", id(testi))
+
 
 class Peli:
     """Pelilogiikka on tämän luokan sisällä.

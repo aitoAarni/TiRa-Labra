@@ -1,18 +1,20 @@
 from konfiguraatio import get_konfiguraatio, set_konfiguraatio, paivita_konfiguraatio, paivita_testi
 
+
 class ValitsePelaaja:
     def __init__(self, pelaaja1, pelaaja2) -> None:
         self._pelaaja1 = pelaaja1
         self._pelaaja2 = pelaaja2
         self._valittu_pelaaja = pelaaja1
-    
+
     def vaihda_pelaajaa(self):
         self._valittu_pelaaja = self._pelaaja1 if self._valittu_pelaaja == self._pelaaja2 else self._pelaaja2
 
     @property
     def valittu_pelaaja(self):
         return self._valittu_pelaaja
-    
+
+
 class RuudukonKoko:
     def __init__(self, ruutujen_maara) -> None:
         self._ruutujen_maara = ruutujen_maara
@@ -26,10 +28,17 @@ class RuudukonKoko:
     @property
     def ruutujen_maara(self):
         return self._ruutujen_maara
-    
-    
+
+
 class PelinHallinta:
-    def __init__(self, ruutujen_hallinta, pelaaja1, pelaaja2, get_konf=get_konfiguraatio, set_konf=set_konfiguraatio, paivita_konf=paivita_konfiguraatio) -> None:
+    def __init__(
+            self,
+            ruutujen_hallinta,
+            pelaaja1,
+            pelaaja2,
+            get_konf=get_konfiguraatio,
+            set_konf=set_konfiguraatio,
+            paivita_konf=paivita_konfiguraatio) -> None:
         self.ruutujen_hallinta = ruutujen_hallinta
         self.pelaaja1 = pelaaja1
         self.pelaaja2 = pelaaja2
