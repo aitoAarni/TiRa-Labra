@@ -1,8 +1,6 @@
 from konfiguraatio import get_konfiguraatio
 from peli.tapahtumat import Tapahtumat
 konffi = get_konfiguraatio()
-LEVEYS = konffi["leveys"]
-KORKEUS = konffi["korkeus"]
 
 
 class Pelaaja:
@@ -28,10 +26,14 @@ class Pelaaja:
 
         if self.hiirta_klikattu():
             x, y = self.hiiren_paikka()
-            ruudun_leveys = LEVEYS / self.ruutujen_maara
-            ruudun_korkeus = KORKEUS / self.ruutujen_maara
+            ruudun_leveys = konffi["leveys"] / self.ruutujen_maara
+            ruudun_korkeus = konffi["korkeus"] / self.ruutujen_maara
             rivi = round(x // ruudun_leveys)
             sarake = round(y // ruudun_korkeus)
 
             return rivi, sarake
         return None
+    
+    @staticmethod
+    def nimi() -> str:
+        return "Ihmis pelaaja"

@@ -36,11 +36,12 @@ class Sovellus:
             valikko.aloita()
             print(3)
             if valikko.aloita_peli:
+                print("peli alkaaaa")
                 while True:
                     peli = Peli(
                         self.tapahtumat,
-                        pelaaja1,
-                        pelaaja2,
+                        pelaaja1.valittu_pelaaja,
+                        pelaaja2.valittu_pelaaja,
                         LautaUI,
                         self.naytto
                     )
@@ -48,6 +49,8 @@ class Sovellus:
                     if tapahtuma == "pelaa uudelleen": continue
                     if tapahtuma == "takaisin": break
                     if tapahtuma == "lopeta": return
+            else:
+                return
 
 
 

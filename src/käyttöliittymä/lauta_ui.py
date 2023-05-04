@@ -4,16 +4,6 @@ import os
 
 konffi = get_konfiguraatio()
 
-LEVEYS = konffi["leveys"]
-KORKEUS = konffi["korkeus"]
-RUUTUJEN_MAARA = konffi["ruutujen_määrä"]
-LAUDAN_VIIVOJEN_VARI = konffi["laudan_viivojen_väri"]
-NAPPULOIDEN_VARI = konffi["nappuloiden_väri"]
-FONTTI = konffi["fontti"]
-VOITTO_TEKSTIN_VARI = konffi["voitto_tekstin_väri"]
-PELI_OHI_VARI = konffi["peli_ohi_väri"]
-LAUDAN_VARI = konffi["laudan_väri"]
-
 
 class LautaUI:
     """Pelilaudan graaffinen esitys
@@ -27,28 +17,28 @@ class LautaUI:
         self._ikkuna = ikkuna
         self._ristit = ristit
         self._nollat = nollat
-        self._ruudun_leveys = LEVEYS / RUUTUJEN_MAARA
-        self._ruudun_korkeus = KORKEUS / RUUTUJEN_MAARA
+        self._ruudun_leveys = konffi["leveys"] / konffi["ruutujen_määrä"]
+        self._ruudun_korkeus = konffi["korkeus"] / konffi["ruutujen_määrä"]
         self.voittoikkuna = None
 
     def _piirra_viivat(self):
         """piirtää laudan ruudut, joihin voi laittaa ristin tai nollan
         """
-        for i in range(1, RUUTUJEN_MAARA):
+        for i in range(1, konffi["ruutujen_määrä"]):
             x1 = self._ruudun_leveys * i
             y1 = 0
             x2 = 0
             y2 = self._ruudun_korkeus * i
 
             # pysty viivat
-            pygame.draw.line(self._ikkuna, LAUDAN_VIIVOJEN_VARI,
-                             (x1, y1), (x1, KORKEUS))
+            pygame.draw.line(self._ikkuna, konffi["laudan_viivojen_väri"],
+                             (x1, y1), (x1, konffi["korkeus"]))
             # vaaka viivat
             pygame.draw.line(
-                self._ikkuna, LAUDAN_VIIVOJEN_VARI, (x2, y2), (LEVEYS, y2))
+                self._ikkuna, konffi["laudan_viivojen_väri"], (x2, y2), (konffi["leveys"], y2))
 
     def _piirra_nollat(self):
-        vari = NAPPULOIDEN_VARI
+        vari = konffi["nappuloiden_väri"]
         for i, ruutu in enumerate(self._nollat):
             rivi, sarake = ruutu
             if i == len(self._nollat) - 1:
@@ -67,7 +57,7 @@ class LautaUI:
                                keskipiste, r, 3)
 
     def _piirra_ristit(self):
-        vari = NAPPULOIDEN_VARI
+        vari = konffi["nappuloiden_väri"]
         r = min(self._ruudun_korkeus, self._ruudun_leveys) / 3  # r = säde
 
         for i, ruutu in enumerate(self._ristit):
@@ -91,7 +81,7 @@ class LautaUI:
 
     def tee_voittoteksti(self, merkki: str):
         self.voittoikkuna = pygame.Surface(
-            (LEVEYS, KORKEUS))
+            (konffi["leveys"], konffi["korkeus"]))
         if merkki.lower() == "x":
             merkkijono = "RISTIT VOITTI!"
 
@@ -102,28 +92,28 @@ class LautaUI:
             merkkijono = "NOLLAT VOITTI!"
 
         fontti = pygame.font.Font(os.path.join(
-            "materiaalit", "Wedgie Regular.ttf"), FONTTI)
+            "materiaalit", "Wedgie Regular.ttf"), konffi["fontti"])
 
-        teksti = fontti.render(merkkijono, True, VOITTO_TEKSTIN_VARI)
+        teksti = fontti.render(merkkijono, True, konffi["voitto_tekstin_väri"])
         teksti_rect = teksti.get_rect()
-        teksti_rect.center = (LEVEYS / 2, KORKEUS / 2)
+        teksti_rect.center = (konffi["leveys"] / 2, konffi["korkeus"] / 2)
         self.voittoikkuna.set_alpha(200)
-        self.voittoikkuna.fill(PELI_OHI_VARI)
+        self.voittoikkuna.fill(konffi["peli_ohi_väri"])
         self.voittoikkuna.blit(teksti, teksti_rect)
 
     def _piirra_voittonakyma(self):
-        vari = PELI_OHI_VARI
+        vari = konffi["peli_ohi_väri"]
         pygame.draw.rect(
             self._ikkuna,
             vari,
             (0,
              0,
-             LEVEYS,
-                KORKEUS))
+             konffi["leveys"],
+                konffi["korkeus"]))
 
     def piirra_lauta(self):
 
-        self._ikkuna.fill(LAUDAN_VARI)
+        self._ikkuna.fill(konffi["laudan_väri"])
         self._piirra_viivat()
         self._piirra_nollat()
         self._piirra_ristit()

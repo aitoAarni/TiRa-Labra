@@ -1,4 +1,4 @@
-from konfiguraatio import get_konfiguraatio, set_konfiguraatio
+from konfiguraatio import get_konfiguraatio, set_konfiguraatio, paivita_konfiguraatio, paivita_testi
 
 class ValitsePelaaja:
     def __init__(self, pelaaja1, pelaaja2) -> None:
@@ -27,13 +27,15 @@ class RuudukonKoko:
     def ruutujen_maara(self):
         return self._ruutujen_maara
     
+    
 class PelinHallinta:
-    def __init__(self, ruutujen_hallinta, pelaaja1, pelaaja2, get_konf=get_konfiguraatio, set_konf=set_konfiguraatio) -> None:
+    def __init__(self, ruutujen_hallinta, pelaaja1, pelaaja2, get_konf=get_konfiguraatio, set_konf=set_konfiguraatio, paivita_konf=paivita_konfiguraatio) -> None:
         self.ruutujen_hallinta = ruutujen_hallinta
         self.pelaaja1 = pelaaja1
         self.pelaaja2 = pelaaja2
         self.get_konf = get_konf
         self.set_konf = set_konf
+        self.paivita_konf = paivita_konf
         self._aloita_peli = False
 
     @property
@@ -44,6 +46,9 @@ class PelinHallinta:
         return False
 
     def aloita_peli_tapahtuma(self):
+        self._aloita_peli = True
         konffi = self.get_konf()
         konffi["ruutujen_määrä"] = self.ruutujen_hallinta.ruutujen_maara
         self.set_konf(konffi)
+        self.paivita_konf()
+        paivita_testi()

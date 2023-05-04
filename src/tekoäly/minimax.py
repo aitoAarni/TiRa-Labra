@@ -2,7 +2,6 @@ from konfiguraatio import get_konfiguraatio
 from tekoäly.heuristinen_arviointi import HeurestisenArvonLaskija
 konffi = get_konfiguraatio()
 
-RUUTUJEN_MAARA = konffi["ruutujen_määrä"]
 
 
 class Tekoaly:
@@ -17,7 +16,7 @@ class Tekoaly:
         self.tarkista_voitto = tarkista_voitto
         self.maksimoiva_merkki = maksimoiva_merkki
         self.minimoiva_merkki = minimoiva_merkki
-        self.n = RUUTUJEN_MAARA
+        self.n = konffi["ruutujen_määrä"]
         self.maksimi_syvyys = maksimi_syvyys
 
     def minimax(

@@ -116,3 +116,7 @@ class TekoalyPelaaja:
         heuristinen_arvo = self.tekoaly.heuristinen_funktio(lauta)
         lauta[siirto[1]][siirto[0]] = None
         return heuristinen_arvo
+    
+    @staticmethod
+    def nimi() -> str:
+        return "Tekoäly pelaaja"

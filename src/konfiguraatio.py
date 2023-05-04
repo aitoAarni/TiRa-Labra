@@ -2,15 +2,13 @@ import json
 from dotenv import load_dotenv
 import os
 
-print("konfigissss123")
 tiedoston_nimi = os.path.dirname(__file__)
-
+konfiguraatio = None
 
 try:
     load_dotenv()
-    print("dotenv found")
 except FileNotFoundError:
-    print("dotenv not found")
+    pass
 
 
 try:
@@ -45,22 +43,36 @@ def rakenna_konfiguraatio():
         json.dump(konfiguraatio, tiedosto)
 
 
-def lataa_konfiguraatio():
-    with open(konfiguraatiotiedoston_polku, "r") as tiedosto:
-        konfiguraatio = json.load(tiedosto)
-    return konfiguraatio
-
 
 def set_konfiguraatio(konfiguraatio_tietokirja):
     with open(konfiguraatiotiedoston_polku, "w") as tiedosto:
         tiedosto.write(json.dumps(konfiguraatio_tietokirja))
 
+def paivita_konfiguraatio():
+    global konfiguraatio
+    with open(konfiguraatiotiedoston_polku, "r") as tiedosto:
+        uusi_konfiguraatio = json.load(tiedosto)
+    konfiguraatio = uusi_konfiguraatio
+
+paivita_konfiguraatio()
+
 
 def get_konfiguraatio():
-    print("polku:", konfiguraatiotiedoston_polku)
-    with open(konfiguraatiotiedoston_polku, "r") as tiedosto:
-        konfiguraatio = json.load(tiedosto)
     return konfiguraatio
+
+
+class Testi:
+    def __init__(self) -> None:
+        self.testi_attribuutti = 1
+
+t = Testi()
+
+def get_testi():
+    print("konfiguraatiossa id(t):", id(t))
+    return t
+
+def paivita_testi():
+    t.testi_attribuutti += 1
 
 
 def main():

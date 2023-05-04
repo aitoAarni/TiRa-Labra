@@ -1,13 +1,13 @@
-from konfiguraatio import get_konfiguraatio
+from konfiguraatio import get_konfiguraatio,get_testi
 from peli.ihmis_pelaaja import Pelaaja
 from peli.tekoäly_pelaaja import TekoalyPelaaja
 from peli.tapahtumat import Tapahtumat
 from käyttöliittymä.lauta_ui import LautaUI
 import pygame.display
+
 konffi = get_konfiguraatio()
-
-RUUTUJEN_MAARA = konffi["ruutujen_määrä"]
-
+testi = get_testi()
+print("peli logiikka: id(testi):", id(testi))
 
 class Peli:
     """Pelilogiikka on tämän luokan sisällä.
@@ -25,15 +25,17 @@ class Peli:
         self.nollat = []
         self.lauta_ui = lauta(ikkuna, self.ristit, self.nollat)
         self.lauta = [[None for _ in range(
-            RUUTUJEN_MAARA)] for _ in range(RUUTUJEN_MAARA)]
+            konffi["ruutujen_määrä"])] for _ in range(konffi["ruutujen_määrä"])]
         self.vapaat_ruudut = set()
-        for x in range(RUUTUJEN_MAARA):
-            for y in range(RUUTUJEN_MAARA):
+        for x in range(konffi["ruutujen_määrä"]):
+            for y in range(konffi["ruutujen_määrä"]):
                 self.vapaat_ruudut.add((x, y))
         self.siirrot = []
         pelaaja1 = self._alusta_pelaaja(pelaaja1, "x", self.ristit)
         pelaaja2 = self._alusta_pelaaja(pelaaja2, "0", self.nollat)
         self.pelaajat = [pelaaja1, pelaaja2]
+        print("testi_atribuutti peli logiikassa:", testi.testi_attribuutti)
+        print("peli logiikassa id(t):", id(testi))
 
     def _alusta_pelaaja(self, pelaaja, merkki, merkit):
         saa_minimoiva_merkki = {"x": "0", "0": "x"}
@@ -43,7 +45,7 @@ class Peli:
                 self.tapahtumat.get_hiiren_paikka,
                 merkki,
                 merkit,
-                RUUTUJEN_MAARA)
+                konffi["ruutujen_määrä"])
 
         elif pelaaja is TekoalyPelaaja:
             return pelaaja(
@@ -62,7 +64,7 @@ class Peli:
             merkki: str,
             lauta: list) -> bool:
         x, y = viimeisin_siirto
-        n = RUUTUJEN_MAARA - 1
+        n = konffi["ruutujen_määrä"] - 1
 
         a = min(y, n - x)
         x_vino_oikea = x + a
@@ -77,7 +79,7 @@ class Peli:
         vino_vasen = 0
         vino_oikea = 0
 
-        for i in range(RUUTUJEN_MAARA):
+        for i in range(konffi["ruutujen_määrä"]):
             if lauta[i][x] == merkki:
                 pysty += 1
             else:
@@ -103,7 +105,7 @@ class Peli:
         return False
 
     def tarkista_tasapeli(self) -> bool:
-        return RUUTUJEN_MAARA ** 2 == self.siirrot
+        return konffi["ruutujen_määrä"] ** 2 == self.siirrot
 
     def tarkista_onko_peli_paattynyt(
             self,

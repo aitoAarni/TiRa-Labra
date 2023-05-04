@@ -3,11 +3,10 @@ from konfiguraatio import get_konfiguraatio
 import pygame
 
 konffi = get_konfiguraatio()
-LEVEYS, KORKEUS, RUUTUJEN_MAARA = konffi["leveys"], konffi["korkeus"], konffi["ruutujen_määrä"]
 
 class Napit:
     def __init__(self, ruudukon_hallinta, pelaaja1, pelaaja2, pelin_hallinta) -> None:
-        self.napit = muodosta_napit(LEVEYS, KORKEUS, ruudukon_hallinta, pelaaja1, pelaaja2, pelin_hallinta)
+        self.napit = muodosta_napit(konffi["leveys"], konffi["korkeus"], ruudukon_hallinta, pelaaja1, pelaaja2, pelin_hallinta)
         self.nappi_jonka_paalla_on_hiiri = None
 
 
@@ -27,8 +26,8 @@ class Napit:
 
 
 def muodosta_napit(leveys, korkeus, ruudukon_hallinta, pelaaja1, pelaaja2, pelin_hallinta):
-    n_leveys = leveys / 40
-    n_korkeus = korkeus / 40
+    n_leveys = leveys / 30
+    n_korkeus = korkeus / 30
 
     keski_x = leveys /2
     keski_y = korkeus / 2
