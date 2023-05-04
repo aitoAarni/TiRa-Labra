@@ -1,4 +1,4 @@
-from konfiguraatio import get_konfiguraatio, set_konfiguraatio, paivita_konfiguraatio, paivita_testi
+from konfiguraatio import get_konfiguraatio, set_konfiguraatio, paivita_konfiguraatio
 
 
 class ValitsePelaaja:
@@ -57,7 +57,7 @@ class PelinHallinta:
     def aloita_peli_tapahtuma(self):
         self._aloita_peli = True
         konffi = self.get_konf()
-        konffi["ruutujen_määrä"] = self.ruutujen_hallinta.ruutujen_maara
+        konffi.ruutujen_maara = self.ruutujen_hallinta.ruutujen_maara
+        print(konffi.palauta_sanakirja_atribuuteista())
         self.set_konf(konffi)
         self.paivita_konf()
-        paivita_testi()

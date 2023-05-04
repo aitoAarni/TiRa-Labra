@@ -1,4 +1,4 @@
-from konfiguraatio import get_konfiguraatio, get_testi
+from konfiguraatio import get_konfiguraatio
 from peli.ihmis_pelaaja import Pelaaja
 from peli.tekoäly_pelaaja import TekoalyPelaaja
 from peli.tapahtumat import Tapahtumat
@@ -24,17 +24,15 @@ class Peli:
         self.nollat = []
         self.lauta_ui = lauta(ikkuna, self.ristit, self.nollat)
         self.lauta = [[None for _ in range(
-            konffi["ruutujen_määrä"])] for _ in range(konffi["ruutujen_määrä"])]
+            konffi.ruutujen_maara)] for _ in range(konffi.ruutujen_maara)]
         self.vapaat_ruudut = set()
-        for x in range(konffi["ruutujen_määrä"]):
-            for y in range(konffi["ruutujen_määrä"]):
+        for x in range(konffi.ruutujen_maara):
+            for y in range(konffi.ruutujen_maara):
                 self.vapaat_ruudut.add((x, y))
         self.siirrot = []
         pelaaja1 = self._alusta_pelaaja(pelaaja1, "x", self.ristit)
         pelaaja2 = self._alusta_pelaaja(pelaaja2, "0", self.nollat)
         self.pelaajat = [pelaaja1, pelaaja2]
-        print("testi_atribuutti peli logiikassa:", testi.testi_attribuutti)
-        print("peli logiikassa id(t):", id(testi))
 
     def _alusta_pelaaja(self, pelaaja, merkki, merkit):
         saa_minimoiva_merkki = {"x": "0", "0": "x"}
@@ -44,7 +42,7 @@ class Peli:
                 self.tapahtumat.get_hiiren_paikka,
                 merkki,
                 merkit,
-                konffi["ruutujen_määrä"])
+                konffi.ruutujen_maara)
 
         elif pelaaja is TekoalyPelaaja:
             return pelaaja(
@@ -63,7 +61,7 @@ class Peli:
             merkki: str,
             lauta: list) -> bool:
         x, y = viimeisin_siirto
-        n = konffi["ruutujen_määrä"] - 1
+        n = konffi.ruutujen_maara - 1
 
         a = min(y, n - x)
         x_vino_oikea = x + a
@@ -78,7 +76,7 @@ class Peli:
         vino_vasen = 0
         vino_oikea = 0
 
-        for i in range(konffi["ruutujen_määrä"]):
+        for i in range(konffi.ruutujen_maara):
             if lauta[i][x] == merkki:
                 pysty += 1
             else:
@@ -104,7 +102,8 @@ class Peli:
         return False
 
     def tarkista_tasapeli(self) -> bool:
-        return konffi["ruutujen_määrä"] ** 2 == self.siirrot
+        print(f"ruutujen_maara: {konffi.ruutujen_maara ** 2}, siirtojen_maara: {len(self.siirrot)}")
+        return konffi.ruutujen_maara ** 2 == len(self.siirrot)
 
     def tarkista_onko_peli_paattynyt(
             self,

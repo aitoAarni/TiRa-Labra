@@ -13,8 +13,8 @@ class Napit:
             pelaaja2,
             pelin_hallinta) -> None:
         self.napit = muodosta_napit(
-            konffi["leveys"],
-            konffi["korkeus"],
+            konffi.leveys,
+            konffi.korkeus,
             ruudukon_hallinta,
             pelaaja1,
             pelaaja2,

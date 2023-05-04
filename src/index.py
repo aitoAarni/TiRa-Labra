@@ -13,22 +13,19 @@ FPS = 20
 
 konffi = get_konfiguraatio()
 
-LEVEYS = konffi["leveys"]
-KORKEUS = konffi["korkeus"]
-RUUTUJEN_MAARA = konffi["ruutujen_määrä"]
 
 
 class Sovellus:
     def __init__(self) -> None:
         pygame.init()
-        self.naytto = pygame.display.set_mode((LEVEYS, KORKEUS))
+        self.naytto = pygame.display.set_mode((konffi.leveys, konffi.korkeus))
         pygame.display.set_caption("Ristinolla")
         self.tapahtumat = Tapahtumat()
 
     def main(self):
         pelaaja1 = ValitsePelaaja(TekoalyPelaaja, Pelaaja)
         pelaaja2 = ValitsePelaaja(Pelaaja, TekoalyPelaaja)
-        ruudukon_hallinta = RuudukonKoko(RUUTUJEN_MAARA)
+        ruudukon_hallinta = RuudukonKoko(konffi.ruutujen_maara)
         kello = pygame.time.Clock()
         kello.tick(FPS)
         while True:

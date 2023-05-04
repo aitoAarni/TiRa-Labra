@@ -26,8 +26,8 @@ class Pelaaja:
 
         if self.hiirta_klikattu():
             x, y = self.hiiren_paikka()
-            ruudun_leveys = konffi["leveys"] / self.ruutujen_maara
-            ruudun_korkeus = konffi["korkeus"] / self.ruutujen_maara
+            ruudun_leveys = konffi.leveys / self.ruutujen_maara
+            ruudun_korkeus = konffi.korkeus / self.ruutujen_maara
             rivi = round(x // ruudun_leveys)
             sarake = round(y // ruudun_korkeus)
 
