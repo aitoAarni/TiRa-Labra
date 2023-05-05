@@ -43,14 +43,14 @@ class ValikkoUI:
             pelaaj1_teksti,
             pelaaja2_teksti,
             ruutujen_maara):
-        n_leveys = leveys / 30
+        
         n_korkeus = korkeus / 30
         fontin_koko = konffi.leveys // 25
 
         keski_x = leveys / 2
         keski_y = korkeus / 2
 
-        y_alkukorkeus = keski_y - n_korkeus * 4
+        y_alkukorkeus = keski_y - n_korkeus * 8
         fontti = pygame.font.SysFont(None, fontin_koko)
         testi_dict = {
             "Ruutujen maara": ruutujen_maara,
@@ -62,7 +62,7 @@ class ValikkoUI:
             teksti = fontti.render(teksti, True, konffi.nappien_vari)
             otsikko = fontti.render(otsikko, True, (255, 255, 255))
             x = keski_x - teksti.get_width() / 2
-            y = y_alkukorkeus + n_korkeus * (4 * i)
+            y = y_alkukorkeus + n_korkeus * (6 * i)
             self.ikkuna.blit(
                 otsikko, (keski_x - otsikko.get_width() / 2, y - n_korkeus * 2))
             self.ikkuna.blit(teksti, (x, y))

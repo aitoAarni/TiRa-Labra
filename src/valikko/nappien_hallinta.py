@@ -47,7 +47,7 @@ def muodosta_napit(
     keski_y = korkeus / 2
 
     x_offsetti = 7.5 * n_leveys
-    y_alkukorkeus = keski_y - n_korkeus * 4
+    y_alkukorkeus = keski_y - n_korkeus * 8
 
     ruutuja_vahemman_nappi = Nappi(
         n_leveys,
@@ -71,7 +71,7 @@ def muodosta_napit(
          x_offsetti,
          y_alkukorkeus +
          n_korkeus *
-         4),
+         6),
         pelaaja1.vaihda_pelaajaa,
         "<")
     oikea_vaihda_pelaajaa1_nappi = Nappi(
@@ -81,7 +81,7 @@ def muodosta_napit(
          x_offsetti,
          y_alkukorkeus +
          n_korkeus *
-         4),
+         6),
         pelaaja1.vaihda_pelaajaa,
         ">")
 
@@ -92,7 +92,7 @@ def muodosta_napit(
          x_offsetti,
          y_alkukorkeus +
          n_korkeus *
-         8),
+         12),
         pelaaja2.vaihda_pelaajaa,
         "<")
     oikea_vaihda_pelaajaa2_nappi = Nappi(
@@ -102,7 +102,7 @@ def muodosta_napit(
          x_offsetti,
          y_alkukorkeus +
          n_korkeus *
-         8),
+         12),
         pelaaja2.vaihda_pelaajaa,
         ">")
 
@@ -110,7 +110,7 @@ def muodosta_napit(
         10 * n_leveys,
         4 * n_korkeus,
         (keski_x,
-         y_alkukorkeus + n_korkeus * 12),
+         y_alkukorkeus + n_korkeus * 18),
         pelin_hallinta.aloita_peli_tapahtuma,
         "Pelaa")
 

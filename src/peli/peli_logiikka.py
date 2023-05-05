@@ -102,7 +102,6 @@ class Peli:
         return False
 
     def tarkista_tasapeli(self) -> bool:
-        print(f"ruutujen_maara: {konffi.ruutujen_maara ** 2}, siirtojen_maara: {len(self.siirrot)}")
         return konffi.ruutujen_maara ** 2 == len(self.siirrot)
 
     def tarkista_onko_peli_paattynyt(

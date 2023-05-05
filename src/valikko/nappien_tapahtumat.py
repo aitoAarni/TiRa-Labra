@@ -20,10 +20,12 @@ class RuudukonKoko:
         self._ruutujen_maara = ruutujen_maara
 
     def lisaa_ruutuja(self):
-        self._ruutujen_maara += 1
+        if self.ruutujen_maara < 50:
+            self._ruutujen_maara += 1
 
     def vahenna_ruutuja(self):
-        self._ruutujen_maara -= 1
+        if self.ruutujen_maara > 7:
+            self._ruutujen_maara -= 1
 
     @property
     def ruutujen_maara(self):
@@ -58,6 +60,5 @@ class PelinHallinta:
         self._aloita_peli = True
         konffi = self.get_konf()
         konffi.ruutujen_maara = self.ruutujen_hallinta.ruutujen_maara
-        print(konffi.palauta_sanakirja_atribuuteista())
         self.set_konf(konffi)
         self.paivita_konf()

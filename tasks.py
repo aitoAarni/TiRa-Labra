@@ -14,8 +14,8 @@ def start(ctx):
     
 
 @task
-def logger(ctx):
-    ctx.run("python3 src/index.py > debugging_log.txt", pty=True)
+def build(ctx):
+    ctx.run("python3 src/build", pty=True)
     
 @task
 def test(ctx):
@@ -30,3 +30,5 @@ def coverage_report(ctx):
     ctx.run("coverage html", pty=True)
     
   
+C:\Users\aarni\AppData\Local\Programs\Python\Python310\Scripts
+%APPDATA%\Python\Scripts

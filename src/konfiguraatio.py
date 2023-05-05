@@ -39,15 +39,15 @@ konfiguraatio = KonfiguraatioArvot()
 
 def rakenna_konfiguraatio():
     konfiguraatio = {
-        "ruutujen_maara": 29,
+        "ruutujen_maara": 25,
         "laudan_vari": (0, 0, 0),
         "laudan_viivojen_vari": (255, 255, 255), 
         "korkeus": 1000, 
         "leveys": 1200, 
         "nappuloiden_vari": (0, 0, 255), 
         "peli_ohi_vari": (192, 192, 192),
-        "voitto_tekstin_vari": (0, 0, 0),
-        "fontti": 30, 
+        "voitto_tekstin_vari": (105, 105, 105),
+        "fontti": 60, 
         "nappien_vari": (0, 0, 220)}
     with open(konfiguraatiotiedoston_polku, "w") as tiedosto:
         json.dump(konfiguraatio, tiedosto)
@@ -69,6 +69,3 @@ paivita_konfiguraatio()
 
 def get_konfiguraatio():
     return konfiguraatio
-
-if __name__ == "__main__":
-    rakenna_konfiguraatio()

@@ -52,13 +52,13 @@ class LautaUI:
                 self._ruudun_korkeus +
                 self._ruudun_korkeus /
                 2)
-            r = min(self._ruudun_korkeus, self._ruudun_leveys) / 3  # r = sade
+            r = min(self._ruudun_korkeus, self._ruudun_leveys) / 3  # r = säde
             pygame.draw.circle(self._ikkuna, vari,
                                keskipiste, r, 3)
 
     def _piirra_ristit(self):
         vari = konffi.nappuloiden_vari
-        r = min(self._ruudun_korkeus, self._ruudun_leveys) / 3  # r = sade
+        r = min(self._ruudun_korkeus, self._ruudun_leveys) / 3  # r = säde
 
         for i, ruutu in enumerate(self._ristit):
             rivi, sarake = ruutu
@@ -91,8 +91,9 @@ class LautaUI:
         else:
             merkkijono = "NOLLAT VOITTI!"
 
-        fontti = pygame.font.Font(os.path.join(
-            "materiaalit", "Wedgie Regular.ttf"), konffi.fontti)
+        fontin_koko = round(min(konffi.leveys, konffi.korkeus) / 8)
+
+        fontti = pygame.font.SysFont(None, fontin_koko)
 
         teksti = fontti.render(merkkijono, True, konffi.voitto_tekstin_vari)
         teksti_rect = teksti.get_rect()

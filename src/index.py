@@ -37,11 +37,8 @@ class Sovellus:
                 pelaaja1,
                 pelaaja2,
                 PelinHallinta)
-            print(1)
             valikko.aloita()
-            print(3)
             if valikko.aloita_peli:
-                print("peli alkaaaa")
                 while True:
                     peli = Peli(
                         self.tapahtumat,

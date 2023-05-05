@@ -33,7 +33,6 @@ class Valikko:
             self.napit.tarkista_onko_hiiri_napin_paalla(
                 self.tapahtumat.get_hiiren_paikka())
             if self.tapahtumat.hiirta_klikattu():
-                print(self.napit.nappi_jonka_paalla_on_hiiri)
                 self.napit.aktivoi_klikattu_nappi()
             if self.pelin_hallinta.aloita_peli:
                 self.aloita_peli = True
