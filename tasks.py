@@ -29,6 +29,3 @@ def coverage(ctx):
 def coverage_report(ctx):
     ctx.run("coverage html", pty=True)
     
-  
-C:\Users\aarni\AppData\Local\Programs\Python\Python310\Scripts
-%APPDATA%\Python\Scripts
