@@ -21,16 +21,6 @@ class Sovellus:
         self.naytto = pygame.display.set_mode((konffi.leveys, konffi.korkeus))
         pygame.display.set_caption("Ristinolla")
         self.tapahtumat = Tapahtumat()
-<<<<<<< HEAD
-        self.peli = Peli(
-            self.tapahtumat,
-            Pelaaja,
-            TekoalyPelaaja,
-            LautaUI,
-            ikkuna
-        )
-=======
->>>>>>> d9ff7de72a0359488f5cbcab10fb53226125135f
 
     def main(self):
         pelaaja1 = ValitsePelaaja(TekoalyPelaaja, Pelaaja)
