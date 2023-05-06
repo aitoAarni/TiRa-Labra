@@ -1,5 +1,6 @@
 from peli.peli_logiikka import Peli
 
+
 def peli_silmukka(peli: Peli) -> str:
 
     peli.lauta_ui.piirra_lauta()
@@ -27,8 +28,9 @@ def peli_silmukka(peli: Peli) -> str:
     while True:
         peli.lauta_ui.piirra_lauta()
         tapahtumat = peli.tapahtumat.get_tapahtumat()
-        if tapahtumat["lopeta"] or tapahtumat["takaisin"]:
+        if tapahtumat["lopeta"]:
             return "lopeta"
+        elif tapahtumat["takaisin"]:
+            return "takaisin"
         elif tapahtumat["pelaa_uudelleen"]:
             return "pelaa_uudelleen"
-        

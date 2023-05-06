@@ -46,3 +46,6 @@ class Tapahtumat:
             if arvo:
                 return avain
         return None
+    
+    def poista_hiiren_klikit_jonosta(self):
+        pygame.event.clear(pygame.MOUSEBUTTONDOWN)

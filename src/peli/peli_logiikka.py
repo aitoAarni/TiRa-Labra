@@ -2,11 +2,10 @@ from konfiguraatio import get_konfiguraatio
 from peli.ihmis_pelaaja import Pelaaja
 from peli.tekoäly_pelaaja import TekoalyPelaaja
 from peli.tapahtumat import Tapahtumat
-from käyttöliittymä.lauta import LautaUI
+from käyttöliittymä.lauta_ui import LautaUI
 import pygame.display
-konffi = get_konfiguraatio()
 
-RUUTUJEN_MAARA = konffi["ruutujen_määrä"]
+konffi = get_konfiguraatio()
 
 
 class Peli:
@@ -25,10 +24,10 @@ class Peli:
         self.nollat = []
         self.lauta_ui = lauta(ikkuna, self.ristit, self.nollat)
         self.lauta = [[None for _ in range(
-            RUUTUJEN_MAARA)] for _ in range(RUUTUJEN_MAARA)]
+            konffi.ruutujen_maara)] for _ in range(konffi.ruutujen_maara)]
         self.vapaat_ruudut = set()
-        for x in range(RUUTUJEN_MAARA):
-            for y in range(RUUTUJEN_MAARA):
+        for x in range(konffi.ruutujen_maara):
+            for y in range(konffi.ruutujen_maara):
                 self.vapaat_ruudut.add((x, y))
         self.siirrot = []
         pelaaja1 = self._alusta_pelaaja(pelaaja1, "x", self.ristit)
@@ -43,7 +42,7 @@ class Peli:
                 self.tapahtumat.get_hiiren_paikka,
                 merkki,
                 merkit,
-                RUUTUJEN_MAARA)
+                konffi.ruutujen_maara)
 
         elif pelaaja is TekoalyPelaaja:
             return pelaaja(
@@ -62,7 +61,7 @@ class Peli:
             merkki: str,
             lauta: list) -> bool:
         x, y = viimeisin_siirto
-        n = RUUTUJEN_MAARA - 1
+        n = konffi.ruutujen_maara - 1
 
         a = min(y, n - x)
         x_vino_oikea = x + a
@@ -77,7 +76,7 @@ class Peli:
         vino_vasen = 0
         vino_oikea = 0
 
-        for i in range(RUUTUJEN_MAARA):
+        for i in range(konffi.ruutujen_maara):
             if lauta[i][x] == merkki:
                 pysty += 1
             else:
@@ -103,7 +102,7 @@ class Peli:
         return False
 
     def tarkista_tasapeli(self) -> bool:
-        return RUUTUJEN_MAARA ** 2 == self.siirrot
+        return konffi.ruutujen_maara ** 2 == len(self.siirrot)
 
     def tarkista_onko_peli_paattynyt(
             self,
