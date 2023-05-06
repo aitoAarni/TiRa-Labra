@@ -35,12 +35,38 @@ class TestPeliLogiikka(unittest.TestCase):
         self.assertEqual((type(pelaaja1), type(pelaaja2)), (Pelaaja, TekoalyPelaaja))
 
     def test_tarkista_tasapeli_toimii(self):
-        siirrot = [(0, 0) for _ in range(RUUTUJEN_MAARA**2 - 1)]
+        siirrot = [(0, i) for i in range(RUUTUJEN_MAARA**2 - 1)]
         self.peli.siirrot = siirrot
         tulos1 = self.peli.tarkista_tasapeli()
-        siirrot.append((0, 0))
+        siirrot.append((0, -1))
         tulos2 = self.peli.tarkista_tasapeli()
-        siirrot.append((0, 0))
+        siirrot.append((0, -2))
         tulos3 = self.peli.tarkista_tasapeli()
 
         self.assertEqual((tulos1, tulos2, tulos3), (False, True, True))
+
+    def test_tarkista_onko_peli_paattynyt(self):
+        lauta = self.peli.lauta
+        lauta[0][0] = "x"
+        self.peli.siirrot.append((0, 0))
+        paluuarvo1 = self.peli.tarkista_onko_peli_paattynyt((0, 0), "x", lauta)
+
+        self.peli.siirrot.clear()
+        for i in range(5):
+            self.peli.siirrot.append((i, 0))
+            lauta[0][i] = "x"
+        paluuarvo2 = self.peli.tarkista_onko_peli_paattynyt((4, 0), "x", lauta)
+
+        self.peli.siirrot.clear()
+        lauta = [["x" for _ in range(RUUTUJEN_MAARA)] for _ in range(RUUTUJEN_MAARA)]
+        for x in range(RUUTUJEN_MAARA):
+            for y in range(RUUTUJEN_MAARA):
+                self.peli.siirrot.append((x, y))
+
+        lauta[0][0] = "0"
+        paluuarvo3 = self.peli.tarkista_onko_peli_paattynyt((0, 0), "0", lauta)
+
+        self.assertEqual(
+            (paluuarvo1, paluuarvo2, paluuarvo3),
+            ((False, None), (True, "x"), (True, "-")),
+        )
