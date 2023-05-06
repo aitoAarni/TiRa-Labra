@@ -9,22 +9,24 @@ konffi = get_konfiguraatio()
 
 
 class Peli:
-    """Pelilogiikka on tämän luokan sisällä.
-    """
+    """Pelilogiikka on tämän luokan sisällä."""
 
     def __init__(
-            self,
-            tapahtumat: Tapahtumat,
-            pelaaja1: Pelaaja | TekoalyPelaaja,
-            pelaaja2: Pelaaja | TekoalyPelaaja,
-            lauta: LautaUI,
-            ikkuna: pygame.display) -> None:
+        self,
+        tapahtumat: Tapahtumat,
+        pelaaja1: Pelaaja | TekoalyPelaaja,
+        pelaaja2: Pelaaja | TekoalyPelaaja,
+        lauta: LautaUI,
+        ikkuna: pygame.display,
+    ) -> None:
         self.tapahtumat = tapahtumat
         self.ristit = []
         self.nollat = []
         self.lauta_ui = lauta(ikkuna, self.ristit, self.nollat)
-        self.lauta = [[None for _ in range(
-            konffi.ruutujen_maara)] for _ in range(konffi.ruutujen_maara)]
+        self.lauta = [
+            [None for _ in range(konffi.ruutujen_maara)]
+            for _ in range(konffi.ruutujen_maara)
+        ]
         self.vapaat_ruudut = set()
         for x in range(konffi.ruutujen_maara):
             for y in range(konffi.ruutujen_maara):
@@ -42,7 +44,8 @@ class Peli:
                 self.tapahtumat.get_hiiren_paikka,
                 merkki,
                 merkit,
-                konffi.ruutujen_maara)
+                konffi.ruutujen_maara,
+            )
 
         elif pelaaja is TekoalyPelaaja:
             return pelaaja(
@@ -53,13 +56,11 @@ class Peli:
                 Peli.tarkista_voitto,
                 merkki,
                 saa_minimoiva_merkki[merkki],
-                3)
+                3,
+            )
 
     @staticmethod
-    def tarkista_voitto(
-            viimeisin_siirto: tuple,
-            merkki: str,
-            lauta: list) -> bool:
+    def tarkista_voitto(viimeisin_siirto: tuple, merkki: str, lauta: list) -> bool:
         x, y = viimeisin_siirto
         n = konffi.ruutujen_maara - 1
 
@@ -86,13 +87,19 @@ class Peli:
                 vaaka += 1
             else:
                 vaaka = 0
-            if x_vino_vasen + i <= n and y_vino_vasen + \
-                    i <= n and lauta[y_vino_vasen + i][x_vino_vasen + i] == merkki:
+            if (
+                x_vino_vasen + i <= n
+                and y_vino_vasen + i <= n
+                and lauta[y_vino_vasen + i][x_vino_vasen + i] == merkki
+            ):
                 vino_vasen += 1
             else:
                 vino_vasen = 0
-            if x_vino_oikea - i >= 0 and y_vino_oikea + \
-                    i <= n and lauta[y_vino_oikea + i][x_vino_oikea - i] == merkki:
+            if (
+                x_vino_oikea - i >= 0
+                and y_vino_oikea + i <= n
+                and lauta[y_vino_oikea + i][x_vino_oikea - i] == merkki
+            ):
                 vino_oikea += 1
             else:
                 vino_oikea = 0
@@ -102,13 +109,11 @@ class Peli:
         return False
 
     def tarkista_tasapeli(self) -> bool:
-        return konffi.ruutujen_maara ** 2 == len(self.siirrot)
+        return konffi.ruutujen_maara**2 <= len(self.siirrot)
 
     def tarkista_onko_peli_paattynyt(
-            self,
-            viimeisin_siirto: tuple,
-            merkki: str,
-            lauta: list) -> tuple:
+        self, viimeisin_siirto: tuple, merkki: str, lauta: list
+    ) -> tuple:
         if self.tarkista_voitto(viimeisin_siirto, merkki, lauta):
             return True, merkki
         if self.tarkista_tasapeli():

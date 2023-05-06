@@ -1,3 +1,3 @@
 [run]
 source = src
-omit = src/**/__init__.py,src/testit/**,src/käyttöliittymä/**,src/index.py,src/testi123.py,src/konfiguraatio.py
+omit = src/**/__init__.py,src/testit/**,src/käyttöliittymä/**,src/index.py,src/testi123.py,src/konfiguraatio.py,src/build.py,src/peli/peli_silmukka.py,src\valikko\valikko.py

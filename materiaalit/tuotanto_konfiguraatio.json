@@ -1,5 +1,1 @@
-<<<<<<< HEAD
-{"ruutujen_m\u00e4\u00e4r\u00e4": 15, "laudan_v\u00e4ri": [0, 0, 0], "laudan_viivojen_v\u00e4ri": [255, 255, 255], "korkeus": 1000, "leveys": 1200, "nappuloiden_v\u00e4ri": [0, 0, 255], "peli_ohi_v\u00e4ri": [192, 192, 192], "voitto_tekstin_v\u00e4ri": [0, 0, 0], "fontti": 30}
-=======
-{"ruutujen_maara": 10, "laudan_vari": [0, 0, 0], "laudan_viivojen_vari": [255, 255, 255], "korkeus": 1000, "leveys": 1000, "nappuloiden_vari": [0, 0, 255], "peli_ohi_vari": [192, 192, 192], "voitto_tekstin_vari": [105, 105, 105], "fontti": 60, "nappien_vari": [0, 0, 220]}
->>>>>>> d9ff7de72a0359488f5cbcab10fb53226125135f
+{"ruutujen_maara": 25, "laudan_vari": [0, 0, 0], "laudan_viivojen_vari": [255, 255, 255], "korkeus": 1000, "leveys": 1200, "nappuloiden_vari": [0, 0, 255], "peli_ohi_vari": [192, 192, 192], "voitto_tekstin_vari": [105, 105, 105], "fontti": 60, "nappien_vari": [0, 0, 220]}

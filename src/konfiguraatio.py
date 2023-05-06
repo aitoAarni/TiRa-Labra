@@ -10,18 +10,8 @@ except FileNotFoundError:
     pass
 
 
-try:
-    konfiguraatiotiedoston_nimi = os.getenv("KONFIGURAATIO")
-    konfiguraatiotiedoston_polku = os.path.join(
-        "materiaalit",
-        konfiguraatiotiedoston_nimi)
-
-except TypeError:
-    konfiguraatiotiedoston_polku = os.path.join(
-        tiedoston_nimi,
-        "..",
-        "materiaalit",
-        "testaus_konfiguraatio.json")
+konfiguraatiotiedoston_nimi = os.getenv("KONFIGURAATIO")
+konfiguraatiotiedoston_polku = os.path.join("materiaalit", konfiguraatiotiedoston_nimi)
 
 
 class KonfiguraatioArvot:
@@ -34,6 +24,7 @@ class KonfiguraatioArvot:
     def palauta_sanakirja_atribuuteista(self):
         return vars(self)
 
+
 konfiguraatio = KonfiguraatioArvot()
 
 
@@ -41,26 +32,37 @@ def rakenna_konfiguraatio():
     konfiguraatio = {
         "ruutujen_maara": 25,
         "laudan_vari": (0, 0, 0),
-        "laudan_viivojen_vari": (255, 255, 255), 
-        "korkeus": 1000, 
-        "leveys": 1200, 
-        "nappuloiden_vari": (0, 0, 255), 
+        "laudan_viivojen_vari": (255, 255, 255),
+        "korkeus": 1000,
+        "leveys": 1000,
+        "nappuloiden_vari": (0, 0, 255),
         "peli_ohi_vari": (192, 192, 192),
         "voitto_tekstin_vari": (105, 105, 105),
-        "fontti": 60, 
-        "nappien_vari": (0, 0, 220)}
+        "fontti": 60,
+        "nappien_vari": (0, 0, 220),
+    }
     with open(konfiguraatiotiedoston_polku, "w") as tiedosto:
-        json.dump(konfiguraatio, tiedosto)
+        tiedosto.write(json.dumps(konfiguraatio))
+    testaus_konfiguraatio_polku = os.path.join(
+        tiedoston_nimi, "..", "materiaalit", "testaus_konfiguraatio.json"
+    )
+    with open(testaus_konfiguraatio_polku, "w") as tiedosto:
+        tiedosto.write(json.dumps(konfiguraatio))
 
 
 def set_konfiguraatio(konfiguraatio_objekti: KonfiguraatioArvot):
     with open(konfiguraatiotiedoston_polku, "w") as tiedosto:
-        tiedosto.write(json.dumps(konfiguraatio_objekti.palauta_sanakirja_atribuuteista()))
+        tiedosto.write(
+            json.dumps(konfiguraatio_objekti.palauta_sanakirja_atribuuteista())
+        )
 
 
 def paivita_konfiguraatio():
     with open(konfiguraatiotiedoston_polku, "r") as tiedosto:
-        uusi_konfiguraatio = json.load(tiedosto)
+        try:
+            uusi_konfiguraatio = json.load(tiedosto)
+        except json.decoder.JSONDecodeError:
+            return
     konfiguraatio.paivita_atribuutit(uusi_konfiguraatio)
 
 
