@@ -11,7 +11,9 @@ except FileNotFoundError:
 
 
 konfiguraatiotiedoston_nimi = os.getenv("KONFIGURAATIO")
-konfiguraatiotiedoston_polku = os.path.join("materiaalit", konfiguraatiotiedoston_nimi)
+konfiguraatiotiedoston_polku = os.path.join(
+    "konfiguraatio", konfiguraatiotiedoston_nimi
+)
 
 
 class KonfiguraatioArvot:
@@ -30,6 +32,7 @@ konfiguraatio = KonfiguraatioArvot()
 
 def rakenna_konfiguraatio():
     konfiguraatio = {
+        "tekoalyn_syvyys": 3,
         "ruutujen_maara": 25,
         "laudan_vari": (0, 0, 0),
         "laudan_viivojen_vari": (255, 255, 255),
@@ -44,7 +47,7 @@ def rakenna_konfiguraatio():
     with open(konfiguraatiotiedoston_polku, "w") as tiedosto:
         tiedosto.write(json.dumps(konfiguraatio))
     testaus_konfiguraatio_polku = os.path.join(
-        tiedoston_nimi, "..", "materiaalit", "testaus_konfiguraatio.json"
+        tiedoston_nimi, "..", "konfiguraatio", "testaus_konfiguraatio.json"
     )
     with open(testaus_konfiguraatio_polku, "w") as tiedosto:
         tiedosto.write(json.dumps(konfiguraatio))

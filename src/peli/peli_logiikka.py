@@ -57,7 +57,7 @@ class Peli:
                 Peli.tarkista_voitto,
                 merkki,
                 saa_minimoiva_merkki[merkki],
-                3,
+                konffi.tekoalyn_syvyys,
             )
 
     @staticmethod
