@@ -1,5 +1,6 @@
 from konfiguraatio import get_konfiguraatio
 from peli.tapahtumat import Tapahtumat
+
 konffi = get_konfiguraatio()
 
 
@@ -9,12 +10,13 @@ class Pelaaja:
     """
 
     def __init__(
-            self,
-            hiiren_klikki: Tapahtumat.hiirta_klikattu,
-            hiiren_paikka: tuple,
-            merkki: str,
-            merkit: list,
-            ruutujen_maara: int) -> None:
+        self,
+        hiiren_klikki: Tapahtumat.hiirta_klikattu,
+        hiiren_paikka: tuple,
+        merkki: str,
+        merkit: list,
+        ruutujen_maara: int,
+    ) -> None:
         self.hiirta_klikattu = hiiren_klikki
         self.hiiren_paikka = hiiren_paikka
         self.merkki = merkki
@@ -22,6 +24,7 @@ class Pelaaja:
         self.ruutujen_maara = ruutujen_maara
 
     def valitse_ruutu(self):
+        """Palauttaa ruudun, johon pelaaj on klikannut"""
         x, y = self.hiiren_paikka()
 
         if self.hiirta_klikattu():

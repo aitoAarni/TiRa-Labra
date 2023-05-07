@@ -4,19 +4,18 @@ from tekoäly.minimax import Tekoaly
 
 
 class TekoalyPelaaja:
-    """Minimax algoritmin käyttöliittymä peliin
-    """
+    """Tekoälyn käyttöliittymä peliin"""
 
     def __init__(
-            self,
-            merkit: list,
-            lauta: list,
-            siirrot: list,
-            vapaat_ruudut: set,
-            tarkista_voitto,
-            maksimoiva_merkki: str,
-            minimoiva_merkki: str,
-            syvyys: int
+        self,
+        merkit: list,
+        lauta: list,
+        siirrot: list,
+        vapaat_ruudut: set,
+        tarkista_voitto,
+        maksimoiva_merkki: str,
+        minimoiva_merkki: str,
+        syvyys: int,
     ) -> None:
         self.merkit = merkit  # kaikki tämän pelaajan ristit tai nollat
         self.lauta = lauta
@@ -31,14 +30,14 @@ class TekoalyPelaaja:
         # mutta hajautustaulu nopeuttaa etsimistä
         self.siirroissa_olevat_ruudut = set()
         self.tekoaly = Tekoaly(
-            tarkista_voitto,
-            maksimoiva_merkki,
-            minimoiva_merkki,
-            syvyys)
+            tarkista_voitto, maksimoiva_merkki, minimoiva_merkki, syvyys
+        )
+
         self.merkki = maksimoiva_merkki
         self.syvyys = syvyys
 
     def valitse_ruutu(self) -> tuple:
+        """Palauttaa ruudun, johon seuraava siirto tehdään"""
         if len(self.siirrot) == 0:
             return self._aloitus_siirto(n=len(self.lauta))
         viimeisin_siirto = self.siirrot[-1]
@@ -49,11 +48,12 @@ class TekoalyPelaaja:
         vapaat_ruudut = self.vapaat_ruudut.copy()
 
         # poistaa edellisen pelaajan siirron mahdollisista siiroista
-        self._poista_etsittavista_siirroista_viimeisin_oikea_siirto(
-            viimeisin_siirto)
+        self._poista_etsittavista_siirroista_viimeisin_oikea_siirto(viimeisin_siirto)
 
-        self.ruudut_joista_etsitaan_siirtoja, self.siirroissa_olevat_ruudut = self._lisaa_etsittavat_siirrot_tekoalylle(
-            viimeisin_siirto)
+        (
+            self.ruudut_joista_etsitaan_siirtoja,
+            self.siirroissa_olevat_ruudut,
+        ) = self._lisaa_etsittavat_siirrot_tekoalylle(viimeisin_siirto)
 
         alfa = float("-infinity")
         beeta = float("infinity")
@@ -68,50 +68,64 @@ class TekoalyPelaaja:
             alfa,
             beeta,
             True,
-            heuristinen_arvo)
+            heuristinen_arvo,
+        )
 
-        self.ruudut_joista_etsitaan_siirtoja, self.siirroissa_olevat_ruudut = self._lisaa_etsittavat_siirrot_tekoalylle(
-            siirto)
+        # pävittää olion tilaa sen jälkeen, kun uusi siirto on valittu
+        (
+            self.ruudut_joista_etsitaan_siirtoja,
+            self.siirroissa_olevat_ruudut,
+        ) = self._lisaa_etsittavat_siirrot_tekoalylle(siirto)
 
         self._poista_etsittavista_siirroista_viimeisin_oikea_siirto(siirto)
         return siirto
 
     def _aloitus_siirto(self, n):
+        """Kun tekoäly on X ja tekee ensimmäistä siirtoa"""
         siirto = random.randrange(3, n - 3), random.randrange(3, n - 3)
-        self.ruudut_joista_etsitaan_siirtoja, self.siirroissa_olevat_ruudut = self._lisaa_etsittavat_siirrot_tekoalylle(
-            siirto)
+        (
+            self.ruudut_joista_etsitaan_siirtoja,
+            self.siirroissa_olevat_ruudut,
+        ) = self._lisaa_etsittavat_siirrot_tekoalylle(siirto)
         self._poista_etsittavista_siirroista_viimeisin_oikea_siirto(siirto)
 
         return siirto
 
     def jarjesta_siirrot_ennen_minimax_algoritmia(self, lauta):
+        """Arvioi siirrot parhaus järjestyksessä ja järjestää ne"""
+        # Arviointi on sama perusta kuin mikä olisi jokaisen
+        # siirron arvo minimax algoritmissa yhden syvyydellä
         self.ruudut_joista_etsitaan_siirtoja.sort(
-            key=lambda siirto: self.siirron_heuristinen_arvo(siirto, lauta))
+            key=lambda siirto: self.siirron_heuristinen_arvo(siirto, lauta)
+        )
 
-    def _lisaa_etsittavat_siirrot_tekoalylle(
-            self, viimeisin_siirto: tuple) -> tuple:
-        """Tekoäly etsii kaikki ruudut, jotka ovat kahden ruudun pääsää jo laudalla olevista ruuduista
-            Tämä metodi pitää kutsua jokaisen oikean siirron jälkeen jotta
+    def _lisaa_etsittavat_siirrot_tekoalylle(self, viimeisin_siirto: tuple) -> tuple:
+        """Tekoäly etsii kaikki ruudut, jotka ovat kahden ruudun pääsää
+        viimeisimmästä siirrosta, joten metodi pitää kutsua jokaisen oikean siirron jälkeen
 
         Args:
             viimeisin_siirto (tuple): x ja y koordinaatti
 
         Returns:
-            _type_: (list, set)
+            tuple: (list, set)
         """
         return Tekoaly.etsi_siirrot(
             viimeisin_siirto,
             self.vapaat_ruudut,
             self.siirroissa_olevat_ruudut,
-            self.ruudut_joista_etsitaan_siirtoja)
+            self.ruudut_joista_etsitaan_siirtoja,
+        )
 
     def _poista_etsittavista_siirroista_viimeisin_oikea_siirto(
-            self, viimeisin_siirto: tuple):
+        self, viimeisin_siirto: tuple
+    ):
+        """Poistaa tekoälyn etsittävistä siirroista viimeisimmän siirron"""
         if viimeisin_siirto in self.siirroissa_olevat_ruudut:
             self.ruudut_joista_etsitaan_siirtoja.remove(viimeisin_siirto)
             self.siirroissa_olevat_ruudut.remove(viimeisin_siirto)
 
     def siirron_heuristinen_arvo(self, siirto: tuple, lauta: list):
+        """Arvioi siirron arvoa laudan kontekstissa"""
         lauta[siirto[1]][siirto[0]] = self.merkki
         heuristinen_arvo = self.tekoaly.heuristinen_funktio(lauta)
         lauta[siirto[1]][siirto[0]] = None

@@ -2,7 +2,7 @@ from peli.peli_logiikka import Peli
 
 
 def peli_silmukka(peli: Peli) -> str:
-
+    """Pelin silmukka"""
     peli.lauta_ui.piirra_lauta()
     loppu = False
     vuoro = 0
@@ -15,9 +15,8 @@ def peli_silmukka(peli: Peli) -> str:
             siirto = peli.pelaa_vuoro(vuoro)
             if siirto:
                 loppu, loppu_arvo = peli.tarkista_onko_peli_paattynyt(
-                    siirto,
-                    peli.pelaajat[vuoro].merkki,
-                    peli.lauta)
+                    siirto, peli.pelaajat[vuoro].merkki, peli.lauta
+                )
 
                 break
         if loppu:

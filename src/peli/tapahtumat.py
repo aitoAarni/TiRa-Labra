@@ -2,21 +2,15 @@ import pygame
 
 
 class Tapahtumat:
-    """Luokka joka hoitaa hiiren ja näppäimistön interaktiot
-    """
+    """Luokka joka hoitaa hiiren ja näppäimistön interaktiot"""
 
     def __init__(self) -> None:
         self.hiiren_paikka = None
         self._hiirta_klikattu = False
 
     def get_tapahtumat(self) -> dict:
-        tapahtumat = {
-            "lopeta": False,
-            "takaisin": False,
-            "pelaa_uudelleen": False
-        }
+        tapahtumat = {"lopeta": False, "takaisin": False, "pelaa_uudelleen": False}
         for tapahtuma in pygame.event.get():
-
             if tapahtuma.type == pygame.QUIT:
                 tapahtumat["lopeta"] = True
 
@@ -33,19 +27,19 @@ class Tapahtumat:
         return tapahtumat
 
     def hiirta_klikattu(self) -> bool:
+        """Kertoo onko hiirta klikattu viimeisen tarkistuksen jälkeen"""
         muisti = self._hiirta_klikattu
         self._hiirta_klikattu = False
         return muisti
 
     def get_hiiren_paikka(self):
+        """Palauttaa hiiren paikan ruudulla"""
         return pygame.mouse.get_pos()
 
     def palauta_nappaimiston_komento(self):
+        """Palauttaa avain-arvo parin jossa on napin nimi-aktio"""
         tapahtumat = self.get_tapahtumat()
         for avain, arvo in tapahtumat.items():
             if arvo:
                 return avain
         return None
-    
-    def poista_hiiren_klikit_jonosta(self):
-        pygame.event.clear(pygame.MOUSEBUTTONDOWN)

@@ -9,7 +9,7 @@ konffi = get_konfiguraatio()
 
 
 class Peli:
-    """Pelilogiikka on tämän luokan sisällä."""
+    """Tämä luokka sisältää pelin logiikan"""
 
     def __init__(
         self,
@@ -37,6 +37,7 @@ class Peli:
         self.pelaajat = [pelaaja1, pelaaja2]
 
     def _alusta_pelaaja(self, pelaaja, merkki, merkit):
+        """Luo pelaaja olion luokasta"""
         saa_minimoiva_merkki = {"x": "0", "0": "x"}
         if pelaaja is Pelaaja:
             return pelaaja(
@@ -61,13 +62,16 @@ class Peli:
 
     @staticmethod
     def tarkista_voitto(viimeisin_siirto: tuple, merkki: str, lauta: list) -> bool:
+        """tarkistaa jos viimeisen sirroon jälkeen kyseinen pelaaja on voittanut pelin"""
         x, y = viimeisin_siirto
         n = konffi.ruutujen_maara - 1
 
+        # laskee vinon oikealta vasemmalle aloitus ruudun
         a = min(y, n - x)
         x_vino_oikea = x + a
         y_vino_oikea = y - a
 
+        # laskee vinon vasemmalta oikealla aloitus ruudun
         b = min(y, x)
         x_vino_vasen = x - b
         y_vino_vasen = y - b
@@ -77,6 +81,8 @@ class Peli:
         vino_vasen = 0
         vino_oikea = 0
 
+        # Käy ruudut laidasta laitaan, ja katsoo jos viimeisen siirron merkki
+        # on viisi kertaa peräkkäin, joka tuottaa voiton
         for i in range(konffi.ruutujen_maara):
             if lauta[i][x] == merkki:
                 pysty += 1
@@ -109,11 +115,18 @@ class Peli:
         return False
 
     def tarkista_tasapeli(self) -> bool:
+        """Katsoo onko peli päättynyt tasapeliin"""
         return konffi.ruutujen_maara**2 <= len(self.siirrot)
 
     def tarkista_onko_peli_paattynyt(
         self, viimeisin_siirto: tuple, merkki: str, lauta: list
     ) -> tuple:
+        """Tarkistaa onko peli päättynyt ja jos on,
+        niin palauttaa joko voittomerkin tai tasapeli tilanteessa '-'
+
+        Returns:
+            tuple: (Bool, str)
+        """
         if self.tarkista_voitto(viimeisin_siirto, merkki, lauta):
             return True, merkki
         if self.tarkista_tasapeli():
@@ -121,6 +134,7 @@ class Peli:
         return False, None
 
     def valitse_ruutu(self, vuoro: int) -> tuple | None:
+        """Hakee ruudun pelaajalta"""
         pelaaja = self.pelaajat[vuoro]
         ruutu = pelaaja.valitse_ruutu()
         if ruutu:
@@ -134,7 +148,9 @@ class Peli:
         return None
 
     def pelaa_vuoro(self, vuoro: int):
+        """Vuoron aikana tarvittavat toimenpiteet"""
         return self.valitse_ruutu(vuoro)
 
     def vaihda_vuoroa(self, vuoro: int):
+        """Vaihtaa pelaajan vuoroa"""
         return (vuoro + 1) % 2
