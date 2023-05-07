@@ -1,6 +1,6 @@
 import pygame
 from konfiguraatio import get_konfiguraatio
-from peli.tapahtumat import Tapahtumat
+from tapahtumat import Tapahtumat
 from peli.peli_logiikka import Peli
 from peli.ihmis_pelaaja import Pelaaja
 from käyttöliittymä.lauta_ui import LautaUI
@@ -9,10 +9,10 @@ from peli.peli_silmukka import peli_silmukka
 from valikko.valikko import Valikko
 from käyttöliittymä.valikko_ui import ValikkoUI
 from valikko.nappien_tapahtumat import ValitsePelaaja, PelinHallinta, RuudukonKoko
+
 FPS = 20
 
 konffi = get_konfiguraatio()
-
 
 
 class Sovellus:
@@ -36,7 +36,8 @@ class Sovellus:
                 ruudukon_hallinta,
                 pelaaja1,
                 pelaaja2,
-                PelinHallinta)
+                PelinHallinta,
+            )
             valikko.aloita()
             if valikko.aloita_peli:
                 while True:
@@ -45,7 +46,7 @@ class Sovellus:
                         pelaaja1.valittu_pelaaja,
                         pelaaja2.valittu_pelaaja,
                         LautaUI,
-                        self.naytto
+                        self.naytto,
                     )
                     tapahtuma = peli_silmukka(peli)
                     if tapahtuma == "pelaa uudelleen":

@@ -1,7 +1,7 @@
 from konfiguraatio import get_konfiguraatio
 from peli.ihmis_pelaaja import Pelaaja
 from peli.tekoäly_pelaaja import TekoalyPelaaja
-from peli.tapahtumat import Tapahtumat
+from tapahtumat import Tapahtumat
 from käyttöliittymä.lauta_ui import LautaUI
 import pygame.display
 

@@ -24,5 +24,4 @@ class TestNappi(unittest.TestCase):
 
     def test_aktivoi_tapahtuma_toimii(self):
         self.nappi.aktivoi_tapahtuma()
-
         self.tapahtuma.assert_called_once()

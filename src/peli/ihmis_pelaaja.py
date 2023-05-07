@@ -1,5 +1,5 @@
 from konfiguraatio import get_konfiguraatio
-from peli.tapahtumat import Tapahtumat
+from tapahtumat import Tapahtumat
 
 konffi = get_konfiguraatio()
 
