@@ -8,7 +8,11 @@ class ValitsePelaaja:
         self._valittu_pelaaja = pelaaja1
 
     def vaihda_pelaajaa(self):
-        self._valittu_pelaaja = self._pelaaja1 if self._valittu_pelaaja == self._pelaaja2 else self._pelaaja2
+        self._valittu_pelaaja = (
+            self._pelaaja1
+            if self._valittu_pelaaja == self._pelaaja2
+            else self._pelaaja2
+        )
 
     @property
     def valittu_pelaaja(self):
@@ -34,16 +38,13 @@ class RuudukonKoko:
 
 class PelinHallinta:
     def __init__(
-            self,
-            ruutujen_hallinta,
-            pelaaja1,
-            pelaaja2,
-            get_konf=get_konfiguraatio,
-            set_konf=set_konfiguraatio,
-            paivita_konf=paivita_konfiguraatio) -> None:
+        self,
+        ruutujen_hallinta,
+        get_konf=get_konfiguraatio,
+        set_konf=set_konfiguraatio,
+        paivita_konf=paivita_konfiguraatio,
+    ) -> None:
         self.ruutujen_hallinta = ruutujen_hallinta
-        self.pelaaja1 = pelaaja1
-        self.pelaaja2 = pelaaja2
         self.get_konf = get_konf
         self.set_konf = set_konf
         self.paivita_konf = paivita_konf

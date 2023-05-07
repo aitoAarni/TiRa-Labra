@@ -70,3 +70,32 @@ class TestPeliLogiikka(unittest.TestCase):
             (paluuarvo1, paluuarvo2, paluuarvo3),
             ((False, None), (True, "x"), (True, "-")),
         )
+
+    def test_valitse_ruutu_toimii(self):
+        pelaaja1 = Mock()
+        pelaaja2 = Mock()
+        pelaaja1.valitse_ruutu.return_value = None
+        pelaaja2.valitse_ruutu.return_value = (4, 5)
+        self.peli.pelaajat = [pelaaja1, pelaaja2]
+
+        paluuarvo1 = self.peli.valitse_ruutu(0)
+        paluuarvo2 = self.peli.valitse_ruutu(1)
+
+        self.assertEqual(
+            (paluuarvo1, paluuarvo2, self.peli.siirrot, len(self.peli.vapaat_ruudut)),
+            (None, (4, 5), [(4, 5)], RUUTUJEN_MAARA**2 - 1),
+        )
+
+    def test_valitse_ruutu_toimii(self):
+        pelaaja = Mock()
+        pelaaja.valitse_ruutu.return_value = (1, 1)
+        self.peli.pelaajat = [pelaaja, None]
+        paluu_arvo = self.peli.pelaa_vuoro(0)
+
+        self.assertEqual(paluu_arvo, (1, 1))
+
+    def test_vaihda_vuoroa_toimii(self):
+        vuoro1 = self.peli.vaihda_vuoroa(1)
+        vuoro2 = self.peli.vaihda_vuoroa(0)
+
+        self.assertEqual((vuoro1, vuoro2), (0, 1))
