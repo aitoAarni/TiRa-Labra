@@ -6,7 +6,17 @@ konffi = get_konfiguraatio()
 
 
 class Napit:
+    """Luokka on valikon nappien hallintaa varten"""
+
     def __init__(self, ruudukon_hallinta, pelaaja1, pelaaja2, pelin_hallinta) -> None:
+        """konstruktori
+
+        Args:
+            ruudukon_hallinta (Object): Ruutujen määrää hallitseva olio
+            pelaaja1 (Object): Ristejä pelaavan pelaajan valinta
+            pelaaja2 (Object): Nollia pelaavan pelaajan valinta
+            pelin_hallinta (Object): konfiguraation ja pelin aloitusta varten
+        """
         self.napit = muodosta_napit(
             konffi.leveys,
             konffi.korkeus,
@@ -18,6 +28,7 @@ class Napit:
         self.nappi_jonka_paalla_on_hiiri = None
 
     def tarkista_onko_hiiri_napin_paalla(self, hiiri_pos):
+        """Tarkistaa onko hiiri minkään napin päällä"""
         for nappi in self.napit.sprites():
             if nappi.havaitse_hiiren_leijuminen(hiiri_pos):
                 self.nappi_jonka_paalla_on_hiiri = nappi
@@ -25,17 +36,20 @@ class Napit:
         self.nappi_jonka_paalla_on_hiiri = None
 
     def aktivoi_klikattu_nappi(self):
+        """aktvoi napin tapahtuma 'onClick' efekti"""
         if self.nappi_jonka_paalla_on_hiiri:
             self.nappi_jonka_paalla_on_hiiri.aktivoi_tapahtuma()
 
 
 def muodosta_nappi(leveys, korkeus, keskipiste, napin_tapahtuma, teksti):
+    """Muodostaa napin saatujen parametrien avulla"""
     return Nappi(leveys, korkeus, keskipiste, napin_tapahtuma, teksti)
 
 
 def muodosta_napit(
     leveys, korkeus, ruudukon_hallinta, pelaaja1, pelaaja2, pelin_hallinta
 ):
+    """Muodostaa valikon napit ja laittaa ne oikeaan kohtaan"""
     n_leveys = leveys / 30
     n_korkeus = korkeus / 30
 

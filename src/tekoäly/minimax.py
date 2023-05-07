@@ -40,7 +40,7 @@ class Tekoaly:
         edellinen_merkki = (
             self.minimoiva_merkki if maksimoiva_pelaaja else self.maksimoiva_merkki
         )
-        # tätä ei toteuteta ensimmäisellä kutsuntakerralla
+        # tätä ehtoa ei toteuteta ensimmäisellä kutsuntakerralla
         if viimeisin_siirto:
             if (
                 self.tarkista_voitto(viimeisin_siirto, edellinen_merkki, pelilauta)
@@ -143,10 +143,13 @@ class Tekoaly:
         """Palauttaa tekoälylle ruudut, joista se etsii siirtoja
 
         Args:
+            edellinen_siirto (tuple): (rivi, sarake)
+            vapaat_ruudut (set): lista laudan vapaista ruuduista
             siirroissa_olevat_ruudut (set): samat ruudut kuin siirroissa,
                                             tietorakenne nopeuttaa etsimistä
+            siirrot (list): tekoälyn etsittävät siirrot
         Returns:
-            _type_: _description_
+            tuple: (list, dict)
         """
         uudet_siirrot = siirrot.copy()
         uudet_siirroissa_olevat_ruudut = siirroissa_olevat_ruudut.copy()
@@ -166,9 +169,10 @@ class Tekoaly:
         return uudet_siirrot, uudet_siirroissa_olevat_ruudut
 
     def _tee_tarkistettava_suunta_dict(
-        self, x_alku: int, y_alku: int, x_seuraava: int, y_seuraava: int, teksti
+        self, x_alku: int, y_alku: int, x_seuraava: int, y_seuraava: int
     ):
-        """_summary_
+        """Muodostaa sanakirjan, jonka avulla voidaan käydä läpi laudan pysty, vaaka ja vinojen rivien
+        ruudut järjestyksessä yksi kerrallaan peräkkäin
 
         Args:
             x_alku (int): mistä x arvosta rivin tarkistus alkaa
@@ -195,36 +199,34 @@ class Tekoaly:
     def heurstisen_arvon_delta(
         self, pelilauta: list, syvyys: int, ruutu: tuple
     ) -> float:
-        """arvioi kaikki vaaka, pysty, ja molemmat vinot rivit, joidenka pituus on 5 tai yli
+        """Metodi arvioi yhden siirron vaikutusta pelitilanteen heuristiseen arvoon verrattuna
+        siirtoa edeltävään tilanteeseen.
+        Arvioitavat suunnat ovat vaaka, pysty, ja molemmat vinot rivit, jos pituus on 5 tai yli.
+        Arvioinnissa arvioidaan vain yksi rivi jokaisesta suunnasta.
+        Arvioitavat rivit kulkevat lisätyn siirron kautta.
 
         Args:
-            pelilauta (list):
+            pelilauta (list): pelilauta
             syvyys (int): minimax algoritmin syvyys, kun se kutsuu tätä metodia
             ruutu (tuple): viimeiseksi lisätyn ruudun koordinaatit
         Returns:
-            float: heuristinen arvo
+            float: heuristinen arvon muutos
         """
         x, y = ruutu
         uusin_merkki = pelilauta[y][x]
         pelilauta[y][x] = None
         tarkistettavat_suunnat = []
         # lisätään pysty suunta
-        tarkistettavat_suunnat.append(
-            self._tee_tarkistettava_suunta_dict(x, 0, 0, 1, "pysty")
-        )
+        tarkistettavat_suunnat.append(self._tee_tarkistettava_suunta_dict(x, 0, 0, 1))
         # lisätään vaaka suunta
-        tarkistettavat_suunnat.append(
-            self._tee_tarkistettava_suunta_dict(0, y, 1, 0, "vaaka")
-        )
+        tarkistettavat_suunnat.append(self._tee_tarkistettava_suunta_dict(0, y, 1, 0))
 
         # lisätään vino rivi joka kallistuu oikealle
         x_alku1 = min(y + x, self.n)
         y_alku1 = max(y - (self.n - x), 0)
         if x_alku1 >= 4 and y_alku1 <= self.n - 5:
             tarkistettavat_suunnat.append(
-                self._tee_tarkistettava_suunta_dict(
-                    x_alku1, y_alku1, -1, 1, "vino oikea"
-                )
+                self._tee_tarkistettava_suunta_dict(x_alku1, y_alku1, -1, 1)
             )
 
         # lisätään vino rivi, joka kallistuu vasemmalle
@@ -232,9 +234,7 @@ class Tekoaly:
         y_alku2 = max(y - x, 0)
         if x_alku2 <= self.n - 5 and y_alku2 <= self.n - 5:
             tarkistettavat_suunnat.append(
-                self._tee_tarkistettava_suunta_dict(
-                    x_alku2, y_alku2, 1, 1, "vino vasen"
-                )
+                self._tee_tarkistettava_suunta_dict(x_alku2, y_alku2, 1, 1)
             )
 
         heurestiset_arvot = []
@@ -273,7 +273,7 @@ class Tekoaly:
             pelilauta (list):
             syvyys (int): minimax algoritmin syvyys, kun se kutsuu tätä metodia
         Returns:
-            float: heuristinen arvo
+            float: pelitilanteen absoluuttinen heuristinen arvo
         """
         pysty = HeurestisenArvonLaskija(self.maksimoiva_merkki, self.minimoiva_merkki)
         vaaka = HeurestisenArvonLaskija(self.maksimoiva_merkki, self.minimoiva_merkki)

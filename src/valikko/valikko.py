@@ -2,6 +2,8 @@ from valikko.nappien_hallinta import Napit
 
 
 class Valikko:
+    """Valikon looginen esitys"""
+
     def __init__(
         self,
         tapahtumat,
@@ -22,6 +24,7 @@ class Valikko:
         self.kayttoliittyma = kayttoliittyma(naytto, self.napit.napit)
 
     def aloita(self):
+        """Valikon looppi, joka pitää valikon yllä, kunnes jokin tapahtuma rikkoo sen"""
         while True:
             tapahtumat = self.tapahtumat.get_tapahtumat()
             if tapahtumat["lopeta"] or tapahtumat["takaisin"]:
