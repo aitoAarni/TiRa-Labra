@@ -11,6 +11,8 @@ except FileNotFoundError:
 
 
 konfiguraatiotiedoston_nimi = os.getenv("KONFIGURAATIO")
+if konfiguraatiotiedoston_nimi == None:
+    konfiguraatiotiedoston_nimi = "tuotanto_konfiguraatio.json"
 konfiguraatiotiedoston_polku = os.path.join(
     "konfiguraatio", konfiguraatiotiedoston_nimi
 )
