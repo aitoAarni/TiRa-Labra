@@ -27,7 +27,7 @@ arvot = {2: 10, 3: 100, 4: 1500}
 if molemmilla_puolilla_tyhja:
     arvot = {2: 100, 3: 1500, 4: 100_000}
 ```
-Arvioinnissa käytetään myös heurestiikkaa, joka ottaa huomioon yhden tyhjän rivin kahden samanmerkkisen jonon välissä. Esim. rivillä kohta "xx-xx" ("-" esittää tyhjää ruutua) arvioitaisiin, että siinä olisi neljä peräkkäin, mutta sen saama arvo neljä peräkkäin kerrottaisiin vakiolla 0.85, sillä se voidaan katkaista keskeltä, joten sen arvo ei ole välttämättä sama kuin 4 peräkkäin ilman tyhjää riviä välissä. Koodi on myös optimoitu ottamaan huomioon tilanteet, jossa on monta katkonaista saman merkkistä jono "-x-x-xx-xx-". Tässä arvioitasiin ensin kaksi yhden pituista yhteen (uusi pituus 2) ja kaksi kahden pituista yhteen (uusi pituus 4), sillä se tuottaisi suurimman arvon.
+Arvioinnissa käytetään myös heurestiikkaa, joka ottaa huomioon yhden tyhjän rivin kahden samanmerkkisen jonon välissä. Esim. rivillä kohta `"xx-xx"` ("-" esittää tyhjää ruutua) arvioitaisiin, että siinä olisi neljä peräkkäin, mutta sen saama arvo neljä peräkkäin kerrottaisiin vakiolla 0.85, sillä se voidaan katkaista keskeltä, joten sen arvo ei ole välttämättä sama kuin 4 peräkkäin ilman tyhjää riviä välissä. Koodi on myös optimoitu ottamaan huomioon tilanteet, jossa on monta katkonaista saman merkkistä jonoa `"-x-x-xx-xx-"`. Tässä arvioitasiin ensin kaksi yhden pituista yhteen (uusi pituus 2) ja kaksi kahden pituista yhteen (uusi pituus 4), sillä se tuottaisi suurimman arvon.
 
 ## Aika ja tilavaativuudet
 
