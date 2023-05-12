@@ -7,11 +7,11 @@ Pelissä on valikko, josta voi risteille ja nollille joko ihmis- tai tekoälypel
 ### minimax
 
 Minimax algoritmin muunnelma on sen heuristisen arvion kanssa. Heuristista arvoa ei arvioida vain syvyydellä 0 tai kun jompi kumpi pelaaja on voittanut, niin kuin normaalissa minimax algoritmissa, vaan jokaisen siirron jälkeen.
-Aluksi ennen miminax algoritmin kutsua arvioidaan `heuristinen_funktio` metodilla, joka arvioi kaikki pelilaudan oleelliset ruudut. Tämä arvio `heuristinen_arvo` annetaan minimaxille parametriksi. Jokaisen siirron jälkeen `for siirto in siirrot[::-1]:` arvioidaan siirron vaikutus ennen uutta minimax kutsua laudalla koomennolla: 
+Aluksi ennen miminax algoritmin kutsua arvioidaan `heuristinen_funktio` metodilla, joka arvioi koko pelilaudan "normaaliin tapaan" ja palauttaa arvion pelitilanteesta. Tämä arvio `heuristinen_arvo` annetaan minimaxille parametriksi. Jokaisen siirron jälkeen `for siirto in siirrot[::-1]:` arvioidaan siirron vaikutus ennen uutta minimax kutsua laudalla koomennolla: 
 ```
 uusi_heuristinen_arvo = heuristinen_arvo + self.heurstisen_arvon_delta(pelilauta, syvyys, siirto)
 ```
-ja `uusi_heuristinen_arvo` annetaan minimax metodille parametriin `heuristinen_arvo`. Miksi näin tehdään eikä vain arvioida pelitilannetta syvyydellä 0 tai kun jompi kumpi on saanut yli 4 peräkkäin? Tähän on kaksi syytä
+ja `uusi_heuristinen_arvo` annetaan minimax metodille parametriin `heuristinen_arvo`. Miksi näin tehdään eikä vain arvioida pelitilannetta syvyydellä 0 tai kun jompi kumpi pelaajista on saanut yli 4 peräkkäin? Tähän on kaksi syytä
 
 - Arvioitaessa pelitilannetta voidaan arvioon liittää aina kerroin, joka riippuu syvyydestä, sillä tiedetään helpisti millä syvyydellä aina mikäkin liike on tehty ja sen vaikutus arviointiin. Tämä on hyödyllistä sillä jos minimaxin maksimi syvyys on pariton, niin maksimioija saa aina yhden siirron enemmän, jolloinka se saisi yhtä monta merkkiä peräkkäin vaikka lähtötilanteessa minimoijalla olisi yksi merkki enemmän peräkkäin.
 - Tämä on oikeastaan nopeampaa, sillä arvioidaan vähemmän ruutuja, sillä normaalisti arvioitaisiin kaikki ruudut tai minimissään pitäisi arvoida suuri osa ruuduista. Seuraava kappale selittää miten `heurstisen_arvon_delta` toimii karkeasti.
