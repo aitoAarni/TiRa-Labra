@@ -5,6 +5,7 @@ Ristinolla tekoälyllä varustettuna olisi tavoite.
 ![Github Actions](https://github.com/aitoAarni/TiRa-Labra/workflows/CI/badge.svg)
 [![codecov](https://codecov.io/gh/aitoAarni/TiRa-Labra/branch/main/graph/badge.svg?token=G521CJR0IT)](https://codecov.io/gh/aitoAarni/TiRa-Labra)
 
+![Ristinolla gif](https://github.com/aitoAarni/TiRa-Labra/assets/13611438/f661d71f-602c-44ce-aa16-13ad8ecec19e)
 
 
 
