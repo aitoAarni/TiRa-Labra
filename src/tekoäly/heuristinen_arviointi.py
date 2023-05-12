@@ -1,14 +1,14 @@
 class HeurestisenArvonLaskija:
     """Luokkan metodit arvioi pelilaudan tilannetta"""
 
-    VOITTO_ARVO = 10**10
+    VOITTO_ARVO = 10**11
 
     def __init__(
-        self, maksimoiva_merkki: str, minimoiva_merkki: str, maksimi_syvys: int
+        self, maksimoiva_merkki: str, minimoiva_merkki: str, maksimi_syvyys: int
     ) -> None:
         self.maksimoiva_merkki = maksimoiva_merkki
         self.minimoiva_merkki = minimoiva_merkki
-        self.maksimi_syvyys = maksimi_syvys
+        self.maksimi_syvyys = maksimi_syvyys
 
     def perakkaisten_ruutujen_arvot(
         self, n_perakkain: int, syvyys: int, molemmilla_puolilla_tyhja: bool = False
