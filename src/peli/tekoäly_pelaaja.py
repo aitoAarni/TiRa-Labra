@@ -43,7 +43,7 @@ class TekoalyPelaaja:
         viimeisin_siirto = self.siirrot[-1]
         lauta = deepcopy(self.lauta)
 
-        heuristinen_arvo = self.tekoaly.heuristinen_funktio(lauta)
+        heuristinen_arvo = self.tekoaly.heuristinen_funktio(lauta, self.syvyys)
 
         vapaat_ruudut = self.vapaat_ruudut.copy()
 
@@ -127,7 +127,7 @@ class TekoalyPelaaja:
     def siirron_heuristinen_arvo(self, siirto: tuple, lauta: list):
         """Arvioi siirron arvoa laudan kontekstissa"""
         lauta[siirto[1]][siirto[0]] = self.merkki
-        heuristinen_arvo = self.tekoaly.heuristinen_funktio(lauta)
+        heuristinen_arvo = self.tekoaly.heuristinen_funktio(lauta, self.syvyys)
         lauta[siirto[1]][siirto[0]] = None
         return heuristinen_arvo
 

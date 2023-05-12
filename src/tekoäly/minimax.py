@@ -47,7 +47,6 @@ class Tekoaly:
                 or syvyys == 0
             ):
                 return heuristinen_arvo, None
-
         if maksimoiva_pelaaja:
             arvo = float("-infinity")
 
@@ -103,7 +102,6 @@ class Tekoaly:
                 )
                 pelilauta[siirto[1]][siirto[0]] = self.minimoiva_merkki
                 vapaat_ruudut.remove(siirto)
-
                 uusi_heuristinen_arvo = heuristinen_arvo + self.heurstisen_arvon_delta(
                     pelilauta, syvyys, siirto
                 )
@@ -184,15 +182,15 @@ class Tekoaly:
             dict: palauttaa sanakirjan, jonka avulla voidaan laskea rivin heuristinen arvo
         """
         suunnan_laskija = HeurestisenArvonLaskija(
-            self.maksimoiva_merkki, self.minimoiva_merkki
+            self.maksimoiva_merkki, self.minimoiva_merkki, self.maksimi_syvyys
         )
 
         suunta_dict = {
-            "arvon laskija": suunnan_laskija,
-            "x alku": x_alku,
-            "y alku": y_alku,
-            "x seuraava": x_seuraava,
-            "y seuraava": y_seuraava,
+            "arvon_laskija": suunnan_laskija,
+            "x_alku": x_alku,
+            "y_alku": y_alku,
+            "x_seuraava": x_seuraava,
+            "y_seuraava": y_seuraava,
         }
         return suunta_dict
 
@@ -216,14 +214,15 @@ class Tekoaly:
         uusin_merkki = pelilauta[y][x]
         pelilauta[y][x] = None
         tarkistettavat_suunnat = []
+
         # lisätään pysty suunta
         tarkistettavat_suunnat.append(self._tee_tarkistettava_suunta_dict(x, 0, 0, 1))
         # lisätään vaaka suunta
         tarkistettavat_suunnat.append(self._tee_tarkistettava_suunta_dict(0, y, 1, 0))
 
         # lisätään vino rivi joka kallistuu oikealle
-        x_alku1 = min(y + x, self.n)
-        y_alku1 = max(y - (self.n - x), 0)
+        x_alku1 = min(y + x, self.n - 1)
+        y_alku1 = max(y - (self.n - 1 - x), 0)
         if x_alku1 >= 4 and y_alku1 <= self.n - 5:
             tarkistettavat_suunnat.append(
                 self._tee_tarkistettava_suunta_dict(x_alku1, y_alku1, -1, 1)
@@ -236,38 +235,35 @@ class Tekoaly:
             tarkistettavat_suunnat.append(
                 self._tee_tarkistettava_suunta_dict(x_alku2, y_alku2, 1, 1)
             )
-
         heurestiset_arvot = []
+        rivin_ruudut = []
         for _ in range(2):
-            taulu = [[0 for _ in range(self.n)] for _ in range(self.n)]
-            arvo = 0
-            for rivin_suunta in tarkistettavat_suunnat:
-                rivin_suunta["arvon laskija"].laskemisen_alustus()
+            heuristinen_arvo = 0
 
+            for rivin_suunta in tarkistettavat_suunnat:
                 for i in range(self.n):
-                    x_akseli = rivin_suunta["x alku"] + rivin_suunta["x seuraava"] * i
-                    y_akseli = rivin_suunta["y alku"] + rivin_suunta["y seuraava"] * i
+                    x_akseli = rivin_suunta["x_alku"] + rivin_suunta["x_seuraava"] * i
+                    y_akseli = rivin_suunta["y_alku"] + rivin_suunta["y_seuraava"] * i
                     if 0 <= x_akseli < self.n and 0 <= y_akseli < self.n:
-                        taulu[y_akseli][x_akseli] += 1
                         merkki = pelilauta[y_akseli][x_akseli]
-                        rivin_suunta["arvon laskija"].laske_arvo(
-                            merkki,
-                            (
-                                x_akseli - rivin_suunta["x seuraava"],
-                                y_akseli - rivin_suunta["y seuraava"],
-                            ),
-                        )
-                rivin_suunta["arvon laskija"].viimeisen_ruudun_tarkistus()
-                arvo += rivin_suunta["arvon laskija"].heuristinen_arvo
-                rivin_suunta["arvon laskija"].heuristinen_arvo = 0
-            HeurestisenArvonLaskija.yksi_perakkain.clear()
+                        rivin_ruudut.append(merkki)
+                    else:
+                        break
+                heuristinen_arvo += rivin_suunta[
+                    "arvon_laskija"
+                ].laske_heuristinen_arvo(rivin_ruudut, syvyys)
+                rivin_ruudut.clear()
             pelilauta[y][x] = uusin_merkki
-            heurestiset_arvot.append(arvo)
+            heurestiset_arvot.append(heuristinen_arvo)
         heuristinen_arvo = heurestiset_arvot[1] - heurestiset_arvot[0]
-        kerroin = (10 - (self.maksimi_syvyys - syvyys)) / 10
+
+        # kerroin on paraabeli, jonka arvoja ovat f(0) = 1, f(1/10) = 0,97, f(2/10) = 0,88 jne...
+        # kerroin auttaa tekoälyä parittoman maksimi syvyyden kanssa (dokumentaatiossa lisää tietoa)
+        x = (self.maksimi_syvyys - syvyys) / 10
+        kerroin = -3 * x**2 + 1
         return heuristinen_arvo * kerroin
 
-    def heuristinen_funktio(self, pelilauta: list) -> float:
+    def heuristinen_funktio(self, pelilauta: list, syvyys) -> float:
         """arvioi kaikki vaaka, pysty, ja molemmat vinot rivit, joidenka pituus on 5 tai yli
         Args:
             pelilauta (list):
@@ -275,28 +271,28 @@ class Tekoaly:
         Returns:
             float: pelitilanteen absoluuttinen heuristinen arvo
         """
-        pysty = HeurestisenArvonLaskija(self.maksimoiva_merkki, self.minimoiva_merkki)
-        vaaka = HeurestisenArvonLaskija(self.maksimoiva_merkki, self.minimoiva_merkki)
+        pysty = HeurestisenArvonLaskija(
+            self.maksimoiva_merkki, self.minimoiva_merkki, self.maksimi_syvyys
+        )
+        vaaka = HeurestisenArvonLaskija(
+            self.maksimoiva_merkki, self.minimoiva_merkki, self.maksimi_syvyys
+        )
         vino_oikea = HeurestisenArvonLaskija(
-            self.maksimoiva_merkki, self.minimoiva_merkki
+            self.maksimoiva_merkki, self.minimoiva_merkki, self.maksimi_syvyys
         )
         vino_vasen = HeurestisenArvonLaskija(
-            self.maksimoiva_merkki, self.minimoiva_merkki
+            self.maksimoiva_merkki, self.minimoiva_merkki, self.maksimi_syvyys
         )
-
+        pysty_rivi = []
+        vaaka_rivi = []
+        vino_oikea_rivi = []
+        vino_vasen_rivi = []
         for a in range(self.n):
-            pysty.laskemisen_alustus()
-            vaaka.laskemisen_alustus()
-            vino_oikea.laskemisen_alustus()
-            vino_vasen.laskemisen_alustus()
             for b in range(self.n):
                 pysty_merkki = pelilauta[b][a]
                 vaaka_merkki = pelilauta[a][b]
-
-                pysty.laske_arvo(pysty_merkki, (a, b - 1))
-                vaaka.laske_arvo(vaaka_merkki, (b - 1, a))
-            pysty.viimeisen_ruudun_tarkistus()
-            vaaka.viimeisen_ruudun_tarkistus()
+                pysty_rivi.append(pysty_merkki)
+                vaaka_rivi.append(vaaka_merkki)
 
         # Looppaa kaikki vinot rivit läpi jossa voi olla 5 merkkiä peräkkäin
         for i in range(self.n * 2 - 10 + 1):
@@ -312,18 +308,13 @@ class Tekoaly:
                 vino_oikea_merkki = pelilauta[y_akseli1][x_akseli1]
                 vino_vasen_merkki = pelilauta[y_akseli2][x_akseli2]
 
-                vino_oikea.laske_arvo(
-                    vino_oikea_merkki, edeltava_ruutu=(x_akseli1 + 1, y_akseli1 - 1)
-                )
-                vino_vasen.laske_arvo(
-                    vino_vasen_merkki, edeltava_ruutu=(x_akseli2 - 1, y_akseli2 - 1)
-                )
-            vino_oikea.viimeisen_ruudun_tarkistus()
-            vino_vasen.viimeisen_ruudun_tarkistus()
-        HeurestisenArvonLaskija.yksi_perakkain.clear()
-        return (
-            pysty.heuristinen_arvo
-            + vaaka.heuristinen_arvo
-            + vino_oikea.heuristinen_arvo
-            + vino_vasen.heuristinen_arvo
-        )
+                vino_oikea_rivi.append(vino_oikea_merkki)
+                vino_vasen_rivi.append(vino_vasen_merkki)
+
+        heuristinen_arvo = 0
+        heuristinen_arvo += pysty.laske_heuristinen_arvo(pysty_rivi, syvyys)
+        heuristinen_arvo += vaaka.laske_heuristinen_arvo(vaaka_rivi, syvyys)
+        heuristinen_arvo += vino_oikea.laske_heuristinen_arvo(vino_oikea_rivi, syvyys)
+        heuristinen_arvo += vino_vasen.laske_heuristinen_arvo(vino_vasen_rivi, syvyys)
+
+        return heuristinen_arvo
