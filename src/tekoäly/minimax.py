@@ -32,7 +32,7 @@ class Tekoaly:
         beeta: float,
         maksimoiva_pelaaja: bool,
         heuristinen_arvo: float,
-        viimeisin_siirto: tuple | None = None,
+        viimeisin_siirto: tuple,
     ) -> tuple:
         """Minimax algoritmi, jossa on relatiivinen heuristinen arviointi,
         joka perustuu aina ylemmän syvyyden heuristiseen arviointiin"""
@@ -41,12 +41,11 @@ class Tekoaly:
             self.minimoiva_merkki if maksimoiva_pelaaja else self.maksimoiva_merkki
         )
         # tätä ehtoa ei toteuteta ensimmäisellä kutsuntakerralla
-        if viimeisin_siirto:
-            if (
-                self.tarkista_voitto(viimeisin_siirto, edellinen_merkki, pelilauta)
-                or syvyys == 0
-            ):
-                return heuristinen_arvo, None
+        if (
+            self.tarkista_voitto(viimeisin_siirto, edellinen_merkki, pelilauta)
+            or syvyys == 0
+        ):
+            return heuristinen_arvo
         if maksimoiva_pelaaja:
             arvo = float("-infinity")
 
@@ -78,9 +77,7 @@ class Tekoaly:
                     False,
                     uusi_heuristinen_arvo,
                     siirto,
-                )[0]
-                if arviointi > arvo:
-                    paras_siirto = siirto
+                )
                 arvo = max(arvo, arviointi)
                 pelilauta[siirto[1]][siirto[0]] = None
                 varatut_siirrot.remove(siirto)
@@ -88,14 +85,13 @@ class Tekoaly:
                 alfa = max(alfa, arvo)
                 if arvo >= beeta:
                     break
-            return arvo, paras_siirto
+            return arvo
 
         else:
             arvo = float("infinity")
             for siirto in siirrot[::-1]:
                 if siirto in varatut_siirrot:
                     continue
-
                 varatut_siirrot.add(siirto)
                 uudet_siirrot, uudet_siirroissa_olevat_ruudut = self.etsi_siirrot(
                     siirto, vapaat_ruudut, siirroissa_olevat_ruudut, siirrot
@@ -118,7 +114,7 @@ class Tekoaly:
                     True,
                     uusi_heuristinen_arvo,
                     siirto,
-                )[0]
+                )
 
                 arvo = min(arvo, arviointi)
                 pelilauta[siirto[1]][siirto[0]] = None
@@ -129,7 +125,7 @@ class Tekoaly:
                 if arvo <= alfa:
                     break
 
-            return arvo, None
+            return arvo
 
     @staticmethod
     def etsi_siirrot(

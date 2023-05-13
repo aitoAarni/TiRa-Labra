@@ -35,11 +35,12 @@ konfiguraatio = KonfiguraatioArvot()
 def rakenna_konfiguraatio():
     konfiguraatio = {
         "tekoalyn_syvyys": 3,
+        "vuoron_aika_sekunteina": 20,
         "ruutujen_maara": 25,
         "laudan_vari": (0, 0, 0),
         "laudan_viivojen_vari": (255, 255, 255),
-        "korkeus": 1000,
         "leveys": 1000,
+        "korkeus": 1000,
         "nappuloiden_vari": (0, 0, 255),
         "peli_ohi_vari": (192, 192, 192),
         "voitto_tekstin_vari": (105, 105, 105),

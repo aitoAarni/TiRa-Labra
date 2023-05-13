@@ -27,11 +27,6 @@ class Peli:
             [None for _ in range(konffi.ruutujen_maara)]
             for _ in range(konffi.ruutujen_maara)
         ]
-        self.vapaat_ruudut = set()
-        for x in range(konffi.ruutujen_maara):
-            for y in range(konffi.ruutujen_maara):
-                self.vapaat_ruudut.add((x, y))
-        self.siirrot = []
         pelaaja1 = self._alusta_pelaaja(pelaaja1, "x", self.ristit)
         pelaaja2 = self._alusta_pelaaja(pelaaja2, "0", self.nollat)
         self.pelaajat = [pelaaja1, pelaaja2]
@@ -52,8 +47,6 @@ class Peli:
             return pelaaja(
                 merkit,
                 self.lauta,
-                self.siirrot,
-                self.vapaat_ruudut,
                 Peli.tarkista_voitto,
                 merkki,
                 saa_minimoiva_merkki[merkki],
@@ -116,7 +109,11 @@ class Peli:
 
     def tarkista_tasapeli(self) -> bool:
         """Katsoo onko peli päättynyt tasapeliin"""
-        return konffi.ruutujen_maara**2 <= len(self.siirrot)
+        for rivi in self.lauta:
+            for ruutu in rivi:
+                if ruutu == None:
+                    return False
+        return True
 
     def tarkista_onko_peli_paattynyt(
         self, viimeisin_siirto: tuple, merkki: str, lauta: list
@@ -140,8 +137,6 @@ class Peli:
         if ruutu:
             if self.lauta[ruutu[1]][ruutu[0]] is None:
                 self.lauta[ruutu[1]][ruutu[0]] = pelaaja.merkki
-                self.siirrot.append(ruutu)
-                self.vapaat_ruudut.remove(ruutu)
                 pelaaja.merkit.append((ruutu[1], ruutu[0]))
 
                 return ruutu
