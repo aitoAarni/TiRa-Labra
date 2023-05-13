@@ -26,7 +26,7 @@ class TestTekoalyPelaaja(unittest.TestCase):
             (5, 5), (5, 6), (4, 5), (5, 7)
         )
         self.tekoaly_pelaaja = TekoalyPelaaja(
-            merkit, lauta, siirrot, vapaat_ruudut, Peli.tarkista_voitto, "x", "0", 2
+            merkit, lauta, Peli.tarkista_voitto, "x", "0", 2
         )
 
     def test_valitse_ruutu_palauttaa_siirron(self):
@@ -35,8 +35,6 @@ class TestTekoalyPelaaja(unittest.TestCase):
 
     def test_tyhjalle_laudalle_siirto_onnistuu(self):
         lauta, m, s, vapaat_ruudut = tee_pelitilanne()
-        tko_aly = TekoalyPelaaja(
-            [], lauta, [], vapaat_ruudut, Peli.tarkista_voitto, "x", "0", 1
-        )
+        tko_aly = TekoalyPelaaja([], lauta, Peli.tarkista_voitto, "x", "0", 1)
         siirto = tko_aly.valitse_ruutu()
         self.assertEqual(type(siirto), tuple)
