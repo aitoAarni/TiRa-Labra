@@ -18,16 +18,16 @@ ja `uusi_heuristinen_arvo` annetaan minimax metodille parametriin `heuristinen_a
 
 metodi `heurstisen_arvon_delta` arvioi vain vaaka pysty ja molemmat vinot rivit jotka kulkevat juuri äskeisen siirron ruudun kautta (eli 4 riviä). Metodi ensin arvioi edellämainitut 4 riviä ilman äskeistä siirtoa laittamalla sirron ruutuun tyhjän ruudun ja sen jälkeen siirron kanssa, jolloin ruutuun ollaan laitettu äskeisen siirron merkki (eli 4 riviä 2 kertaa arvioitu). Metodi ottaa molemmista pelitilanteista arvion ja palauttaa `jälkimmäinen arvio - ensimmäinen arvio` ja kertoo tämän viellä kertoimella, joka vähänee mitä syvemmällä ollaan menty minimax algoritmissa, eli syvemmällä tehdyt liikkeet vaikuttavat minimaxin heuristiseen arvoon vähemmän.
 
-### Pelitilanteen arvioinnin heurestiikka
+### Pelitilanteen arvioinnin heuristiikka
 
-Pelilaudan rivejä (vaaka, pysty tai vino) arvioidaan aina kerrallaan. Arvioinnissa aloitetaan aina rivin alusta ja mennään yksi ruutu eteenpäin kerrallaan. Jos samoja merkkejä on enemmän kuin kaksi peräkkäin, niin niille annetaan arvo. Arvioon vaikutta peräkkäisten merkkien päädyissä olevat ruudut, onko ne tyhjiä vai onko niissä toisen pelaajan merkkejä. Jos molemmilla puolilla on toisen pelaajan merkki, niin jonolle samoja merkkejä ei anneta arvoa, ellei merkkien pituus ole 5 tai yli. Kun toinen puoli jonosta peräkkäisiä merkkejä on blokattu vastustajan merkillä, niin jonolle annetaan pienempi arvo seuraavan koodin mukaan (5 tai yli peräkkäin on arvoltaan 10<sup>11</sup>-10<sup>(maksimi_syvyys-nykyinen_syvyys)</sup>)
+Pelilaudan rivejä (vaaka, pysty tai vino) arvioidaan aina kerrallaan. Arvioinnissa aloitetaan aina rivin alusta ja mennään yksi ruutu eteenpäin kerrallaan. Jos samoja merkkejä on enemmän kuin yksi peräkkäin, niin heristista arvoa lisätään. Arvioon vaikutta peräkkäisten merkkien päädyissä olevat ruudut, onko ne tyhjiä vai onko niissä toisen pelaajan merkkejä. Jos molemmilla puolilla on toisen pelaajan merkki, niin jonolle samoja merkkejä ei anneta arvoa, ellei merkkien pituus ole 5 tai yli. Kun toinen puoli jonosta peräkkäisiä merkkejä on blokattu vastustajan merkillä, niin jonolle annetaan pienempi arvo seuraavan koodin mukaan (5 tai yli peräkkäin on arvoltaan 10<sup>11</sup>-10<sup>maksimi_syvyys-nykyinen_syvyys</sup>)
 
 ```
 arvot = {2: 10, 3: 100, 4: 1500}
 if molemmilla_puolilla_tyhja:
     arvot = {2: 100, 3: 1500, 4: 100_000}
 ```
-Arvioinnissa käytetään myös heurestiikkaa, joka ottaa huomioon yhden tyhjän rivin kahden samanmerkkisen jonon välissä. Esim. rivillä kohta `"xx-xx"` ("-" esittää tyhjää ruutua) arvioitaisiin, että siinä olisi neljä peräkkäin, mutta sen saama arvo neljä peräkkäin kerrottaisiin vakiolla 0.85, sillä se voidaan katkaista keskeltä, joten sen arvo ei ole välttämättä sama kuin 4 peräkkäin ilman tyhjää ruutua välissä. Koodi on myös optimoitu ottamaan huomioon tilanteet, jossa on monta katkonaista saman merkkistä jonoa `"-x-x-xx-xx-"`. Tässä arvioitasiin ensin kaksi yhden pituista yhteen (uusi pituus 2) ja kaksi kahden pituista yhteen (uusi pituus 4), sillä se tuottaisi suurimman arvon.
+Arvioinnissa käytetään myös heuristiikkaa, joka ottaa huomioon yhden tyhjän rivin kahden samanmerkkisen jonon välissä. Esim. rivillä kohta `"xx-xx"` ("-" esittää tyhjää ruutua) arvioitaisiin, että siinä olisi neljä peräkkäin, mutta sen saama arvo neljä peräkkäin kerrottaisiin vakiolla 0.85, sillä se voidaan katkaista keskeltä, joten sen arvo ei ole välttämättä sama kuin 4 peräkkäin ilman tyhjää ruutua välissä. Koodi on myös optimoitu ottamaan huomioon tilanteet, jossa on monta katkonaista saman merkkistä jonoa `"-x-x-xx-xx-"`. Tässä arvioitasiin ensin kaksi yhden pituista yhteen (uusi pituus 2) ja kaksi kahden pituista yhteen (uusi pituus 4), sillä se tuottaisi suurimman arvon. Heuristiikka ei arvioi enempää kuin 2 katkonaista jonoa yhteen, edellisessä tapauksessa saataisiin 6 merkkiä peräkkäin muuten.
 
 ## Aika ja tilavaativuudet
 
