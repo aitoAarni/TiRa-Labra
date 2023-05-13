@@ -51,12 +51,12 @@ class TekoalyPelaaja:
                 heuristinen_arvo,
             )
             if siirtojen_arvot == None:
-                return siirtojen_arvot[-1]
+                break
             tekoalyn_etsittavat_ruudut = jarjesta_lista_toisen_listan_avulla(
                 tekoalyn_etsittavat_ruudut, siirtojen_arvot
             )
 
-        paras_siirto = tekoalyn_etsittavat_ruudut[-1]
+            paras_siirto = tekoalyn_etsittavat_ruudut[-1]
         return paras_siirto
 
     def palauta_siirtojen_arvot(
@@ -71,7 +71,7 @@ class TekoalyPelaaja:
         alfa = float("-infinity")
         siirtojen_arvot = []
         for indeksi, siirto in enumerate(etsittavat_ruudut[::-1]):
-            lataus_baari_cli(indeksi + 1, len(etsittavat_ruudut))
+            lataus_baari_cli(indeksi + 1, len(etsittavat_ruudut), syvyys)
             arvo = self.laske_siirron_paras_arvo(
                 syvyys,
                 siirto,
