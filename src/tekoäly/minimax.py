@@ -1,5 +1,6 @@
 from konfiguraatio import get_konfiguraatio
 from tekoäly.heuristinen_arviointi import HeurestisenArvonLaskija
+from apuvälineet import vuoron_aika_loppunut, palauta_aika
 
 konffi = get_konfiguraatio()
 
@@ -19,6 +20,8 @@ class Tekoaly:
         self.minimoiva_merkki = minimoiva_merkki
         self.n = konffi.ruutujen_maara
         self.maksimi_syvyys = maksimi_syvyys
+        self.vuoron_alkuaika = None
+        self.vuoro_loppunut = False
 
     def minimax(
         self,
@@ -45,6 +48,8 @@ class Tekoaly:
             self.tarkista_voitto(viimeisin_siirto, edellinen_merkki, pelilauta)
             or syvyys == 0
         ):
+            if vuoron_aika_loppunut(self.vuoron_alkuaika):
+                self.vuoro_loppunut = True
             return heuristinen_arvo
         if maksimoiva_pelaaja:
             arvo = float("-infinity")
@@ -78,6 +83,9 @@ class Tekoaly:
                     uusi_heuristinen_arvo,
                     siirto,
                 )
+                if self.vuoro_loppunut:
+                    return None
+
                 arvo = max(arvo, arviointi)
                 pelilauta[siirto[1]][siirto[0]] = None
                 varatut_siirrot.remove(siirto)
@@ -115,6 +123,8 @@ class Tekoaly:
                     uusi_heuristinen_arvo,
                     siirto,
                 )
+                if self.vuoro_loppunut:
+                    return None
 
                 arvo = min(arvo, arviointi)
                 pelilauta[siirto[1]][siirto[0]] = None
@@ -314,3 +324,7 @@ class Tekoaly:
         heuristinen_arvo += vino_vasen.laske_heuristinen_arvo(vino_vasen_rivi, syvyys)
 
         return heuristinen_arvo
+
+    def aloita_vuoron_ajastin(self):
+        self.vuoron_alkuaika = palauta_aika()
+        self.vuoro_loppunut = False

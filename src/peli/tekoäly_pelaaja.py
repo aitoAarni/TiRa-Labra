@@ -1,7 +1,7 @@
 import random
 from copy import deepcopy
 from tekoäly.minimax import Tekoaly
-from apuvälineet import lautaus_baari_cli
+from apuvälineet import lataus_baari_cli, jarjesta_lista_toisen_listan_avulla
 
 
 class TekoalyPelaaja:
@@ -40,30 +40,55 @@ class TekoalyPelaaja:
             tekoalyn_etsittavat_ruudut,
             tekoalyn_etsittavat_ruudut_hajautus_taulu,
         ) = self._lisaa_etsittavat_siirrot_tekoalylle(pelin_siirrot, vapaat_ruudut)
-        self.jarjesta_siirrot(
-            lauta,
-            tekoalyn_etsittavat_ruudut,
-            vapaat_ruudut,
-            tekoalyn_etsittavat_ruudut_hajautus_taulu,
-            heuristinen_arvo,
-        )
-        alfa = float("-infinity")
-        for indeksi, siirto in enumerate(tekoalyn_etsittavat_ruudut[::-1]):
-            arvo = self.laske_siirron_paras_arvo(
-                self.syvyys,
-                siirto,
+        self.tekoaly.aloita_vuoron_ajastin()
+        for syvyys in range(2, self.syvyys + 1):
+            siirtojen_arvot = self.palauta_siirtojen_arvot(
+                syvyys,
                 lauta,
                 tekoalyn_etsittavat_ruudut,
-                vapaat_ruudut,
                 tekoalyn_etsittavat_ruudut_hajautus_taulu,
+                vapaat_ruudut,
+                heuristinen_arvo,
+            )
+            if siirtojen_arvot == None:
+                return siirtojen_arvot[-1]
+            tekoalyn_etsittavat_ruudut = jarjesta_lista_toisen_listan_avulla(
+                tekoalyn_etsittavat_ruudut, siirtojen_arvot
+            )
+
+        paras_siirto = tekoalyn_etsittavat_ruudut[-1]
+        return paras_siirto
+
+    def palauta_siirtojen_arvot(
+        self,
+        syvyys,
+        lauta,
+        etsittavat_ruudut,
+        etsittavat_ruudut_hajautus_taulu,
+        vapaat_ruudut,
+        heuristinen_arvo,
+    ):
+        alfa = float("-infinity")
+        siirtojen_arvot = []
+        for indeksi, siirto in enumerate(etsittavat_ruudut[::-1]):
+            lataus_baari_cli(indeksi + 1, len(etsittavat_ruudut))
+            arvo = self.laske_siirron_paras_arvo(
+                syvyys,
+                siirto,
+                lauta,
+                etsittavat_ruudut,
+                vapaat_ruudut,
+                etsittavat_ruudut_hajautus_taulu,
                 alfa,
                 heuristinen_arvo,
             )
-            lautaus_baari_cli(indeksi + 1, len(tekoalyn_etsittavat_ruudut))
-            if arvo > alfa:
-                paras_siirto = siirto
+            siirtojen_arvot.append(arvo)
+            if arvo == None:
+                return None
+
             alfa = max(arvo, alfa)
-        return paras_siirto
+        siirtojen_arvot.reverse()
+        return siirtojen_arvot
 
     def laske_siirron_paras_arvo(
         self,
