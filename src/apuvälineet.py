@@ -3,13 +3,12 @@ from konfiguraatio import get_konfiguraatio
 
 konffi = get_konfiguraatio()
 VUORON_AIKA = konffi.vuoron_aika_sekunteina
-print()
 
 
 def lataus_baari_cli(osoittaja, nimittaja, syvyys):
     prosenttia = 100 * (osoittaja / float(nimittaja))
     baari = ("|" * round(prosenttia) + "-" * round(100 - prosenttia)).strip()
-    print(f"[{baari}] {prosenttia:.2f}%", end="\r")
+    print(f"[{baari}] {prosenttia:.2f}% syvyys: {syvyys}", end="\r")
 
 
 def palauta_aika():

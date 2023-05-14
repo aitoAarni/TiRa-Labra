@@ -5,9 +5,8 @@ from tapahtumat import Tapahtumat
 pygame.init()
 
 
-def lisaa_eventti(tyyppi, nappi=None):
-    nappaimisto = {"key": nappi}
-    tapahtuma = pygame.event.Event(tyyppi, nappaimisto)
+def lisaa_eventti(tyyppi, atribuutit=None):
+    tapahtuma = pygame.event.Event(tyyppi, atribuutit)
     pygame.event.post(tapahtuma)
 
 
@@ -20,9 +19,9 @@ class TestTapahtumat(unittest.TestCase):
 
     def test_get_tapahtumat_kaikki_napit_toimii(self):
         oikea_vastaus = {"lopeta": True, "takaisin": True, "pelaa_uudelleen": True}
-        lisaa_eventti(pygame.KEYDOWN, pygame.K_r)
-        lisaa_eventti(pygame.KEYDOWN, pygame.K_ESCAPE)
-        lisaa_eventti(pygame.QUIT, "")
+        lisaa_eventti(pygame.KEYDOWN, {"key": pygame.K_r})
+        lisaa_eventti(pygame.KEYDOWN, {"key": pygame.K_ESCAPE})
+        lisaa_eventti(pygame.QUIT, {})
         tapahtumat = self.tapahtumat.get_tapahtumat()
         self.assertDictEqual(tapahtumat, oikea_vastaus)
 
@@ -32,13 +31,13 @@ class TestTapahtumat(unittest.TestCase):
         self.assertDictEqual(tapahtumat, oikea_vastaus)
 
     def test_hiiren_klikki_toimii(self):
-        lisaa_eventti(pygame.MOUSEBUTTONDOWN)
+        lisaa_eventti(pygame.MOUSEBUTTONDOWN, {"button": 1})
         self.tapahtumat.get_tapahtumat()
         hiirta_klikattu = self.tapahtumat.hiirta_klikattu()
         self.assertTrue(hiirta_klikattu)
 
     def test_palauta_nappaimiston_komento_metodi_toimii_kun_nappaimistoa_painettu(self):
-        lisaa_eventti(pygame.KEYDOWN, pygame.K_ESCAPE)
+        lisaa_eventti(pygame.KEYDOWN, {"key": pygame.K_ESCAPE})
         paluuarvo = self.tapahtumat.palauta_nappaimiston_komento()
         self.assertEqual(paluuarvo, "takaisin")
 

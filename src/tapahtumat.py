@@ -9,6 +9,11 @@ class Tapahtumat:
         self._hiirta_klikattu = False
 
     def get_tapahtumat(self) -> dict:
+        """kerää hiiren ja näppäimistön tapahtumat
+
+        Returns:
+            dict: avain: näppäimistön komennot (str), arvo: bool
+        """
         tapahtumat = {"lopeta": False, "takaisin": False, "pelaa_uudelleen": False}
         for tapahtuma in pygame.event.get():
             if tapahtuma.type == pygame.QUIT:
@@ -21,9 +26,8 @@ class Tapahtumat:
                 if tapahtuma.key == pygame.K_r:
                     tapahtumat["pelaa_uudelleen"] = True
 
-            if tapahtuma.type == pygame.MOUSEBUTTONDOWN:
+            if tapahtuma.type == pygame.MOUSEBUTTONDOWN and tapahtuma.button == 1:
                 self._hiirta_klikattu = True
-
         return tapahtumat
 
     def hiirta_klikattu(self) -> bool:

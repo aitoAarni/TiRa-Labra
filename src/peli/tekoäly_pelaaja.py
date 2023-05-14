@@ -42,6 +42,7 @@ class TekoalyPelaaja:
         ) = self._lisaa_etsittavat_siirrot_tekoalylle(pelin_siirrot, vapaat_ruudut)
         self.tekoaly.aloita_vuoron_ajastin()
         for syvyys in range(2, self.syvyys + 1):
+            print(" " * 122, end="\r")
             siirtojen_arvot = self.palauta_siirtojen_arvot(
                 syvyys,
                 lauta,

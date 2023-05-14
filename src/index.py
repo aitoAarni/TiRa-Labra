@@ -62,4 +62,5 @@ class Sovellus:
 if __name__ == "__main__":
     sovellus = Sovellus()
     sovellus.main()
+    print()
     print("see you later, alligator")
