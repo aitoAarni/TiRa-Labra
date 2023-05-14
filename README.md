@@ -1,6 +1,7 @@
 # TiRa-Labra
 
-Ristinolla tekoälyllä varustettuna olisi tavoite.
+Tällänen nopea viikonloppu projekti TiRa-labra kurssille. Joku ristinolla peli tämä on, jossa pitää saada viisi merkkiä peräkkäin ja tekoäly pystyy päihittämää suhteellisen luotettavasti RNG:een.
+
 
 ![Github Actions](https://github.com/aitoAarni/TiRa-Labra/workflows/CI/badge.svg)
 [![codecov](https://codecov.io/gh/aitoAarni/TiRa-Labra/branch/main/graph/badge.svg?token=G521CJR0IT)](https://codecov.io/gh/aitoAarni/TiRa-Labra)
