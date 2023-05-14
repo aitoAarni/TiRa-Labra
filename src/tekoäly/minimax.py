@@ -18,8 +18,8 @@ class Tekoaly:
         self.tarkista_voitto = tarkista_voitto
         self.maksimoiva_merkki = maksimoiva_merkki
         self.minimoiva_merkki = minimoiva_merkki
-        self.n = konffi.ruutujen_maara
         self.maksimi_syvyys = maksimi_syvyys
+        self.n = konffi.ruutujen_maara
         self.vuoron_alkuaika = None
         self.vuoro_loppunut = False
 
@@ -325,6 +325,7 @@ class Tekoaly:
 
         return heuristinen_arvo
 
-    def aloita_vuoron_ajastin(self):
+    def aloita_vuoro(self):
+        """Kutsutaan ennen minimax algoritmin käyttöä. Tämä alustaa vuoron ajastimen atribuutit"""
         self.vuoron_alkuaika = palauta_aika()
         self.vuoro_loppunut = False

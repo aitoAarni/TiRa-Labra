@@ -29,7 +29,7 @@ class TekoalyPelaaja:
         """Palauttaa ruudun, johon seuraava siirto tehdään"""
         lauta = deepcopy(self.lauta)
 
-        if self.ensimmäinen_siirto(lauta):
+        if self.onko_ensimmäinen_siirto(lauta):
             return self._aloitus_siirto(n=len(self.lauta))
 
         heuristinen_arvo = self.tekoaly.heuristinen_funktio(lauta, self.syvyys)
@@ -40,7 +40,7 @@ class TekoalyPelaaja:
             tekoalyn_etsittavat_ruudut,
             tekoalyn_etsittavat_ruudut_hajautus_taulu,
         ) = self._lisaa_etsittavat_siirrot_tekoalylle(pelin_siirrot, vapaat_ruudut)
-        self.tekoaly.aloita_vuoron_ajastin()
+        self.tekoaly.aloita_vuoro()
         for syvyys in range(2, self.syvyys + 1):
             print(" " * 122, end="\r")
             siirtojen_arvot = self.palauta_siirtojen_arvot(
@@ -108,6 +108,7 @@ class TekoalyPelaaja:
         ) = self.tekoaly.etsi_siirrot(
             siirto, vapaat_ruudut, etsittavat_ruudut_hajautus_taulu, etsittavat_ruudut
         )
+
         lauta[siirto[1]][siirto[0]] = self.merkki
         vapaat_ruudut.remove(siirto)
         uusi_heuristinen_arvo = heuristinen_arvo + self.tekoaly.heurstisen_arvon_delta(
@@ -141,7 +142,7 @@ class TekoalyPelaaja:
                     siirrot.append((x, y))
         return siirrot, vapaat_ruudut
 
-    def ensimmäinen_siirto(self, lauta):
+    def onko_ensimmäinen_siirto(self, lauta):
         for rivi in lauta:
             for merkki in rivi:
                 if merkki != None:
@@ -152,29 +153,6 @@ class TekoalyPelaaja:
         """Kun tekoäly on X ja tekee ensimmäistä siirtoa"""
         siirto = random.randrange(4, n - 4), random.randrange(4, n - 4)
         return siirto
-
-    def jarjesta_siirrot(
-        self,
-        lauta,
-        etsittavat_siirrot,
-        vapaat_ruudut,
-        etsittavat_siirrot_hajautus_taulu,
-        heuristinen_arvo,
-    ):
-        """Arvioi siirrot parhaus järjestyksessä ja järjestää ne"""
-        # Arviointi on sama perusta kuin mikä olisi jokaisen
-        # siirron arvo minimax algoritmissa yhden syvyydellä
-        kopio_etsittavat_siirrot = etsittavat_siirrot[:]
-        etsittavat_siirrot.sort(
-            key=lambda siirto: self.siirron_heuristinen_arvo(
-                siirto,
-                lauta,
-                kopio_etsittavat_siirrot,
-                vapaat_ruudut,
-                etsittavat_siirrot_hajautus_taulu,
-                heuristinen_arvo,
-            )
-        )
 
     def _lisaa_etsittavat_siirrot_tekoalylle(
         self, siirrot: tuple, vapaat_ruudut
@@ -195,28 +173,6 @@ class TekoalyPelaaja:
                 siirto, vapaat_ruudut, siirroissa_olevat_ruudut, etsittavat_siirrot
             )
         return etsittavat_siirrot, siirroissa_olevat_ruudut
-
-    def siirron_heuristinen_arvo(
-        self,
-        siirto,
-        lauta,
-        etsittavat_siirrot,
-        vapaat_ruudut,
-        etsittavat_siirrot_hajautus_taulu,
-        heuristinen_arvo,
-    ):
-        """Arvioi siirron arvoa laudan kontekstissa"""
-        arvo = self.laske_siirron_paras_arvo(
-            2,
-            siirto,
-            lauta,
-            etsittavat_siirrot,
-            vapaat_ruudut,
-            etsittavat_siirrot_hajautus_taulu,
-            float("-infinity"),
-            heuristinen_arvo,
-        )
-        return arvo
 
     @staticmethod
     def nimi() -> str:
