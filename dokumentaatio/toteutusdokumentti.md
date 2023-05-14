@@ -44,4 +44,6 @@ Arvioinnissa käytetään myös heuristiikkaa, joka ottaa huomioon yhden tyhjän
 - heuristista arviointia voisi parantaa, jolloloinka pienempi syvyys ei ole yhtä merkittävää
 
 
-lähteet: [minimax.pdf](https://tiralabra.github.io/2023_p4/fi/aiheet/minimax.pdf)
+## Työn kaikki lähteet
+
+[kurssin minimax moniste](https://tiralabra.github.io/2023_p4/fi/aiheet/minimax.pdf)
