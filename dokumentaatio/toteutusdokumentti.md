@@ -2,7 +2,7 @@
 
 ## Yleisrakenne
 
-Pelissä on valikko, josta voi risteille ja nollille joko ihmis- tai tekoälypelaajan, sekä pelilaudan ruutujen määrän. Pelin tekoäly käyttää minimax algoritmia (pienellä muunnelmalla), joka on raa'an voiman algoritmi.
+Pelissä on valikko, josta voi risteille ja nollille joko ihmis- tai tekoälypelaajan, sekä pelilaudan ruutujen määrän. Pelin tekoäly käyttää minimax algoritmia (pienellä muunnelmalla), joka on raa'an voiman algoritmi. Minimax on tehostettu alfa-beeta karsinnalla. Tekoäly pelaajalla on aikaraja, ja se kutsuu minimax algoritmia syvyyksillä 2, 3, ..., maksimi_syvyys. Jokaisen syvyyden jälkeen ruudut joista minimax etsii maksimoijan ensimmäistä siirtoa järjestetään sen syvyyden arvojen mukaan seuraavaa syvyyttä varten, jotta alfa-beeta karsinta toimisi tehokkaammin. Tekoälyn vuorolla on aikaraja, jos se loppuu kesken, niin edellisen syvyyden paras siirto palautetaan.
 
 ### minimax
 
