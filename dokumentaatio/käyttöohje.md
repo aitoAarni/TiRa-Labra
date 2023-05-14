@@ -47,6 +47,6 @@ Pelin voittamiseen vaaditaan viisi ristiä tai nollaa peräkkäin.
 Valikosta voi vaihtaa muutamia pelin asetuksia.
 Pelissä on useita asetuksia joita voi vaihtaa [konfiguraatio tiedostosta](https://github.com/aitoAarni/TiRa-Labra/blob/main/konfiguraatio/tuotanto_konfiguraatio.json) mm. tekoälyn maksimi syvyys, vuoron maksimi kesto tekoälylle ja resoluutio.
 
-komentorivi näyttää pelin tekoälyn progression vuoron aikana.
+komentorivi näyttää pelin tekoälyn progression vuoron aikana (kannattaa pitää komentorivi riittävän suurena, jotta latausbaari näkyy oikein).
 
 Pelin pikanäppäimet: `r` on uudestaan pelaamista varten ja `esc` on poistumista varten
