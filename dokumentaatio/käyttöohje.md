@@ -7,6 +7,11 @@ Projektin asentamine omalle koneelle on mahdollista komennolla (jos git on asenn
 git clone git@github.com:aitoAarni/TiRa-Labra.git
 ```
 
+sen jälkeen vaihda hakemistoa sovelluksen juureen
+```
+cd TiRa-Labra
+```
+
 Sovelluksen riippuvuudet voidaan asentaa komennolla: 
 ```
 poetry install
