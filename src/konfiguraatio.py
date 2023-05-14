@@ -34,9 +34,9 @@ konfiguraatio = KonfiguraatioArvot()
 
 def rakenna_konfiguraatio():
     konfiguraatio = {
-        "tekoalyn_syvyys": 3,
+        "tekoalyn_syvyys": 4,
         "vuoron_aika_sekunteina": 20,
-        "ruutujen_maara": 25,
+        "ruutujen_maara": 20,
         "laudan_vari": (0, 0, 0),
         "laudan_viivojen_vari": (255, 255, 255),
         "leveys": 1000,
@@ -70,9 +70,6 @@ def paivita_konfiguraatio():
         except json.decoder.JSONDecodeError:
             return
     konfiguraatio.paivita_atribuutit(uusi_konfiguraatio)
-
-
-paivita_konfiguraatio()
 
 
 def get_konfiguraatio():

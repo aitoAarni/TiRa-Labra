@@ -1,5 +1,13 @@
+import os
 import pygame
-from konfiguraatio import get_konfiguraatio
+
+tiedoston_nimi = os.path.dirname(__file__)
+if ".env" not in os.listdir(os.path.join(tiedoston_nimi, "..")):
+    os.system("poetry run invoke build")
+
+from konfiguraatio import get_konfiguraatio, paivita_konfiguraatio
+
+paivita_konfiguraatio()
 from tapahtumat import Tapahtumat
 from peli.peli_logiikka import Peli
 from peli.ihmis_pelaaja import Pelaaja
