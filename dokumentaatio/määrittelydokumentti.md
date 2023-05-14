@@ -12,7 +12,7 @@ Ohjelma tulee saamaan syötteitä käyttäjältä hiiren välityksellä.
 Hiiren kursoria liikuttamalla ja sen jälkeen vasenta nappia (mouse1) painamalla peli saa tiedon siitä, 
 mihin ruutuun käyttäjä haluaa oman ristin tai nollan asetettavan.
 
-Oletetaan pelatut ruudut syötteeksi n (vakiokerroin max 24, sillä pelatun ruudun ympäriltä tekoäly etsii pahimmassa tapauksessa näin monta ruutua), jolloin saadaan aikavaativuus minimax algoritmissa on eksponentaalinen O(n^a), Tällä hetkellä a on maksimissaan 3. 
+Oletetaan pelatut ruudut syötteeksi n (vakiokerroin max 24, sillä pelatun ruudun ympäriltä tekoäly etsii pahimmassa tapauksessa näin monta ruutua), jolloin saadaan aikavaativuus minimax algoritmissa on eksponentaalinen O(n<sup>a</sup>). 
 MInimax algoritmia on tehostettu alfa-beta-karsinnalla sekä muilla pelikohtaisilla viilauksilla, mutta aikavaativuus silti pysyy eksponentiaalisena. 
 Tilavaativuus on minimaalinen verrattuna aikavaativuuteen se on luokkaa O(n), sillä jokaisella syvyydellä minimax algoritmissa säilytetään vain edellisen syvyyden pelitilanne, eikä esim. jokaista tulevaa pelitilannetta.
 

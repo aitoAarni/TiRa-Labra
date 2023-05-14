@@ -2,7 +2,7 @@
 
 ## Yleisrakenne
 
-Pelissä on valikko, josta voi risteille ja nollille joko ihmis- tai tekoälypelaajan, sekä pelilaudan ruutujen määrän. Pelin tekoäly käyttää minimax algoritmia (pienellä muunnelmalla), joka on raa'an voiman algoritmi.
+Pelissä on valikko, josta voi risteille ja nollille joko ihmis- tai tekoälypelaajan, sekä pelilaudan ruutujen määrän. Pelin tekoäly käyttää minimax algoritmia (pienellä muunnelmalla), joka on raa'an voiman algoritmi. Minimax on tehostettu alfa-beeta karsinnalla. Tekoäly pelaajalla on aikaraja, ja se kutsuu minimax algoritmia syvyyksillä 2, 3, ..., maksimi_syvyys (iteratiivinen syveneminen). Jokaisen syvyyden jälkeen ruudut joista minimax etsii maksimoijan ensimmäistä siirtoa järjestetään sen syvyyden arvojen mukaan seuraavaa syvyyttä varten, jotta alfa-beeta karsinta toimisi tehokkaammin. Tekoälyn vuorolla on aikaraja, jos se loppuu kesken, niin edellisen syvyyden paras siirto palautetaan.
 
 ### minimax
 
@@ -31,12 +31,19 @@ Arvioinnissa käytetään myös heuristiikkaa, joka ottaa huomioon yhden tyhjän
 
 ## Aika ja tilavaativuudet
 
-- minimax algoritmin aikavaativuus on tällä hetkellä O(n<sup>3</sup>), sillä sen syvyys on 3 ja n on syötteen, eli ristien ja nollien määrä.
-- Heurestisen funktion aikavaativuus tällä hetkellä on O(1), sillä se käy läpi vain viimeisimmän valitun merkin ruudusta lähtien vakaa, pysty sekä vinot rivit (sama myös pätee voiton tarkistus funktiolle).
+- minimax algoritmin aikavaativuus on tällä hetkellä O(n<sup>a</sup>), missä a on sen syvyys ja n on syötteen, eli ristien ja nollien määrä.
+- heuristiikka arvioidaan kahdella metodilla, mutta molempien aikavaativuus on O(1), mutta nopeampaa tapaa käytetään minimax algoritmissa, joten se nopeuttaa ohjelemaa huomattavasti vakiokertoimien takia.
 
 ## Työn mahdolliset puutteet ja parannusehdotukset
 
+- Koodin sisäistä rakennetta voisi parantaa jonkin verran
+- Testausta voisi aina olla enemmän
+- Minimax algoritmia voisi nopeuttaa, sillä se voi hyvällä tuurilla vain laskea kohtuullisessa ajassa syvyydellä 4
+    - Siirtoja jotka eivät vaikuta hyviltä voisi karsia pois laskennasta
+    - transpositiotaulun implementointi olisi ollu mahdollisesti viisasta, mutta se ei välttämätt ole ihan yksi yhteen tämän projektin minimaxin kanssa, sillä pelitilanteen arviointi riippu siirtojen syvyydestä, mutta pieni muutos arviointii mahdollistaisi sen.
+- heuristista arviointia voisi parantaa, jolloloinka pienempi syvyys ei ole yhtä merkittävää
 
 
+## Työn kaikki lähteet
 
-lähteet: [minimax.pdf](https://tiralabra.github.io/2023_p4/fi/aiheet/minimax.pdf)
+[kurssin minimax moniste](https://tiralabra.github.io/2023_p4/fi/aiheet/minimax.pdf)

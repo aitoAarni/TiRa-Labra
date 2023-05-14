@@ -1,6 +1,7 @@
 # TiRa-Labra
 
-Ristinolla tekoälyllä varustettuna olisi tavoite.
+Tällänen nopea viikonloppu projekti TiRa-labra kurssille. Joku ristinolla peli tämä on, jossa pitää saada viisi merkkiä peräkkäin ja tekoäly pystyy päihittämää suhteellisen luotettavasti RNG:een.
+
 
 ![Github Actions](https://github.com/aitoAarni/TiRa-Labra/workflows/CI/badge.svg)
 [![codecov](https://codecov.io/gh/aitoAarni/TiRa-Labra/branch/main/graph/badge.svg?token=G521CJR0IT)](https://codecov.io/gh/aitoAarni/TiRa-Labra)
@@ -17,6 +18,8 @@ Ristinolla tekoälyllä varustettuna olisi tavoite.
 
 [Toteutusdokumentti](https://github.com/aitoAarni/TiRa-Labra/blob/main/dokumentaatio/toteutusdokumentti.md)
 
+[Käyttöohje](https://github.com/aitoAarni/TiRa-Labra/blob/main/dokumentaatio/k%C3%A4ytt%C3%B6ohje.md)
+
 ### viikkoraportit
 
 [viikkoraportti 1](https://github.com/aitoAarni/TiRa-Labra/blob/main/dokumentaatio/viikkoraportti1.md)
@@ -31,18 +34,6 @@ Ristinolla tekoälyllä varustettuna olisi tavoite.
 
 [viikkoraportti 6](https://github.com/aitoAarni/TiRa-Labra/blob/main/dokumentaatio/viikkoraportti6.md)
 
-## pikaiset ohjeet vertaisarviointia varten
 
-
-Lataa projekti git clone - kommennolla ja asenna projekti seuraavilla komennoilla:
-
-```
-poetry install
-```
-
-aloita ohjelma komennolla
-
-```
-poetry run invoke start 
-```
-Tällä hetkellä pelissä heurestinen arviointi on vielä vähän heikko, joten paras minimax syvyys jolla peli toimii on 2. Pelissä ei ole vielä valikkoa, joten joitakin parametrejä voi vaihdella [materiaalit/tuotanto_konfiguraatio.json](https://github.com/aitoAarni/TiRa-Labra/blob/main/materiaalit/tuotanto_konfiguraatio.json) tiedostosta.
+##
+![käyttöohje](https://github.com/aitoAarni/TiRa-Labra/assets/13611438/8c3affb2-ea7c-47c4-afaa-fafd79775b0e)
