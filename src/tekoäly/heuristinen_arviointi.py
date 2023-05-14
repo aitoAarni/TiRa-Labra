@@ -17,6 +17,7 @@ class HeurestisenArvonLaskija:
 
         Args:
             n_perakkain (int): montako ruutua on peräkkäin
+            syvyys (int): miltä syvyydeltä minimax algoritmia tätä kutsutaan
             molemmilla_puolilla_tyhja (bool, optional):
             onko n_perakkain jonon molemmilla puolilla tyhjä ruutu. Defaults to False.
 
@@ -68,7 +69,7 @@ class HeurestisenArvonLaskija:
     ):
         """iteroi kaikki kombinaatiot läpi, miten saman merkkiset jonot,
           joissa on yksi tyhjä ruutu välissä voi arvioida.
-          jos esim jono on 'xx xx', niin se arvioidaan neljän pitkänä
+          jos esim jono on 'xx-xx', niin se arvioidaan neljän pitkänä
 
         Args:
             paikat (list):
@@ -81,23 +82,29 @@ class HeurestisenArvonLaskija:
         Returns:
             float: Palauttaa parhaan mahdollisen kombinaation
         """
+        # merkkaa onko jonoa blokattu edestä toisella merkillä tai laudan alulla
         etu_blokki = True
         if indeksi == len(paikat):
             return 0
         alku = paikat[indeksi][0]
         if alku > 0 and rivi[alku - 1] == None:
             etu_blokki = False
+
+        # kahden katkenneen jonon alkupuoli on jo laskettu yhteen,
+        # joten sitä ei lasketa yhteen uudestaan
         if alku == varattu:
             return self._iteraattori(
                 paikat, rivi, indeksi + 1, None, toinen_merkki, syvyys
             )
 
         loppu = paikat[indeksi][1]
+
+        # merkkaa onko jonoa blokattu takaa toisella merkillä tai laudan päädyllä
         taka_blokki = True
         loppu_pituus = len(rivi) - 1 - loppu
         for i, merkki in enumerate(rivi[loppu:]):
             if merkki in (None, toinen_merkki):
-                loppu_pituus = i - 1
+                loppu_pituus = i - 1  # jälkimmäisen jonon pituus
                 break
 
         if (
@@ -106,7 +113,9 @@ class HeurestisenArvonLaskija:
         ):
             taka_blokki = False
         maksimi_arvo = 0
+        # jos molemmilta puolilta jonoa blokataan ja siitä ei voi saada 5 peräkkäin, niin skippaa
         if not (etu_blokki and taka_blokki and loppu + loppu_pituus - alku < 4):
+            # Kahden erotetun jonon yhteispituuden arvo (erotettu yhdellä tyhjällä ruudulla)
             arvo = self.perakkaisten_ruutujen_arvot(
                 loppu + loppu_pituus - alku, syvyys, not (etu_blokki or taka_blokki)
             )
@@ -117,6 +126,7 @@ class HeurestisenArvonLaskija:
             )
             maksimi_arvo = arvo
 
+        # arvioidaan tapaus jos näitä kahta jonoa ei arvioida yhteen
         arvo = self.perakkaisten_ruutujen_arvot(
             loppu - alku - 1, syvyys, molemmilla_puolilla_tyhja=not etu_blokki
         )
@@ -128,7 +138,7 @@ class HeurestisenArvonLaskija:
         return maksimi_arvo
 
     def laske_heuristinen_arvo(self, rivi_ruutuja, syvyys):
-        """Metodi saa aina rivin, jonka se arvioi heuristiikan avulla numeerisesti
+        """(spagetti) metodi saa aina rivin, jonka se arvioi heuristiikan avulla numeerisesti
 
         Args:
             rivi_ruutuja (list): ruudut voi olla ristejä, nollia sekä tyhjiä
@@ -144,8 +154,12 @@ class HeurestisenArvonLaskija:
         viimeinen_tyhja_ruutu = None
         edeltava_merkki = -1
         skipattava_merkki = False
+
+        # säilöö tapaukset, joissa kaksi peräkkäistä jono ruutuja jotka on erotettu vain yhdellä tyhjällä ruudulla
         yksi_tyhja_ruutu_maksimoivien_merkkien_valissa = {}
+        # säilöö tapaukset, joissa kaksi peräkkäistä jono ruutuja jotka on erotettu vain yhdellä tyhjällä ruudulla
         yksi_tyhja_ruutu_minimoivien_merkkien_valissa = {}
+        # säilöö lähtöruudut edellämainituille tapauksille
         tyhja_ruutu_merkkien_valissa = set()
         seuraava_merkki = -1
 
@@ -203,10 +217,10 @@ class HeurestisenArvonLaskija:
                         )
                 maksimoivia_palasia_perakkain = 0
 
-            # jos jonon (ristejä tai nollia) molemmilla puolilla on tyhjä ruutu
+            # jos jonon nykyinen ruutu on tyhjä
             else:
-                # jos minimoivia merkkejä on välissä ja molemmilla puolilla on tyhjä ruutu
-                # niin vähennä heurestista arvoa
+                # katsoo onko tyhjän ruudun molemmilla puolilla samnmerkkinen jono
+                # jos on niin sen arvo lasketaan myöhemmin
                 if (
                     seuraava_merkki == edeltava_merkki
                     and not None
@@ -229,6 +243,9 @@ class HeurestisenArvonLaskija:
                         ] = (ruudun_num + 1)
                         tyhja_ruutu_merkkien_valissa.add(ruudun_num + 1)
                         skipattava_merkki = self.maksimoiva_merkki
+
+                # jos minimoivia merkkejä on välissä ja molemmilla puolilla on tyhjä ruutu
+                # niin vähennä heurestista arvoa
                 elif (
                     viimeinen_tyhja_ruutu
                     == ruudun_num - 1 - minimoivia_palasia_perakkain
@@ -275,6 +292,8 @@ class HeurestisenArvonLaskija:
                 minimoivia_palasia_perakkain = maksimoivia_palasia_perakkain = 0
 
             edeltava_merkki = merkki
+
+        # tarkistaa viimeisen ruudun
         if (
             viimeinen_tyhja_ruutu == ruudun_num - minimoivia_palasia_perakkain
             and ruudun_num - minimoivia_palasia_perakkain + 1
@@ -283,6 +302,8 @@ class HeurestisenArvonLaskija:
             heuristinen_arvo -= self.perakkaisten_ruutujen_arvot(
                 minimoivia_palasia_perakkain, syvyys
             )
+
+        # tarkistaa viimeisen ruudun
         if (
             viimeinen_tyhja_ruutu == ruudun_num - maksimoivia_palasia_perakkain
             and ruudun_num - maksimoivia_palasia_perakkain + 1
@@ -291,6 +312,7 @@ class HeurestisenArvonLaskija:
             heuristinen_arvo += self.perakkaisten_ruutujen_arvot(
                 maksimoivia_palasia_perakkain, syvyys
             )
+
         heuristinen_arvo -= self.etsi_paras_arvo_katkenneesta_perakkaisista_ruuduista(
             yksi_tyhja_ruutu_minimoivien_merkkien_valissa,
             rivi_ruutuja,

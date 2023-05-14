@@ -38,12 +38,29 @@ class Tekoaly:
         viimeisin_siirto: tuple,
     ) -> tuple:
         """Minimax algoritmi, jossa on relatiivinen heuristinen arviointi,
-        joka perustuu aina ylemmän syvyyden heuristiseen arviointiin"""
+        joka perustuu aina ylemmän syvyyden heuristiseen arviointiin
+
+        Args:
+            syvyys (int): laskennan syvyys
+            pelilauta (list): pelilauta
+            siirrot (list): etsittavat siirrot
+            varatut_siirrot (set): siirrot jotka on edellisilla syvyyksillä kaytössä
+            vapaat_ruudut (set): ruudut jotka ovat vapaat laudalla
+            siirroissa_olevat_ruudut (set): samt ruudut kuin siirrot, mutta hajautustaulu
+            alfa (float): maksmoivan pelaajan paras arvo ylemmällä syvyydellä
+            beeta (float): minimoivan pelaajan paras arvo ylemmällä syvyydellä
+            maksimoiva_pelaaja (bool): kertoo kumman vuoro
+            heuristinen_arvo (float): pelitilanteen arvio
+            viimeisin_siirto (tuple): edellisen syvyyden siirto
+
+        Returns:
+            tuple: heuristinen arvio
+        """
 
         edellinen_merkki = (
             self.minimoiva_merkki if maksimoiva_pelaaja else self.maksimoiva_merkki
         )
-        # tätä ehtoa ei toteuteta ensimmäisellä kutsuntakerralla
+
         if (
             self.tarkista_voitto(viimeisin_siirto, edellinen_merkki, pelilauta)
             or syvyys == 0
@@ -51,6 +68,7 @@ class Tekoaly:
             if vuoron_aika_loppunut(self.vuoron_alkuaika):
                 self.vuoro_loppunut = True
             return heuristinen_arvo
+
         if maksimoiva_pelaaja:
             arvo = float("-infinity")
 
@@ -66,7 +84,7 @@ class Tekoaly:
 
                 pelilauta[siirto[1]][siirto[0]] = self.maksimoiva_merkki
                 vapaat_ruudut.remove(siirto)
-                uusi_heuristinen_arvo = heuristinen_arvo + self.heurstisen_arvon_delta(
+                uusi_heuristinen_arvo = heuristinen_arvo + self.heuristisen_arvon_delta(
                     pelilauta, syvyys, siirto
                 )
 
@@ -106,7 +124,7 @@ class Tekoaly:
                 )
                 pelilauta[siirto[1]][siirto[0]] = self.minimoiva_merkki
                 vapaat_ruudut.remove(siirto)
-                uusi_heuristinen_arvo = heuristinen_arvo + self.heurstisen_arvon_delta(
+                uusi_heuristinen_arvo = heuristinen_arvo + self.heuristisen_arvon_delta(
                     pelilauta, syvyys, siirto
                 )
 
@@ -176,7 +194,7 @@ class Tekoaly:
         self, x_alku: int, y_alku: int, x_seuraava: int, y_seuraava: int
     ):
         """Muodostaa sanakirjan, jonka avulla voidaan käydä läpi laudan pysty, vaaka ja vinojen rivien
-        ruudut järjestyksessä yksi kerrallaan peräkkäin
+        ruudut järjestyksessä yksi kerrallaan peräkkäin helposti
 
         Args:
             x_alku (int): mistä x arvosta rivin tarkistus alkaa
@@ -200,11 +218,10 @@ class Tekoaly:
         }
         return suunta_dict
 
-    def heurstisen_arvon_delta(
+    def heuristisen_arvon_delta(
         self, pelilauta: list, syvyys: int, ruutu: tuple
     ) -> float:
-        """Metodi arvioi yhden siirron vaikutusta pelitilanteen heuristiseen arvoon verrattuna
-        siirtoa edeltävään tilanteeseen.
+        """Metodi arvioi yhden siirron vaikutusta pelitilanteen heuristisen arvion muutokseen.
         Arvioitavat suunnat ovat vaaka, pysty, ja molemmat vinot rivit, jos pituus on 5 tai yli.
         Arvioinnissa arvioidaan vain yksi rivi jokaisesta suunnasta.
         Arvioitavat rivit kulkevat lisätyn siirron kautta.

@@ -26,7 +26,12 @@ class TekoalyPelaaja:
         self.syvyys = maksimi_syvyys
 
     def valitse_ruutu(self) -> tuple:
-        """Palauttaa ruudun, johon seuraava siirto tehdään"""
+        """Palauttaa ruudun, johon seuraava siirto tehdään.
+        Kutsuu minimaxia syvyyksillä 2, 3,...,self.syvyys asti.
+        Edellisen minimaxista saadut arvot järjestävät aina seuraavan minimaxin aloitus siirtojen käynti järjestyksen.
+        Jos vuoron aika loppuu kesken, niin käytetään viimeisen kokonaan läpi käydyn
+        minimax algoritmin parasta siirtoa.
+        """
         lauta = deepcopy(self.lauta)
 
         if self.onko_ensimmäinen_siirto(lauta):
@@ -62,13 +67,26 @@ class TekoalyPelaaja:
 
     def palauta_siirtojen_arvot(
         self,
-        syvyys,
-        lauta,
-        etsittavat_ruudut,
-        etsittavat_ruudut_hajautus_taulu,
-        vapaat_ruudut,
-        heuristinen_arvo,
+        syvyys: int,
+        lauta: list,
+        etsittavat_ruudut: list,
+        etsittavat_ruudut_hajautus_taulu: set,
+        vapaat_ruudut: set,
+        heuristinen_arvo: float,
     ):
+        """ARvioi siirrot ja tekee listan, jonka arvot vastaavat indekseiltään etsittavat_ruudut siirtoja
+
+        Args:
+            syvyys (int): syvyys jolla minimaxia kutsutaan
+            lauta (list): pelialuta
+            etsittavat_ruudut (list): ruudut joista tekoäly etsii siirtoa
+            etsittavat_ruudut_hajautus_taulu (set): hajautustaulu listasta etsittavat_ruudut
+            vapaat_ruudut (set): ruudut joissa ei ole ristiä tai nollaa
+            heuristinen_arvo (float): heuristinen arvo
+
+        Returns:
+            (list): Palauttaa listan siirtojen arvoista.
+        """
         alfa = float("-infinity")
         siirtojen_arvot = []
         for indeksi, siirto in enumerate(etsittavat_ruudut[::-1]):
@@ -93,15 +111,30 @@ class TekoalyPelaaja:
 
     def laske_siirron_paras_arvo(
         self,
-        syvyys,
-        siirto,
-        lauta,
-        etsittavat_ruudut,
-        vapaat_ruudut,
-        etsittavat_ruudut_hajautus_taulu,
-        alfa,
-        heuristinen_arvo,
+        syvyys: int,
+        siirto: tuple,
+        lauta: list,
+        etsittavat_ruudut: list,
+        vapaat_ruudut: set,
+        etsittavat_ruudut_hajautus_taulu: set,
+        alfa: float,
+        heuristinen_arvo: float,
     ):
+        """Kutsuu minimax algoritmia, ja käyttää sitä arvioidakseen siirron arvon
+
+        Args:
+            syvyys (int): minimaxin syvyys
+            siirto (tuple): siirron rivi ja sarake
+            lauta (list): pelialauta
+            etsittavat_ruudut (list): ruudut joista maksimoija etsii ensimmäistä siirtoa
+            vapaat_ruudut (set): ruudut joissa ei ole merkkejä
+            etsittavat_ruudut_hajautus_taulu (set): hajautustaulu etsittavat_ruudut listalle
+            alfa (float): käytetään alfa-beeta karsinnassa
+            heuristinen_arvo (float): pelilaudan lähtökohtainen arvio
+
+        Returns:
+            float: siirron arvio
+        """
         (
             uudet_etsittavat_ruudut,
             uudet_etsittavat_ruudut_hajautus_taulu,
@@ -111,7 +144,7 @@ class TekoalyPelaaja:
 
         lauta[siirto[1]][siirto[0]] = self.merkki
         vapaat_ruudut.remove(siirto)
-        uusi_heuristinen_arvo = heuristinen_arvo + self.tekoaly.heurstisen_arvon_delta(
+        uusi_heuristinen_arvo = heuristinen_arvo + self.tekoaly.heuristisen_arvon_delta(
             lauta, syvyys, siirto
         )
         arvo = self.tekoaly.minimax(
@@ -131,7 +164,15 @@ class TekoalyPelaaja:
         vapaat_ruudut.add(siirto)
         return arvo
 
-    def etsi_siirrot_ja_vapaat_ruudut(self, lauta):
+    def etsi_siirrot_ja_vapaat_ruudut(self, lauta: list) -> tuple:
+        """etsii pelilaudalla olevat siirrot ja vapaat ruudut
+
+        Args:
+            lauta (list): pelilauta
+
+        Returns:
+            tuple: (pelilaudalla olevat merkit, pelilaudan tyhjät ruudut)
+        """
         vapaat_ruudut = set()
         siirrot = []
         for y, rivi in enumerate(lauta):
@@ -143,6 +184,11 @@ class TekoalyPelaaja:
         return siirrot, vapaat_ruudut
 
     def onko_ensimmäinen_siirto(self, lauta):
+        """Katsoo onko tekoäly tekemässä pelin ensimmäistä siirtoa
+
+        Returns:
+            bool: onko siirto ensimmäinen == True, muuten False
+        """
         for rivi in lauta:
             for merkki in rivi:
                 if merkki != None:
@@ -150,22 +196,23 @@ class TekoalyPelaaja:
         return True
 
     def _aloitus_siirto(self, n):
-        """Kun tekoäly on X ja tekee ensimmäistä siirtoa"""
+        """Kun tekoäly on X ja tekee ensimmäistä siirtoa, niin tämä palauttaa siirron"""
         siirto = random.randrange(4, n - 4), random.randrange(4, n - 4)
         return siirto
 
     def _lisaa_etsittavat_siirrot_tekoalylle(
-        self, siirrot: tuple, vapaat_ruudut
+        self, siirrot: tuple, vapaat_ruudut: set
     ) -> tuple:
-        """Tekoäly etsii kaikki ruudut, jotka ovat kahden ruudun pääsää
-        viimeisimmästä siirrosta, joten metodi pitää kutsua jokaisen oikean siirron jälkeen
+        """Etsii tekoälylle ne ruudut joista yhteen se tulee laittamaan merkin
 
         Args:
-            viimeisin_siirto (tuple): x ja y koordinaatti
+            siirrot (tuple): laudalla ennen vuoroa olevat siirrot
+            vapaat_ruudut (set): laudalla olevat tyhjät ruudut
 
         Returns:
-            tuple: (list, set)
+            tuple: (tekoälylle etsittävät ruudut, tekoälylle etsittävät ruudut hajautustauluna)
         """
+
         etsittavat_siirrot = []
         siirroissa_olevat_ruudut = set()
         for siirto in siirrot:
@@ -176,4 +223,5 @@ class TekoalyPelaaja:
 
     @staticmethod
     def nimi() -> str:
+        """Ui moduulia varten"""
         return "Tekoäly pelaaja"

@@ -32,7 +32,7 @@ class Peli:
         self.pelaajat = [pelaaja1, pelaaja2]
 
     def _alusta_pelaaja(self, pelaaja, merkki, merkit):
-        """Luo pelaaja olion luokasta"""
+        """Luo pelaaja olion saadusta pelaaja luokasta"""
         saa_minimoiva_merkki = {"x": "0", "0": "x"}
         if pelaaja is Pelaaja:
             return pelaaja(

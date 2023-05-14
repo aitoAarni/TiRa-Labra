@@ -37,6 +37,7 @@ class LautaUI:
             )
 
     def _piirra_nollat(self):
+        """Piirttää laudalle nollat"""
         vari = konffi.nappuloiden_vari
         for i, ruutu in enumerate(self._nollat):
             rivi, sarake = ruutu
@@ -50,6 +51,7 @@ class LautaUI:
             pygame.draw.circle(self._ikkuna, vari, keskipiste, r, 3)
 
     def _piirra_ristit(self):
+        """Piirtää laudalle ristit"""
         vari = konffi.nappuloiden_vari
         r = min(self._ruudun_korkeus, self._ruudun_leveys) / 3  # r = säde
 
@@ -100,6 +102,7 @@ class LautaUI:
         self.voittoikkuna.blit(teksti, teksti_rect)
 
     def _piirra_voittonakyma(self):
+        """Piirtää pelin loputtua informaatiota"""
         vari = konffi.peli_ohi_vari
         pygame.draw.rect(self._ikkuna, vari, (0, 0, konffi.leveys, konffi.korkeus))
 
