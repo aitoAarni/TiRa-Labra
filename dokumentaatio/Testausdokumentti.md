@@ -2,7 +2,7 @@
 
 kattavuusraportti yksikkötesteistä: [![codecov](https://codecov.io/gh/aitoAarni/TiRa-Labra/branch/main/graph/badge.svg?token=G521CJR0IT)](https://codecov.io/gh/aitoAarni/TiRa-Labra)
 
-![Kattavuusraportti](https://user-images.githubusercontent.com/13611438/236777503-54125732-02f6-4ad0-a7b7-9048ae893fb7.png)
+![testien kattavuus raportti](https://github.com/aitoAarni/TiRa-Labra/assets/13611438/88c28b84-0e59-40e7-9f3d-9fa36e7d1f38)
 
 
 Projektia on testattu yksikkötesteillä. Yksikkötestit toteutettin automaattisella ohjelmalla. Testauksen syötteet katsovat osittain myös ääritapauksia ja niitä on lisätty viikosta 5 eteenpäin. 
