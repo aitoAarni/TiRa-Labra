@@ -34,5 +34,5 @@ Ristinolla tekoälyllä varustettuna olisi tavoite.
 [viikkoraportti 6](https://github.com/aitoAarni/TiRa-Labra/blob/main/dokumentaatio/viikkoraportti6.md)
 
 
-## Ohjeet
-![käyttöohje](https://github.com/aitoAarni/TiRa-Labra/assets/13611438/548d93b0-7f6e-426e-8c2d-1533a4ff6065)
+##
+![käyttöohje](https://github.com/aitoAarni/TiRa-Labra/assets/13611438/8c3affb2-ea7c-47c4-afaa-fafd79775b0e)
