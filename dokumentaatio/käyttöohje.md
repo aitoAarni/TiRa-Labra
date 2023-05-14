@@ -12,17 +12,19 @@ Sovelluksen riippuvuudet voidaan asentaa komennolla:
 poetry install
 ```
 
-Ennen sovelluksen suoritusta .env sekä mahdollisesti konfiguraatio pitää alustaa komennolla:
+Ennen sovelluksen suoritusta .env sekä mahdollisesti konfiguraatio tiedostot pitää alustaa komennolla:
 ```
 poetry run invoke build
 ```
 
 projektin komennot ovat juurihakemiston `tasks.py` tiedostossa
 komennoista tärkeimmät ovat:
+
 aloittamista varten
 ```
 poetry run invoke start
 ```
+
 windowsilla suosittelen aloittamaan ohjelman komennolla:
 ```
 poetry run python src\index.py
